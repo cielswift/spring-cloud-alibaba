@@ -1,0 +1,82 @@
+server:
+  port: 5110
+  servlet:
+    context-path: /consumer
+spring:
+  application:
+    name: consumer
+  aop:
+    proxy-target-class: true #使用cglib代理
+  main:
+    allow-bean-definition-overriding: true #bean冲突覆盖
+  cloud:
+    nacos:  #使用nacos注册中心
+      discovery:
+        server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+        namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+        group: DEFAULT_GROUP #组
+      config:
+        server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+        file-extension: yaml  #指定读取的配置文件后缀, dataId 默认就是spring.application.name + yaml, 可以通过prefix修改
+        namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+        group: DEFAULT_GROUP #组
+        prefix: consumer  #文件名 -- 如果没有配置则默认为 ${spring.appliction.name} (优先级高)
+        extension-configs:  #扩展配置,多个配置文件
+          - dataId: xiapeixin.yaml
+            group: DEFAULT_GROUP
+            refresh: false
+          - dataId: xiapeixin2.yaml
+            group: DEFAULT_GROUP
+            refresh: false
+
+    sentinel: #限流
+      transport:
+        dashboard: 127.0.0.1:8080
+      datasource:
+        d1:
+          file:
+            file: classpath:flowrule.json
+            data-type: json
+            rule-type: flow
+
+  zipkin:  #链路追踪
+    base-url: http://127.0.0.1:9411/
+  sleuth:
+    sampler:
+      probability: 1 #percentage是采样比例
+
+dubbo: #dubbo配置
+  protocol:
+    name: dubbo #dubbo协议
+    port: 20880 #协议端口
+  registry:
+    address: nacos://127.0.0.1:13100?backup=127.0.0.1:13101,127.0.0.1:13102 #使用nacos注册中心
+  application:
+    qos-enable: false #运维服务是否开启
+  consumer:
+    check: false #启动时就检查服务
+    version: 1.0
+
+ribbon: #超时设置
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+
+feign:
+  sentinel: #开启对于sentinel的支持
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  config: classpath:logback-spring.xml

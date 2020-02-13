@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>pom</packaging>
+
+    <modules>
+      <module>spring-cloud-alibaba-producer1</module>
+        <module>spring-cloud-alibaba-producer2</module>
+        <module>spring-cloud-alibaba-consumer</module>
+        <module>spring-cloud-alibaba-api</module>
+        <module>spring-cloud-alibaba-gateway</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.3.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.ciel</groupId>
+    <artifactId>spring-cloud-alibaba</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>spring-cloud-alibaba</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+
+        <dependency> <!--ConfigurationProperties 提示-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
+        <dependency> <!--日志-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <dependency> <!--jwt工具-->
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+        <dependency> <!--jwt工具-->
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+
+        <dependency> <!--json工具-->
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
+        </dependency>
+
+        <dependency> <!--自动生成get,set-->
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency> <!-- ASPECTJ_AOP-->
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <dependency> <!--ASPECTJ_AOP-->
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <dependency> <!--ASPECTJ_AOP-->
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <dependency> <!--动态代理-->
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+    </dependencies>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency> <!--spring cloud 版本-->
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency> <!--spring cloud alibaba 版本-->
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2.2.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-api/spring-cloud-alibaba-api.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-api/spring-cloud-alibaba-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-consumer/spring-cloud-alibaba-consumer.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-consumer/spring-cloud-alibaba-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway/spring-cloud-alibaba-gateway.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-gateway/spring-cloud-alibaba-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-producer1/spring-cloud-alibaba-producer1.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-producer1/spring-cloud-alibaba-producer1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-producer2/spring-cloud-alibaba-producer2.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-producer2/spring-cloud-alibaba-producer2.iml" />
+    </modules>
+  </component>
+</project>
