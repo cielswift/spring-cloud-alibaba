@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class RestRpcController {
-
     /**
      * 注入service,基于dubbo协议;
      */
@@ -35,12 +35,13 @@ public class RestRpcController {
     @Autowired
     protected FuckMyLifeXiaPeiXin fuckMyLifeXiaPeiXin;
 
-
     /**
      * Sentinel降级
      * value 自定义资源名
      */
     @SentinelResource(value = "d1", blockHandler = "d2", fallback = "d3")
+
+    //@GlobalTransactional(timeoutMills = 300000, name = "spring-cloud-demo-tx")
 
     @GetMapping("/d1")
     public Object d1(String name) {
@@ -54,6 +55,10 @@ public class RestRpcController {
          * restTemplate 调用
          */
         String object = restTemplate.getForObject("http://127.0.0.1/", String.class);
+
+        if("nginx".equals(object)){
+            return "This nginx";
+        }
 
         /**
          * feign调用

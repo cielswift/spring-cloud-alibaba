@@ -6,12 +6,12 @@ import com.alibaba.csp.sentinel.slots.block.BlockException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,6 +47,7 @@ public class SpringCloudAlibabaConsumerApplication {
     @SentinelRestTemplate(blockHandler = "r2", blockHandlerClass = SpringCloudAlibabaConsumerApplication.class,
                           fallback = "r3",fallbackClass = SpringCloudAlibabaConsumerApplication.class )
     @Bean
+    //@LoadBalanced //不能访问ip加端口,因为这个一个负载均衡器; 加上这个restTemplate 只能使用服务名访问;
     public RestTemplate restTemplate(){
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));

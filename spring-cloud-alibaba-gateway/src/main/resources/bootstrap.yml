@@ -5,6 +5,11 @@ server:
 spring:
   application:
     name: gateway
+  redis: #redis
+    host: 127.0.0.1
+    port: 6510
+    password: ciel
+    database: 2
   aop:
     proxy-target-class: true #使用cglib代理
   main:
@@ -32,14 +37,35 @@ spring:
     gateway:  #路由规则
       discovery:
         locator:
-          enabled: true
-      routes:
-        - id: consumer #id 任意
-          uri: lb://consumer
-          predicates:
-            - Path=/con/**  #请求路径带有这个,那么映射到上面uri的服务上
-          filters:
-            - StripPrefix=1 #访问路径 http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
+          enabled: true  #开启根据服务名称进行转发
+          lower-case-service-id: true #微服务名称小写
+#      routes:
+#        - id: consumer #id 任意
+#          uri: lb://consumer
+#          predicates:
+#            - Path=/con/** #请求路径带有这个,那么映射到上面uri的服务上
+#            #- Before=2019-05-13T17:20:10.789-07:00[Asia/Shanghai] #并且要在这个时间之前
+#            - After=2019-02-14T13:10:47.789-07:00[Asia/Shanghai]
+#            #- Header=X-Request-Id, \d+ #有请求头名为 x-request-id，其值与 \d+ 正则表达式匹配（值为一个或多个数字），则此路由匹配
+#          filters:
+#            - StripPrefix=1 #访问路径 http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
+#            - name: RequestRateLimiter #请求数限流 名字不能随便写
+#              args:
+#                key-resolver: "#{@ipKeyResolver}"  #获取刚才创建的对象
+#                redis-rate-limiter.replenishRate: 1  #令牌桶每秒填充平均速率
+#                redis-rate-limiter.burstCapacity: 1  #令牌桶总容量
+
+#        - burstCapacity：令牌桶总容量。
+#        - replenishRate：令牌桶每秒填充平均速率。
+#        - key-resolver：用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
+#
+#      通过在replenishRate和中设置相同的值来实现稳定的速率burstCapacity。设置burstCapacity高于时，可以允许临时突发replenishRate。
+#      在这种情况下，需要在突发之间允许速率限制器一段时间（根据replenishRate），因为2次连续突发将导致请求被丢弃（HTTP 429 - Too Many Requests）
+#      key-resolver: "#{@userKeyResolver}" 用于通过SPEL表达式来指定使用哪一个KeyResolver.
+#      如上配置：
+#      表示 一秒内，允许 一个请求通过，令牌桶的填充速率也是一秒钟添加一个令牌。
+#      最大突发状况 也只允许 一秒内有一次请求，可以根据业务来调整 。
+
 
     sentinel: #限流
       transport:
@@ -50,6 +76,7 @@ spring:
   sleuth:
     sampler:
       probability: 1 #percentage是采样比例
+
 
 ribbon:
   ReadTimeout: 5000

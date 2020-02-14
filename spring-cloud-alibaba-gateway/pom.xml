@@ -67,6 +67,22 @@
             <version>1.7.1</version>
         </dependency>
 
+        <dependency> <!--redis 配合限流-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+        </dependency>
+
+        <dependency> <!--监控 配合限流-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency> <!--sentinel 限流-->
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>

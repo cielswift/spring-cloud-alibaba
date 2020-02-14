@@ -50,6 +50,12 @@
             <groupId>com.ciel</groupId>
             <artifactId>spring-cloud-alibaba-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion> <!--消费者不需要连接jdbc-->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency> <!--dubbo 调用-->

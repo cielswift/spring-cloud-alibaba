@@ -9,6 +9,18 @@ spring:
     proxy-target-class: true #使用cglib代理
   main:
     allow-bean-definition-overriding: true #bean冲突覆盖
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:1600/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: ciel
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 15
+      min-idle: 15
+      max-active: 50
+      timeBetweenEvictionRunsMillis: 50000
+      validationQuery: SELECT 1 FROM dual
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -52,6 +64,19 @@ dubbo: #dubbo配置
     version: 1.0
 
 
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  typeAliasesPackage: com.ciel.springcloudalibabaentity  #实体扫描
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql
+    map-underscore-to-camel-case: true #数据库下划线转换
+  global-config:
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      updateStrategy: NOT_NULL  #为null 不更新
+      insertStrategy: NOT_NULL
+      selectStrategy: NOT_NULL
 
 
 ribbon:

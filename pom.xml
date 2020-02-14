@@ -11,6 +11,8 @@
         <module>spring-cloud-alibaba-consumer</module>
         <module>spring-cloud-alibaba-api</module>
         <module>spring-cloud-alibaba-gateway</module>
+        <module>spring-cloud-alibaba-entity</module>
+        <module>spring-cloud-alibaba-commons</module>
     </modules>
 
     <parent>

@@ -2,7 +2,9 @@
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-commons/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-entity/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-producer1/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-producer2/src/main/java" charset="UTF-8" />
