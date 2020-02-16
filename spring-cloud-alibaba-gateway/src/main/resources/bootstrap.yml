@@ -77,22 +77,10 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
-
 ribbon:
   ReadTimeout: 5000
   ConnectTimeout: 5000
 
-feign:
-  hystrix:
-    enabled: true
-
-#禁止超时时间
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enable: false
 
 management:
   endpoints:

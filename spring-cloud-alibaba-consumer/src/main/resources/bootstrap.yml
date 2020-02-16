@@ -45,10 +45,12 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
+
 dubbo: #dubbo配置
   protocol:
     name: dubbo #dubbo协议
     port: 20880 #协议端口
+    accesslog: true  #将访问日志输出到当前应用的log4j日志
   registry:
     address: nacos://127.0.0.1:13100?backup=127.0.0.1:13101,127.0.0.1:13102 #使用nacos注册中心
   application:
@@ -56,10 +58,8 @@ dubbo: #dubbo配置
   consumer:
     check: false #启动时就检查服务
     version: 1.0
-
-ribbon: #超时设置
-  ReadTimeout: 5000
-  ConnectTimeout: 5000
+    timeout: 600000  #10分钟
+    retries: 0 #禁止重试 为了debug
 
 feign:
   sentinel: #开启对于sentinel的支持
@@ -67,10 +67,13 @@ feign:
   client:
     config:
       default:
-        connectTimeout: 5000
-        readTimeout: 5000
+        connectTimeout: 600000
+        readTimeout: 600000
         loggerLevel: basic
 
+ribbon: #超时设置
+  ReadTimeout: 600000
+  ConnectTimeout: 600000
 
 management:
   endpoints:

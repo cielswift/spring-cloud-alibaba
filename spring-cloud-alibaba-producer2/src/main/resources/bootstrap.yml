@@ -10,8 +10,8 @@ spring:
   main:
     allow-bean-definition-overriding: true #bean冲突覆盖
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:1600/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: ciel
     type: com.alibaba.druid.pool.DruidDataSource
@@ -47,12 +47,24 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
+#分布式事务
+seata:
+  tx-service-group: default
+  service:
+    grouplist: 127.0.0.1:19200
+  registry:
+    nacos:  #使用nacos注册中心
+      server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+
+
 dubbo: #dubbo配置
   scan:
     base-packages: com.ciel.springcloudalibabaproducer2.serverimpl #服务扫描包,标记有@service
   protocol:
     name: dubbo #dubbo协议
     port: 20882 #协议端口
+    accesslog: true  #将访问日志输出到当前应用的log4j日志
   provider:
     version: 1.0
   registry:
@@ -62,7 +74,8 @@ dubbo: #dubbo配置
   consumer:
     check: false #启动时就检查服务
     version: 1.0
-
+    timeout: 600000  #10分钟
+    retries: 0 #禁止重试 为了debug
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
@@ -78,22 +91,16 @@ mybatis-plus:
       insertStrategy: NOT_NULL
       selectStrategy: NOT_NULL
 
-
-ribbon:
-  ReadTimeout: 5000
-  ConnectTimeout: 5000
-
+#超时10分钟
 feign:
-  hystrix:
-    enabled: true
-
-#禁止超时时间
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enable: false
+  client:
+    config:
+      default:
+        connectTimeout: 600000
+        readTimeout: 600000
+ribbon:
+  ReadTimeout: 600000
+  ConnectTimeout: 600000
 
 management:
   endpoints:
@@ -103,3 +110,7 @@ management:
 
 logging:
   config: classpath:logback-spring.xml
+
+clusters:
+  datacenterId: 7
+  machineId: 2

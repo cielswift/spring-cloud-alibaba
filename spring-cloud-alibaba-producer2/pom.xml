@@ -63,10 +63,20 @@
             <version>1.1.21</version>
         </dependency>
 
-        <dependency> <!--mysql-->
+        <dependency><!--mysql-->
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.17</version>
+            <version>5.1.48</version>
+        </dependency>
+
+        <dependency>  <!--Feign无感知远程调用-->
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency> <!--seata 分布式事务 客户端-->
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-seata</artifactId>
         </dependency>
 
     </dependencies>

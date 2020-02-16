@@ -5,13 +5,18 @@ import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.ciel.springcloudalibabaapi.crud.ApplicationServer;
 import com.ciel.springcloudalibabaapi.feign.FuckMyLife;
 import com.ciel.springcloudalibabaconsumer.feignimpl.FuckMyLifeXiaPeiXin;
+import com.ciel.springcloudalibabaconsumer.feignimpl.PublicTransactional10x;
+import com.ciel.springcloudalibabaconsumer.feignimpl.PublicTransactional20x;
+import com.ciel.springcloudalibabaentity.ScaUser;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +45,6 @@ public class RestRpcController {
      * value 自定义资源名
      */
     @SentinelResource(value = "d1", blockHandler = "d2", fallback = "d3")
-
-    //@GlobalTransactional(timeoutMills = 300000, name = "spring-cloud-demo-tx")
-
     @GetMapping("/d1")
     public Object d1(String name) {
 
@@ -87,4 +89,29 @@ public class RestRpcController {
     public Object d3(String name, Throwable te) {
         return "异常降级??".contains(te.getClass().getName());
     }
+
+
+    /*
+    #####################################################################################################
+     */
+
+    @Autowired
+    protected PublicTransactional10x transactional10x;
+
+    @Autowired
+    protected PublicTransactional20x transactional20x;
+
+
+
+    @GetMapping("/transactional")
+    public Object transactional(@RequestParam("money") BigDecimal money){
+
+        boolean isOk =
+                transactional10x.transactionPrice(money, 425752943532056576L,425752880537804800L,1);
+
+        return Map.of("code",isOk);
+    }
+
+
+
 }

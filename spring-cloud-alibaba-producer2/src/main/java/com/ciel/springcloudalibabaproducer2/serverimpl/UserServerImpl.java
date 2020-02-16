@@ -17,7 +17,7 @@ public class UserServerImpl implements UserServer {
     public String get(String name) {
 
         ScaApplication scaApplication = new ScaApplication();
-        scaApplication.setName(name);
+        scaApplication.setName("刘学文");
         scaApplication.setUserId(System.currentTimeMillis());
 
         applicationService.save(scaApplication);
