@@ -18,7 +18,7 @@ spring:
     druid:
       initial-size: 15
       min-idle: 15
-      max-active: 50
+      max-active: 20
       timeBetweenEvictionRunsMillis: 50000
       validationQuery: SELECT 1 FROM dual
   cloud:
@@ -51,7 +51,7 @@ spring:
 seata:
   tx-service-group: default
   service:
-    grouplist: 127.0.0.1:19200
+    grouplist: 127.0.0.1:19201
   registry:
     nacos:  #使用nacos注册中心
       server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
@@ -68,7 +68,7 @@ dubbo: #dubbo配置
   provider:
     version: 1.0
   registry:
-    address: nacos://127.0.0.1:13100?backup=127.0.0.1:13101,127.0.0.1:13102 #使用nacos注册中心
+    address: nacos://127.0.0.1:13100?backup=127.0.0.1:13101,127.0.0.1:13102&namespace=a998603d-3546-4ddc-9099-2ed82a6f3a68 #使用nacos注册中心
   application:
     qos-enable: false #运维服务是否开启
   consumer:

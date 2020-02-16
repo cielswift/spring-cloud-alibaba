@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.a.dao.ScaRolePermissionsDao">
+
+    <resultMap type="com.a.entity.ScaRolePermissions" id="ScaRolePermissionsMap">
+        <result property="roleId" column="ROLE_ID" jdbcType="INTEGER"/>
+        <result property="permissionsId" column="PERMISSIONS_ID" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ScaRolePermissionsMap">
+        select
+          ROLE_ID, PERMISSIONS_ID
+        from spring_alibaba.sca_role_permissions
+        where  = #{}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ScaRolePermissionsMap">
+        select
+          ROLE_ID, PERMISSIONS_ID
+        from spring_alibaba.sca_role_permissions
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ScaRolePermissionsMap">
+        select
+          ROLE_ID, PERMISSIONS_ID
+        from spring_alibaba.sca_role_permissions
+        <where>
+            <if test="roleId != null">
+                and ROLE_ID = #{roleId}
+            </if>
+            <if test="permissionsId != null">
+                and PERMISSIONS_ID = #{permissionsId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into spring_alibaba.sca_role_permissions(ROLE_ID, PERMISSIONS_ID)
+        values (#{roleId}, #{permissionsId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update spring_alibaba.sca_role_permissions
+        <set>
+            <if test="roleId != null">
+                ROLE_ID = #{roleId},
+            </if>
+            <if test="permissionsId != null">
+                PERMISSIONS_ID = #{permissionsId},
+            </if>
+        </set>
+        where  = #{}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from spring_alibaba.sca_role_permissions where  = #{}
+    </delete>
+
+</mapper>

@@ -5,12 +5,9 @@ import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
 import com.ciel.springcloudalibabaentity.ScaUser;
 import com.ciel.springcloudalibabaproducer1.feign.TransactionConsumer;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
@@ -28,7 +25,7 @@ public class TransactionalProducer implements PublicTransactional {
     /**
      *全局事务
      */
-    @GlobalTransactional(timeoutMills = 6000)
+    @GlobalTransactional(timeoutMills = 60000)
     @Transactional
     @Override
     @GetMapping("/transactional")
@@ -76,6 +73,10 @@ public class TransactionalProducer implements PublicTransactional {
 
         if(!shIsOk){
             throw new RuntimeException("对方平台余额修改失败");
+        }
+
+        if(price.compareTo(BigDecimal.TEN) == 0){
+            throw new RuntimeException("10元主动异常 ,测试其他平台全局事务是否回滚");
         }
 
         return true;

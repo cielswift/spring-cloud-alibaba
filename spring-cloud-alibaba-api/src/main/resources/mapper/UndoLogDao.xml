@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.a.dao.UndoLogDao">
+
+    <resultMap type="com.a.entity.UndoLog" id="UndoLogMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="branchId" column="branch_id" jdbcType="INTEGER"/>
+        <result property="xid" column="xid" jdbcType="VARCHAR"/>
+        <result property="context" column="context" jdbcType="VARCHAR"/>
+        <result property="rollbackInfo" column="rollback_info" jdbcType="OTHER"/>
+        <result property="logStatus" column="log_status" jdbcType="INTEGER"/>
+        <result property="logCreated" column="log_created" jdbcType="TIMESTAMP"/>
+        <result property="logModified" column="log_modified" jdbcType="TIMESTAMP"/>
+        <result property="ext" column="ext" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UndoLogMap">
+        select
+          id, branch_id, xid, context, rollback_info, log_status, log_created, log_modified, ext
+        from spring_alibaba.undo_log
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UndoLogMap">
+        select
+          id, branch_id, xid, context, rollback_info, log_status, log_created, log_modified, ext
+        from spring_alibaba.undo_log
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UndoLogMap">
+        select
+          id, branch_id, xid, context, rollback_info, log_status, log_created, log_modified, ext
+        from spring_alibaba.undo_log
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="branchId != null">
+                and branch_id = #{branchId}
+            </if>
+            <if test="xid != null and xid != ''">
+                and xid = #{xid}
+            </if>
+            <if test="context != null and context != ''">
+                and context = #{context}
+            </if>
+            <if test="rollbackInfo != null">
+                and rollback_info = #{rollbackInfo}
+            </if>
+            <if test="logStatus != null">
+                and log_status = #{logStatus}
+            </if>
+            <if test="logCreated != null">
+                and log_created = #{logCreated}
+            </if>
+            <if test="logModified != null">
+                and log_modified = #{logModified}
+            </if>
+            <if test="ext != null and ext != ''">
+                and ext = #{ext}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into spring_alibaba.undo_log(branch_id, xid, context, rollback_info, log_status, log_created, log_modified, ext)
+        values (#{branchId}, #{xid}, #{context}, #{rollbackInfo}, #{logStatus}, #{logCreated}, #{logModified}, #{ext})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update spring_alibaba.undo_log
+        <set>
+            <if test="branchId != null">
+                branch_id = #{branchId},
+            </if>
+            <if test="xid != null and xid != ''">
+                xid = #{xid},
+            </if>
+            <if test="context != null and context != ''">
+                context = #{context},
+            </if>
+            <if test="rollbackInfo != null">
+                rollback_info = #{rollbackInfo},
+            </if>
+            <if test="logStatus != null">
+                log_status = #{logStatus},
+            </if>
+            <if test="logCreated != null">
+                log_created = #{logCreated},
+            </if>
+            <if test="logModified != null">
+                log_modified = #{logModified},
+            </if>
+            <if test="ext != null and ext != ''">
+                ext = #{ext},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from spring_alibaba.undo_log where id = #{id}
+    </delete>
+
+</mapper>
