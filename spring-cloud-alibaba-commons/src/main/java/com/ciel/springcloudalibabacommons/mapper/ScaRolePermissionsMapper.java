@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-02-14
  */
 @Mapper
-public interface ScaRolePermissionsMapper extends BaseMapper<ScaRolePermissions> {
+public interface ScaRolePermissionsMapper extends MyBaseMapper<ScaRolePermissions> {
 
 }

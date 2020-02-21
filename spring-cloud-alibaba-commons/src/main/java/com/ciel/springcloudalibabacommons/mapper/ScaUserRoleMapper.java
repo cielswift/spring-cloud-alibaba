@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-02-14
  */
 @Mapper
-public interface ScaUserRoleMapper extends BaseMapper<ScaUserRole> {
+public interface ScaUserRoleMapper extends MyBaseMapper<ScaUserRole> {
 
 }

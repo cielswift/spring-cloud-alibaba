@@ -2,6 +2,33 @@ server:
   port: 5110
   servlet:
     context-path: /consumer
+  http2:  #2.0
+    enabled: true
+  compression:   #压缩
+    enabled: true
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
+    io-threads: 8
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+    # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+    worker-threads: 64
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+    buffer-size: 1024
+    # 是否分配的直接内存(NIO直接分配的堆外内存)
+    direct-buffers: true
+#
+#    accesslog:
+#      dir:  #Undertow访问日志目录。
+#      enabled: true #是否启用访问日志。
+#      pattern: ＃访问日志的格式模式。
+#      prefix: ＃日志文件名前缀。
+#      rotate: #启用访问日志轮换。
+#      suffix: ＃日志文件名后缀。
+#    eager-filter-init: true #启动后是否立马初始化 servlet 过滤器
+#    max-http-post-size: -1  #HTTP内容的最大字节数
+
 spring:
   application:
     name: consumer
@@ -44,7 +71,6 @@ spring:
   sleuth:
     sampler:
       probability: 1 #percentage是采样比例
-
 
 dubbo: #dubbo配置
   protocol:

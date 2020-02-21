@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="mysql-local-1670" uuid="d55c2e0f-c543-4559-9c5e-9092e1d0e4bc">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1:1670/spring_alibaba</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="mysql-local-1671" uuid="0f6ecef6-58f0-4ee8-b467-c82852b2675a">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1:1671/spring_alibaba</jdbc-url>
+    </data-source>
+  </component>
+</project>

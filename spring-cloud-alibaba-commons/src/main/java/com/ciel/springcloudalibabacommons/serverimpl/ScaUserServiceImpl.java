@@ -1,10 +1,17 @@
 package com.ciel.springcloudalibabacommons.serverimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ciel.springcloudalibabaapi.crud.IScaApplicationService;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabacommons.mapper.ScaUserMapper;
+import com.ciel.springcloudalibabaentity.ScaApplication;
 import com.ciel.springcloudalibabaentity.ScaUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -17,4 +24,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> implements IScaUserService {
 
+    @Autowired
+    protected IScaApplicationService applicationService;
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, String> testTransaction() {
+        remove(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,"aaa"));
+
+        applicationService.remove(new LambdaQueryWrapper<ScaApplication>().eq(ScaApplication::getName,"aaa"));
+
+        return Map.of("a","ok");
+    }
 }

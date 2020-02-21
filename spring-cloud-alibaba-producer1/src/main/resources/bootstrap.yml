@@ -16,9 +16,9 @@ spring:
     password: ciel
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      initial-size: 15
-      min-idle: 15
-      max-active: 20
+      initial-size: 16
+      min-idle: 16
+      max-active: 32
       timeBetweenEvictionRunsMillis: 50000
       validationQuery: SELECT 1 FROM dual
   cloud:
@@ -49,9 +49,9 @@ spring:
 
 #分布式事务
 seata:
-  tx-service-group: default
+  tx-service-group: pro10 #名称不能相同
   service:
-    grouplist: 127.0.0.1:19201
+    grouplist: 127.0.0.1:19212
   registry:
     nacos:  #使用nacos注册中心
       server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102

@@ -69,6 +69,12 @@
             <version>5.1.48</version>
         </dependency>
 
+        <dependency> <!--mybatis plus 执行 SQL 分析打印-->
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.8.7</version>
+        </dependency>
+
         <dependency>  <!--Feign无感知远程调用-->
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -78,6 +84,12 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-seata</artifactId>
         </dependency>
+
+<!--        <dependency> &lt;!&ndash;分库分表&ndash;&gt;-->
+<!--            <groupId>org.apache.shardingsphere</groupId>-->
+<!--            <artifactId>sharding-jdbc-core</artifactId>-->
+<!--            <version>4.0.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

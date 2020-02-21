@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-02-14
  */
 @Mapper
-public interface ScaApplicationMapper extends BaseMapper<ScaApplication> {
+public interface ScaApplicationMapper extends MyBaseMapper<ScaApplication> {
 
 }

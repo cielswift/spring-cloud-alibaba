@@ -13,6 +13,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -28,11 +29,16 @@ import java.nio.charset.StandardCharsets;
  * 开启基于注解的aop
  */
 @EnableAspectJAutoProxy
+/**
+ * 开启定时任务
+ */
+@EnableScheduling
 
 /**
  * 开启feign调用
  */
 @EnableFeignClients
+
 
 public class SpringCloudAlibabaConsumerApplication {
 

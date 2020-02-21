@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-02-14
  */
 @Mapper
-public interface ScaPermissionsMapper extends BaseMapper<ScaPermissions> {
+public interface ScaPermissionsMapper extends MyBaseMapper<ScaPermissions> {
 
 }

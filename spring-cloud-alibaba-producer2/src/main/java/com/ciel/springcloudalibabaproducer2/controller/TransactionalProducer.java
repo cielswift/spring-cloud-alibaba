@@ -2,6 +2,7 @@ package com.ciel.springcloudalibabaproducer2.controller;
 
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
+import com.ciel.springcloudalibabacommons.mapper.ScaApplicationMapper;
 import com.ciel.springcloudalibabaentity.ScaUser;
 import com.ciel.springcloudalibabaproducer2.feign.TransactionConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,12 +67,20 @@ public class TransactionalProducer implements PublicTransactional {
             throw new RuntimeException("此平台余额修改失败");
         }
 
+        //String xid = RootContext.getXID();//分支事务id
+        //System.out.println(xid);
+
         return true;
     }
+
+    @Autowired
+    protected ScaApplicationMapper applicationMapper;
 
     @Transactional
     @GetMapping("/testtran")
     public Object testtran(String code){
+
+        //applicationMapper.deleteAll();
 
         ScaUser user = userService.getById(425752880537804800L);
         user.setImage(code);

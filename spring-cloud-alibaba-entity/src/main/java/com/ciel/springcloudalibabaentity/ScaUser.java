@@ -1,11 +1,11 @@
 package com.ciel.springcloudalibabaentity;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
+
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,4 +43,10 @@ public class ScaUser extends ScaBaseEntity {
     @TableField("PRICE")
     private BigDecimal price;
 
+    /**
+     * 乐观锁
+     */
+    @TableField(value = "VERSION",fill = FieldFill.INSERT)
+    @Version
+    private Integer version;
 }

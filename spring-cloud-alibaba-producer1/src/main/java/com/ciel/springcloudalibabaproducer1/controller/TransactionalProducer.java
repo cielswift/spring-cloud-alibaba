@@ -4,6 +4,7 @@ import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
 import com.ciel.springcloudalibabaentity.ScaUser;
 import com.ciel.springcloudalibabaproducer1.feign.TransactionConsumer;
+import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +76,11 @@ public class TransactionalProducer implements PublicTransactional {
             throw new RuntimeException("对方平台余额修改失败");
         }
 
+        String xid = RootContext.getXID();//分支事务id
+        System.out.println(xid);
+
         if(price.compareTo(BigDecimal.TEN) == 0){
+
             throw new RuntimeException("10元主动异常 ,测试其他平台全局事务是否回滚");
         }
 
