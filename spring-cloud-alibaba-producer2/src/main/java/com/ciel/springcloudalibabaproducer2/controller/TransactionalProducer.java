@@ -1,5 +1,6 @@
 package com.ciel.springcloudalibabaproducer2.controller;
 
+import com.ciel.springcloudalibabaapi.crud.AAASe;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
 import com.ciel.springcloudalibabacommons.mapper.ScaApplicationMapper;
@@ -72,24 +73,28 @@ public class TransactionalProducer implements PublicTransactional {
 
         return true;
     }
-
+    
     @Autowired
-    protected ScaApplicationMapper applicationMapper;
+    protected AAASe aaaSe;
 
-    @Transactional
+    //@Transactional
     @GetMapping("/testtran")
     public Object testtran(String code){
 
-        //applicationMapper.deleteAll();
+        aaaSe.testCustomTransaction();
 
-        ScaUser user = userService.getById(425752880537804800L);
-        user.setImage(code);
+    //    aaaSe.testTransaction();
 
-        userService.saveOrUpdate(user);
+       // userService.testTransaction();
 
-        if("err".equals(code)){
-           throw new RuntimeException("err--");
-        }
+//        ScaUser user = userService.getById(425752880537804800L);
+//        user.setImage(code);
+//
+//        userService.saveOrUpdate(user);
+//
+//        if("err".equals(code)){
+//           throw new RuntimeException("err--");
+//        }
 
         return Map.of("msg",true);
     }
