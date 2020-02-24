@@ -35,6 +35,19 @@ spring:
             refresh: false
 
     gateway:  #路由规则
+#      globalcors: #跨域设置
+#        corsConfigurations:
+#          '[/**]':
+#            allow-credentials: true
+#            allowedHeaders: "*"
+#            allowedOrigins: "*"
+#            allowedMethods:
+#              - GET
+#                POST
+#                DELETE
+#                PUT
+#                OPTION
+#            max-age: 3600
       discovery:
         locator:
           enabled: true  #开启根据服务名称进行转发
