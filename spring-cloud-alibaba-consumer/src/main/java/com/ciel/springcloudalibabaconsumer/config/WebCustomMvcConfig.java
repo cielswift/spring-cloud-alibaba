@@ -10,12 +10,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebCustomMvcConfig implements WebMvcConfigurer {
 
 
+    /**
+     * 注册rest风格url
+     */
     @Bean
-    public FormContentFilter formContentFilter() { //注册rest风格url
+    public FormContentFilter formContentFilter() {
         return new FormContentFilter();
     }
 
-    //跨域设置
+
+    /**
+     * 跨域设置
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

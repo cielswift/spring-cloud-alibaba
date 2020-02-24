@@ -80,24 +80,16 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
-        <dependency> <!--seata 分布式事务 客户端-->
+        <dependency> <!-- 2pc (两阶段提交协议)seata 分布式事务 客户端-->
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-seata</artifactId>
         </dependency>
 
-
-        <dependency> <!--接口文档-->
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>2.0.1</version>
+        <dependency> <!--tcc 协议 hmily分布式事务(不需要服务端)-->
+            <groupId>org.dromara</groupId>
+            <artifactId>hmily-core</artifactId>
+            <version>2.0.6-RELEASE</version>
         </dependency>
-
-
-        <!--        <dependency> &lt;!&ndash;分库分表&ndash;&gt;-->
-<!--            <groupId>org.apache.shardingsphere</groupId>-->
-<!--            <artifactId>sharding-jdbc-core</artifactId>-->
-<!--            <version>4.0.0</version>-->
-<!--        </dependency>-->
 
     </dependencies>
 

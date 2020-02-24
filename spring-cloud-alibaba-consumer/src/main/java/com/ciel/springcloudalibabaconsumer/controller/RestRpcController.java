@@ -55,10 +55,11 @@ public class RestRpcController {
         /**
          * restTemplate 调用
          */
-        String object = restTemplate.getForObject("http://127.0.0.1/", String.class);
-
-        if("nginx".equals(object)){
-            return Result.error("this nginx");
+        String object = null;
+        try{
+             object = restTemplate.getForObject("https://cielswift.github.io/", String.class);
+        }catch (Exception e){
+            return Result.error("restTemplate 调用失败;");
         }
 
         /**

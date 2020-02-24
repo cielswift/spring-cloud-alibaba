@@ -3,11 +3,13 @@ package com.ciel.springcloudalibabaapi.retu.cglibproxy;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CglibProxyFactory implements MethodInterceptor {
@@ -62,5 +64,23 @@ public class CglibProxyFactory implements MethodInterceptor {
         URL resource2 = proxyInstance.getClass().getClassLoader().getResource("./");
         //在使用 ClassLoader().getResource 获取路径时，不能以 "/" 开头，且路径总是从 classpath 根路径开始；
         System.out.println(resource2);
+
+
+        /**
+         * 获取方法参数名称
+         */
+        Method[] methods = CglibProxyFactory.class.getMethods();
+        for (Method me: methods){
+            String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(me);
+
+
+            System.out.println("METHOD_NAME:"+me.getName());
+            Arrays.stream(parameterNames).forEach(System.out::print);
+            System.out.println();
+
+        }
+
+
+
     }
 }
