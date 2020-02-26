@@ -1,23 +1,29 @@
 package com.ciel.springcloudalibabaproducer2.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.ciel.springcloudalibabaapi.crud.AAASe;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
+import com.ciel.springcloudalibabaapi.exception.AlertException;
 import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
-import com.ciel.springcloudalibabacommons.mapper.ScaApplicationMapper;
-import com.ciel.springcloudalibabaentity.ScaUser;
+import com.ciel.springcloudalibabaapi.retu.Result;
+import com.ciel.springcloudalibabaentity.entity.ScaUser;
+import com.ciel.springcloudalibabaentity.type2.Person;
 import com.ciel.springcloudalibabaproducer2.feign.TransactionConsumer;
+import org.dromara.hmily.annotation.Hmily;
+import org.dromara.hmily.core.concurrent.threadlocal.HmilyTransactionContextLocal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
-@RestController("transactionProducer")
+@RestController
 public class TransactionalProducer implements PublicTransactional {
 
     @Autowired
@@ -73,10 +79,62 @@ public class TransactionalProducer implements PublicTransactional {
 
         return true;
     }
-    
+
+    //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+    @Autowired
+    protected RedisTemplate redisTemplate;
+
+    @PutMapping(value = "/hmily/{price}/{sendUserId}/{receiveUserId}/{code}")
+    @Override
+    @Hmily(confirmMethod = "confirm",cancelMethod = "cancel")
+    public boolean hmilyTransaction(@PathVariable("price") @NotEmpty(message="kong") BigDecimal price,
+                                    @PathVariable("sendUserId") @NotNull(message="kong") Long sendUserId,
+                                    @PathVariable("receiveUserId") @NotNull(message="kong") Long receiveUserId,
+                                    @PathVariable("code") @NotNull(message="kong") Integer code) throws AlertException {
+
+        System.out.println("p2 开启try");
+
+        return true;
+    }
+
+    @Transactional(rollbackFor = AlertException.class)
+    public boolean confirm(BigDecimal price,Long sendUserId, Long receiveUserId, Integer code) throws AlertException {
+
+        //获取全局事务id
+        String transId = HmilyTransactionContextLocal.getInstance().get().getTransId();
+
+        Object confirmEx = redisTemplate.opsForValue().get("confirm_"+transId);
+        if(null != confirmEx) {
+            System.out.println("失败:confirm_ 已经执行");
+            return false;
+        }
+
+        //加钱
+        boolean update = userService.update(new LambdaUpdateWrapper<ScaUser>()
+                .setSql("price = price+"+price.toString())
+                .eq(ScaUser::getId, receiveUserId));
+
+        if(!update){
+            throw new AlertException("更新失败");
+        }
+
+        //插入confirm_记录
+        redisTemplate.opsForValue().set("confirm_"+transId,1);
+        System.out.println("p2 confirm_ 提交");
+        return true;
+    }
+
+    public boolean cancel(BigDecimal price,Long sendUserId, Long receiveUserId, Integer code) throws AlertException{
+
+        System.out.println("p2 开启cancel");
+        return true;
+    }
+
+
+
     @Autowired
     protected AAASe aaaSe;
-
     //@Transactional
     @GetMapping("/testtran")
     public Object testtran(String code){
@@ -97,6 +155,35 @@ public class TransactionalProducer implements PublicTransactional {
 //        }
 
         return Map.of("msg",true);
+    }
+
+
+    @GetMapping("/te2")
+    public Result te2(){
+
+        ScaUser scaUser = new ScaUser();
+        scaUser.setUsername("xiapeixin202");
+
+        Person p = new Person();
+        p.setName("xia");
+        p.setAge(22);
+        p.setGender(false);
+        p.setByDate(LocalDateTime.now());
+
+        scaUser.setPerson(p);
+
+        userService.save(scaUser);
+
+        return Result.ok("ok");
+    }
+
+
+    @GetMapping("/te2g")
+    public Result te2g(){
+
+        List<ScaUser> list = userService.list();
+
+        return Result.ok("ok").body(list);
     }
 
 }

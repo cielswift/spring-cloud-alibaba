@@ -1,6 +1,6 @@
 package com.ciel.springcloudalibabaapi.feign;
 
-import com.ciel.springcloudalibabaentity.ScaUser;
+import com.ciel.springcloudalibabaapi.exception.AlertException;
 
 import java.math.BigDecimal;
 
@@ -16,5 +16,8 @@ public interface PublicTransactional {
      */
     public boolean transactionPrice(BigDecimal price,Long sendUserId, Long receiveUserId,Integer code);
 
+
+    public boolean hmilyTransaction(BigDecimal price,Long sendUserId,
+                                    Long receiveUserId,Integer code) throws AlertException;
 
 }

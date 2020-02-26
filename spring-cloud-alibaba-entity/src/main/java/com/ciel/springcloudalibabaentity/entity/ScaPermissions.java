@@ -1,10 +1,7 @@
-package com.ciel.springcloudalibabaentity;
+package com.ciel.springcloudalibabaentity.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,11 +17,10 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sca_role")
-public class ScaRole extends ScaBaseEntity {
+@TableName("sca_permissions")
+public class ScaPermissions extends ScaBaseEntity {
 
     @TableField("NAME")
     private String name;
-
 
 }

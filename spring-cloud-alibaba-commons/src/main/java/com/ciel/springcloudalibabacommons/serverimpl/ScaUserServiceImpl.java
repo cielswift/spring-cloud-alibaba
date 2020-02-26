@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ciel.springcloudalibabaapi.crud.IScaApplicationService;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabacommons.mapper.ScaUserMapper;
-import com.ciel.springcloudalibabaentity.ScaApplication;
-import com.ciel.springcloudalibabaentity.ScaUser;
+import com.ciel.springcloudalibabaentity.entity.ScaApplication;
+import com.ciel.springcloudalibabaentity.entity.ScaUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +28,8 @@ public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> impl
     protected IScaApplicationService applicationService;
 
 
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Map<String, String> testTransaction() {
@@ -37,4 +39,8 @@ public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> impl
 
         return Map.of("a","ok");
     }
+
+
+    //////////////////////////////////////////////////////
+
 }

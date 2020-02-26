@@ -3,7 +3,7 @@ package com.ciel.springcloudalibabacommons.serverimpl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ciel.springcloudalibabaapi.crud.IScaUserRoleService;
 import com.ciel.springcloudalibabacommons.mapper.ScaUserRoleMapper;
-import com.ciel.springcloudalibabaentity.ScaUserRole;
+import com.ciel.springcloudalibabaentity.entity.ScaUserRole;
 import org.springframework.stereotype.Service;
 
 /**

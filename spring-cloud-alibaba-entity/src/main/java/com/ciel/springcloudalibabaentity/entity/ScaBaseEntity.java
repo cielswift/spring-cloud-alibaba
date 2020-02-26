@@ -1,5 +1,6 @@
-package com.ciel.springcloudalibabaentity;
+package com.ciel.springcloudalibabaentity.entity;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -29,4 +30,16 @@ public abstract class ScaBaseEntity implements Serializable {
     @TableLogic
     @TableField(value = "DELETED", fill = FieldFill.INSERT)
     private Integer deleted;
+
+    /**
+     * 自身的json(str)属性, 转自身的object 属性;
+     *
+     * 例如 两个属性 private String personStr -> private Person person
+     *
+     * @param json
+     * @param filed
+     */
+    public void toObject(String json,Object filed){
+        filed = JSON.parseObject(json,filed.getClass());
+    }
 }

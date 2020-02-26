@@ -1,4 +1,4 @@
-package com.ciel.springcloudalibabaentity;
+package com.ciel.springcloudalibabaentity.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;

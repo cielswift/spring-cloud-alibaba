@@ -1,12 +1,14 @@
-package com.ciel.springcloudalibabaentity;
+package com.ciel.springcloudalibabaentity.entity;
 
 import java.math.BigDecimal;
 
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ciel.springcloudalibabaentity.type2.Person;
+import com.ciel.springcloudalibabaentity.type2.json2Person;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,7 +24,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sca_user")
+@TableName(value = "sca_user",autoResultMap = true) //开启注释映射
 public class ScaUser extends ScaBaseEntity {
 
     @TableField("USERNAME")
@@ -49,4 +51,12 @@ public class ScaUser extends ScaBaseEntity {
     @TableField(value = "VERSION",fill = FieldFill.INSERT)
     @Version
     private Integer version;
+
+    //@TableField(typeHandler = JacksonTypeHandler.class)
+
+    /**
+     * 类型转换器 ,要开启映射@TableName(value = "sca_user",autoResultMap = true) //开启注释映射
+     */
+    @TableField(typeHandler = json2Person.class)
+    private Person person;
 }

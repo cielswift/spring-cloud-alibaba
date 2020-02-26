@@ -3,10 +3,14 @@ package com.ciel.springcloudalibabaconsumer.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.ciel.springcloudalibabaapi.crud.ApplicationServer;
+import com.ciel.springcloudalibabaapi.crud.IScaUserService;
+import com.ciel.springcloudalibabaapi.exception.AlertException;
 import com.ciel.springcloudalibabaapi.retu.Result;
 import com.ciel.springcloudalibabaconsumer.feignimpl.FuckMyLifeXiaPeiXin;
 import com.ciel.springcloudalibabaconsumer.feignimpl.PublicTransactional10x;
 import com.ciel.springcloudalibabaconsumer.feignimpl.PublicTransactional20x;
+import com.ciel.springcloudalibabaentity.entity.ScaUser;
+import com.ciel.springcloudalibabaentity.type2.Person;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -109,6 +114,22 @@ public class RestRpcController {
 
         boolean isOk =
                 transactional10x.transactionPrice(money, 425752943532056576L,425752880537804800L,1);
+
+        return Result.ok("code").body(isOk);
+    }
+
+
+    @GetMapping("/hmily")
+    public Result hmily(@RequestParam("money") BigDecimal money) throws AlertException {
+
+        boolean isOk =
+                false;
+        try {
+            isOk = transactional10x.hmilyTransaction(money, 425752943532056576L,425752880537804800L,1);
+        } catch (AlertException e) {
+
+           throw new AlertException("调用异常");
+        }
 
         return Result.ok("code").body(isOk);
     }

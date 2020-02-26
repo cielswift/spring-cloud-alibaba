@@ -1,7 +1,6 @@
 package com.ciel.springcloudalibabacommons.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ciel.springcloudalibabaentity.ScaUserRole;
+import com.ciel.springcloudalibabaentity.entity.ScaUserRole;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -2,7 +2,7 @@ package com.ciel.springcloudalibabaapi.crud;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ciel.springcloudalibabaentity.ScaUser;
+import com.ciel.springcloudalibabaentity.entity.ScaUser;
 
 import java.util.Map;
 
@@ -18,4 +18,8 @@ public interface IScaUserService extends IService<ScaUser> {
 
 
     public Map<String, String> testTransaction();
+
+    /////////////////////////////////////////////////////////////////////////////////
+
+
 }

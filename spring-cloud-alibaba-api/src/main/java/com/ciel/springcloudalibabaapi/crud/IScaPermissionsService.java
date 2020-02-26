@@ -1,7 +1,7 @@
 package com.ciel.springcloudalibabaapi.crud;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ciel.springcloudalibabaentity.ScaPermissions;
+import com.ciel.springcloudalibabaentity.entity.ScaPermissions;
 
 /**
  * <p>

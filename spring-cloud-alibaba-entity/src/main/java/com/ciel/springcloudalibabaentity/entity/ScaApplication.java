@@ -1,8 +1,8 @@
-package com.ciel.springcloudalibabaentity;
+package com.ciel.springcloudalibabaentity.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,16 +18,14 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sca_user_permissions")
-public class ScaUserPermissions implements Serializable {
+@TableName("sca_application")
+public class ScaApplication extends ScaBaseEntity {
 
-    private static final long serialVersionUID = ScaBaseEntity.serialVersionUID;
+    @TableField("NAME")
+    private String name;
 
     @TableField("USER_ID")
     private Long userId;
-
-    @TableField("PERMISSIONS_ID")
-    private Long permissionsId;
 
 
 }

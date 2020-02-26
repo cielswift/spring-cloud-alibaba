@@ -1,16 +1,11 @@
-package com.ciel.springcloudalibabaentity;
+package com.ciel.springcloudalibabaentity.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -23,14 +18,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sca_application")
-public class ScaApplication extends ScaBaseEntity {
+@TableName("sca_user_permissions")
+public class ScaUserPermissions implements Serializable {
 
-    @TableField("NAME")
-    private String name;
+    private static final long serialVersionUID = ScaBaseEntity.serialVersionUID;
 
     @TableField("USER_ID")
     private Long userId;
+
+    @TableField("PERMISSIONS_ID")
+    private Long permissionsId;
 
 
 }

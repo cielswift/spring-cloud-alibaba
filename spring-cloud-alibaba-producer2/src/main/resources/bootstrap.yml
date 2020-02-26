@@ -9,6 +9,10 @@ spring:
     proxy-target-class: true #使用cglib代理
   main:
     allow-bean-definition-overriding: true #bean冲突覆盖
+  redis:
+    host: 127.0.0.1
+    port: 6510
+    password: ciel
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -47,7 +51,7 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
-#分布式事务
+#2pc 分布式事务
 seata:
   tx-service-group: pro20
   service:
@@ -57,6 +61,47 @@ seata:
       server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
       namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
 
+#tcc 分布式事务
+org:
+  dromara:
+    hmily :
+      serializer : kryo
+      recoverDelayTime : 128
+      retryMax : 30
+      scheduledDelay : 128
+      scheduledThreadMax :  10
+      repositorySupport : redis
+      started: false
+#      hmilyDbConfig :
+#        driverClassName: com.mysql.jdbc.Driver
+#        url: jdbc:mysql://127.0.0.1:1672/hmily_transaction?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#        username : root
+#        password : ciel
+      hmilyRedisConfig:
+        hostName: 127.0.0.1
+        port: 6510
+        password: ciel
+
+    # repositorySupport : redis
+    #         hostName  : 192.168.1.68
+    #         port      :  6379
+    #         password  :
+
+
+    # repositorySupport : zookeeper
+    #         host      : 92.168.1.73:2181
+    #         sessionTimeOut      :  100000
+    #         rootPath  : /tcc
+
+    # repositorySupport : mongodb
+    #       mongoDbUrl  : 192.168.1.68:27017
+    #       mongoDbName  :  happylife
+    #       mongoUserName  : xiaoyu
+    #       mongoUserPwd   : 123456
+
+    # repositorySupport : file
+    #         path      : /account
+    #         prefix    :  account
 
 dubbo: #dubbo配置
   scan:

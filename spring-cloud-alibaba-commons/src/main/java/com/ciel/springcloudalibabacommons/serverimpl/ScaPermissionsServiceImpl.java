@@ -3,7 +3,7 @@ package com.ciel.springcloudalibabacommons.serverimpl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ciel.springcloudalibabaapi.crud.IScaPermissionsService;
 import com.ciel.springcloudalibabacommons.mapper.ScaPermissionsMapper;
-import com.ciel.springcloudalibabaentity.ScaPermissions;
+import com.ciel.springcloudalibabaentity.entity.ScaPermissions;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,7 +1,7 @@
 package com.ciel.springcloudalibabacommons.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.ciel.springcloudalibabaentity.ScaUser;
+import com.ciel.springcloudalibabaentity.entity.ScaUser;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 

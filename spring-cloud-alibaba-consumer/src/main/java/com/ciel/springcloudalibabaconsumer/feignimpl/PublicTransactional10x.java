@@ -1,9 +1,8 @@
 package com.ciel.springcloudalibabaconsumer.feignimpl;
 
+import com.ciel.springcloudalibabaapi.exception.AlertException;
 import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
-import com.ciel.springcloudalibabaentity.ScaUser;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -16,5 +15,9 @@ public interface PublicTransactional10x extends PublicTransactional {
     boolean transactionPrice(@RequestParam("price")BigDecimal price, @RequestParam("sendUserId")Long sendUserId,
                              @RequestParam("receiveUserId")Long receiveUserId,@RequestParam("code") Integer code);
 
+    @Override
+    @PutMapping(value = "/producer10/hmily/{price}/{sendUserId}/{receiveUserId}/{code}")
+    boolean hmilyTransaction(@PathVariable("price")  BigDecimal price, @PathVariable("sendUserId")  Long sendUserId,
+                           @PathVariable("receiveUserId")  Long receiveUserId, @PathVariable("code")  Integer code) throws AlertException;
 
 }

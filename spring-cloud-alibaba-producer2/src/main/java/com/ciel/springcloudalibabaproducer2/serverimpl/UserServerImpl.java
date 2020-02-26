@@ -2,7 +2,7 @@ package com.ciel.springcloudalibabaproducer2.serverimpl;
 
 import com.ciel.springcloudalibabaapi.crud.IScaApplicationService;
 import com.ciel.springcloudalibabaapi.crud.UserServer;
-import com.ciel.springcloudalibabaentity.ScaApplication;
+import com.ciel.springcloudalibabaentity.entity.ScaApplication;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
