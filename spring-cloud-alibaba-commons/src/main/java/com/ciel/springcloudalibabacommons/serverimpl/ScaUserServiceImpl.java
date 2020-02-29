@@ -32,12 +32,12 @@ public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, String> testTransaction() {
+    public Object testTransaction() {
         remove(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,"aaa"));
 
         applicationService.remove(new LambdaQueryWrapper<ScaApplication>().eq(ScaApplication::getName,"aaa"));
 
-        return Map.of("a","ok");
+        return "yes";
     }
 
 

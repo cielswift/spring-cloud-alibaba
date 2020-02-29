@@ -24,5 +24,18 @@
             <artifactId>mybatis-plus-extension</artifactId>
             <version>3.3.1</version>
         </dependency>
+
+        <dependency> <!--mybatis plus 多数据源-->
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency> <!--缓存-->
+            <groupId>org.mybatis.caches</groupId>
+            <artifactId>mybatis-ehcache</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
     </dependencies>
 </project>

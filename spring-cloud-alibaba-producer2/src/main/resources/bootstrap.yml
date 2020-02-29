@@ -14,17 +14,33 @@ spring:
     port: 6510
     password: ciel
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: ciel
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      initial-size: 16
-      min-idle: 16
-      max-active: 32
-      timeBetweenEvictionRunsMillis: 50000
-      validationQuery: SELECT 1 FROM dual
+    dynamic: #多数据源模式
+      primary: master #设置默认的数据源或者数据源组,默认值即为master ; 两套配置的主库和从库相反
+      druid: #druid 全局配置
+        filters: stat #Druid内置提供一个StatFilter，用于统计监控信息
+        initial-size: 16
+        min-idle: 16
+        max-active: 32
+        time-between-eviction-runs-millis: 5000
+        validation-query: SELECT 1 FROM dual
+      datasource:
+        master:
+          username: root
+          password: ciel
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          type: com.alibaba.druid.pool.DruidDataSource
+          druid:
+            initial-size: 16 #单独配置
+        slave1:
+          username: root
+          password: ciel
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          type: com.alibaba.druid.pool.DruidDataSource
+          druid:
+            initial-size: 16
+
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -128,6 +144,7 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql
     map-underscore-to-camel-case: true #数据库下划线转换
+    #cache-enabled: true #开启二级缓存
   global-config:
     db-config:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)

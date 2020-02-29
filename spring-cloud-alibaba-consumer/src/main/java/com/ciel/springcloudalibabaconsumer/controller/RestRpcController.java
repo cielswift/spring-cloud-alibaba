@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +34,8 @@ public class RestRpcController {
 
     @GetMapping("/")
     public Result index() {
-        List<Map<String, String>> body = List.of(Map.of("CODE", "200"),
-                Map.of("MSG", "WELCOME-欢迎"));
-        return Result.ok("olll").body(body);
+
+        return Result.ok("olll").body("WELCOME-欢迎");
     }
 
     @Autowired
@@ -72,11 +72,13 @@ public class RestRpcController {
          */
         List<String> xiapeixin = fuckMyLifeXiaPeiXin.fml("xiapeixin");
 
-        List<Map<String, String>> body = List.of(Map.of("CODE", "200"),
-                Map.of("MSG", select), Map.of("body", object),
-                Map.of("oth", xiapeixin.toString()));
 
-        return Result.ok("ok").body(body);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("1",select);
+        hashMap.put("2",object);
+        hashMap.put("3",xiapeixin);
+
+        return Result.ok("ok").body(hashMap);
     }
 
     /**

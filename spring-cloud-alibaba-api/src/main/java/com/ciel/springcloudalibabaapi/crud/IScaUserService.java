@@ -17,7 +17,7 @@ import java.util.Map;
 public interface IScaUserService extends IService<ScaUser> {
 
 
-    public Map<String, String> testTransaction();
+    public Object testTransaction();
 
     /////////////////////////////////////////////////////////////////////////////////
 

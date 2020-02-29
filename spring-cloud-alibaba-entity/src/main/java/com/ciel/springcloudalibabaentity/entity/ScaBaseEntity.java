@@ -36,6 +36,8 @@ public abstract class ScaBaseEntity implements Serializable {
      *
      * 例如 两个属性 private String personStr -> private Person person
      *
+     *
+     * //这个不太好,后期想法是直接 重写 getPerson() 方法,来完成转换
      * @param json
      * @param filed
      */

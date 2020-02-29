@@ -1,18 +1,23 @@
 package com.ciel.springcloudalibabaproducer2.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.ciel.springcloudalibabaapi.crud.AAASe;
+import com.ciel.springcloudalibabaapi.crud.IScaOrderService;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabaapi.exception.AlertException;
 import com.ciel.springcloudalibabaapi.feign.PublicTransactional;
 import com.ciel.springcloudalibabaapi.retu.Result;
+import com.ciel.springcloudalibabaentity.entity.ScaOrder;
 import com.ciel.springcloudalibabaentity.entity.ScaUser;
 import com.ciel.springcloudalibabaentity.type2.Person;
 import com.ciel.springcloudalibabaproducer2.feign.TransactionConsumer;
-import org.dromara.hmily.annotation.Hmily;
 import org.dromara.hmily.core.concurrent.threadlocal.HmilyTransactionContextLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMessage;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,7 +92,7 @@ public class TransactionalProducer implements PublicTransactional {
 
     @PutMapping(value = "/hmily/{price}/{sendUserId}/{receiveUserId}/{code}")
     @Override
-    @Hmily(confirmMethod = "confirm",cancelMethod = "cancel")
+    //@Hmily(confirmMethod = "confirm",cancelMethod = "cancel")
     public boolean hmilyTransaction(@PathVariable("price") @NotEmpty(message="kong") BigDecimal price,
                                     @PathVariable("sendUserId") @NotNull(message="kong") Long sendUserId,
                                     @PathVariable("receiveUserId") @NotNull(message="kong") Long receiveUserId,
@@ -154,7 +159,7 @@ public class TransactionalProducer implements PublicTransactional {
 //           throw new RuntimeException("err--");
 //        }
 
-        return Map.of("msg",true);
+        return Result.ok("msg");
     }
 
 
@@ -183,6 +188,36 @@ public class TransactionalProducer implements PublicTransactional {
 
         List<ScaUser> list = userService.list();
 
+        return Result.ok("ok").body(list);
+    }
+
+    @Autowired
+    protected IScaOrderService scaOrderService;
+
+    @GetMapping("/dtt")
+    public Result dtt(){
+
+        ScaOrder scaOrder = new ScaOrder();
+        scaOrder.setOrderNumber(System.currentTimeMillis());
+
+        scaOrderService.save(scaOrder);
+
+        return Result.ok("ok");
+    }
+
+    @GetMapping(value = "/dttg")
+    public Result dttg(){
+
+        //MediaType.APPLICATION_JSON_UTF8_VALUE
+        //produces：它的作用是指定返回值类型，不但可以设置返回值类型还可以设定返回值的字符编码；
+        //consumes： 指定处理请求的提交内容类型（Content-Type），例如application/json, text/html;
+
+        LambdaQueryWrapper<ScaOrder> lambdaQueryWrapper = new LambdaQueryWrapper<ScaOrder>()
+                .eq(ScaOrder::getOrderNumber, 123456)
+                .or(i -> i.eq(ScaOrder::getId, 123).ne(ScaOrder::getId, 456))
+                .orderByAsc(ScaOrder::getOrderNumber);
+
+        List<ScaOrder> list = scaOrderService.list();
         return Result.ok("ok").body(list);
     }
 

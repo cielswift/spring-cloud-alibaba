@@ -49,13 +49,4 @@ public class Result extends HashMap<String,Object> {
         return this;
     }
 
-    public static void main(String[] args) {
-
-        List<Map<String, String>> body = List.of(Map.of("CODE", "200"),
-                Map.of("MSG", "WELCOME-欢迎"));
-
-        Result aa = Result.error("验证码错误").body(body);
-
-        System.out.println(JSON.toJSONString(aa));
-    }
 }

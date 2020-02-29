@@ -1,8 +1,10 @@
 package com.ciel.springcloudalibabacommons.mapper;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
-import com.ciel.springcloudalibabaentity.entity.ScaUser;
+import com.ciel.springcloudalibabaentity.entity.ScaOrder;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.caches.ehcache.EhcacheCache;
 
 /**
  * <p>
@@ -13,7 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-02-14
  */
 @Mapper
-//@DS("master")  手动指定数据源
-public interface ScaUserMapper extends MyBaseMapper<ScaUser> {
+public interface ScaOrderMapper extends MyBaseMapper<ScaOrder> {
 
 }

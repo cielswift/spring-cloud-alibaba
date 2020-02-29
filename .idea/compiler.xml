@@ -15,15 +15,15 @@
         <module name="spring-cloud-alibaba-commons" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="spring-cloud-alibaba" target="12" />
-      <module name="spring-cloud-alibaba-api" target="12" />
-      <module name="spring-cloud-alibaba-commons" target="12" />
-      <module name="spring-cloud-alibaba-consumer" target="12" />
-      <module name="spring-cloud-alibaba-entity" target="12" />
-      <module name="spring-cloud-alibaba-gateway" target="12" />
-      <module name="spring-cloud-alibaba-producer1" target="12" />
-      <module name="spring-cloud-alibaba-producer2" target="12" />
+    <bytecodeTargetLevel target="8">
+      <module name="spring-cloud-alibaba" target="1.8" />
+      <module name="spring-cloud-alibaba-api" target="1.8" />
+      <module name="spring-cloud-alibaba-commons" target="1.8" />
+      <module name="spring-cloud-alibaba-consumer" target="1.8" />
+      <module name="spring-cloud-alibaba-entity" target="1.8" />
+      <module name="spring-cloud-alibaba-gateway" target="1.8" />
+      <module name="spring-cloud-alibaba-producer1" target="1.8" />
+      <module name="spring-cloud-alibaba-producer2" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

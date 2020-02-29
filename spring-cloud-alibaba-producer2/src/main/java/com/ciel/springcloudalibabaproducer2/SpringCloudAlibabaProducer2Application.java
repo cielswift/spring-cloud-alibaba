@@ -1,5 +1,6 @@
 package com.ciel.springcloudalibabaproducer2;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,9 +12,13 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication
+/**
+ * 使用多数据源排除自动加载的数据源
+ */
+@SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
 
 /**
  * 使用nacos作为注册中心
@@ -40,6 +45,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @ComponentScan("org.dromara.hmily")
 
+@EnableScheduling  //开启定时任务
 public class SpringCloudAlibabaProducer2Application {
 
     public static void main(String[] args) {
