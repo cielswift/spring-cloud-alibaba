@@ -12,6 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @ComponentScan("org.dromara.hmily")
 
+@EnableScheduling  //开启定时任务
 public class SpringCloudAlibabaProducer1Application {
 
     public static void main(String[] args) {

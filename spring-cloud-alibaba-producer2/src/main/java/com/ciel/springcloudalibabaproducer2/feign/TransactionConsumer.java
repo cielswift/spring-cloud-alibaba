@@ -24,4 +24,7 @@ public interface TransactionConsumer extends PublicTransactional {
                              @PathVariable("receiveUserId")Long receiveUserId, @PathVariable("code") Integer code) throws AlertException;
 
 
+    @Override
+    @PutMapping("/producer10/rocket_mq/{price}")
+    boolean rocketMqTran(@PathVariable("price") BigDecimal price) throws AlertException;
 }

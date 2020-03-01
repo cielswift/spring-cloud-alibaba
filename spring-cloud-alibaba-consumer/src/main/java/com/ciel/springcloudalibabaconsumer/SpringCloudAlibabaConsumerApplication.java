@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * 开启基于注解的aop
  */
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(exposeProxy = true,proxyTargetClass = true)
 /**
  * 开启定时任务
  */

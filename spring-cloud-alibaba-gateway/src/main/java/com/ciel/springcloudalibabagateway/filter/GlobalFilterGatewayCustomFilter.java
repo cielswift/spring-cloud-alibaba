@@ -37,7 +37,7 @@
 //           // List<String> authentication = exchange.getRequest().getQueryParams().get("Authentication");
 //
 //            List<String> token = exchange.getRequest().getHeaders().get("Authentication");
-//            token = List.of("123456");
+//
 //            if (null != token && !token.isEmpty()) {
 //
 //                return chain.filter(exchange).then(Mono.fromRunnable(() -> {

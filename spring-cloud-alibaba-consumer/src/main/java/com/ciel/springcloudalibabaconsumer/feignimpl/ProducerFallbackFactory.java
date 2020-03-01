@@ -3,6 +3,7 @@ package com.ciel.springcloudalibabaconsumer.feignimpl;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -14,7 +15,9 @@ public class ProducerFallbackFactory implements FallbackFactory<FuckMyLifeXiaPei
             @Override
             public List<String> fml(String name) {
 
-                return List.of("发生了异常>>".concat(throwable.getClass().getName()));
+                LinkedList<String> strings = new LinkedList<>();
+                strings.add("发生了异常");
+                return strings;
             }
         };
     }

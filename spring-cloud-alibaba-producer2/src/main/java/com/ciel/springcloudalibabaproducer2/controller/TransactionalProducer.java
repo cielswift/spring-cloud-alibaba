@@ -136,7 +136,19 @@ public class TransactionalProducer implements PublicTransactional {
         return true;
     }
 
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+    @Override
+    @PutMapping("/rocket_mq/{price}")
+    @Transactional(rollbackFor = Exception.class)
+    public boolean rocketMqTran(@PathVariable("price") BigDecimal price) throws AlertException {
+
+        return userService.update(new LambdaUpdateWrapper<ScaUser>()
+                .setSql("price = price+".concat(price.toString()))
+                .eq(ScaUser::getId, 425752880537804800L).ge(ScaUser::getPrice, price));
+    }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @Autowired
     protected AAASe aaaSe;
@@ -220,5 +232,6 @@ public class TransactionalProducer implements PublicTransactional {
         List<ScaOrder> list = scaOrderService.list();
         return Result.ok("ok").body(list);
     }
+
 
 }

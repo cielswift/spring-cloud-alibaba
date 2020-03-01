@@ -73,6 +73,17 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-jdbc</artifactId>
 				</exclusion>
+
+				<exclusion> <!--消费者不需要连接mybatis-->
+					<groupId>com.baomidou</groupId>
+					<artifactId>mybatis-plus-boot-starter</artifactId>
+				</exclusion>
+
+				<exclusion> <!--消费者不需要连接mybatis-->
+					<groupId>com.baomidou</groupId>
+					<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+				</exclusion>
+
 			</exclusions>
 		</dependency>
 

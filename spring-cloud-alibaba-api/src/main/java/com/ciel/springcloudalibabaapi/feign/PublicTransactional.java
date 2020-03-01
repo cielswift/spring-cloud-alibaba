@@ -20,4 +20,5 @@ public interface PublicTransactional {
     public boolean hmilyTransaction(BigDecimal price,Long sendUserId,
                                     Long receiveUserId,Integer code) throws AlertException;
 
+    public boolean rocketMqTran(BigDecimal price) throws AlertException;
 }

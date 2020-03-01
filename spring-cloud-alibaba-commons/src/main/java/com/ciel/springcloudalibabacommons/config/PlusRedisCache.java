@@ -1,9 +1,7 @@
 package com.ciel.springcloudalibabacommons.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.CacheNamespace;
-import org.apache.ibatis.cache.Cache;
-import org.mybatis.caches.ehcache.EhcacheCache;
+
 
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;

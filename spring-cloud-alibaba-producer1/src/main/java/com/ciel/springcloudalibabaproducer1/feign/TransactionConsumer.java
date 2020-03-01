@@ -23,4 +23,7 @@ public interface TransactionConsumer extends PublicTransactional {
     boolean hmilyTransaction(@PathVariable("price") BigDecimal price, @PathVariable("sendUserId") Long sendUserId,
                              @PathVariable("receiveUserId")Long receiveUserId, @PathVariable("code") Integer code) throws AlertException;
 
+    @Override
+    @PutMapping("/producer20/rocket_mq/{price}")
+    boolean rocketMqTran(@PathVariable("price") BigDecimal price) throws AlertException;
 }

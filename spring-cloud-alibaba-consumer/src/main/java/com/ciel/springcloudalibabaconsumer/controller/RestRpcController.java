@@ -2,6 +2,7 @@ package com.ciel.springcloudalibabaconsumer.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.ciel.springcloudalibabaapi.crud.ApplicationServer;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
 import com.ciel.springcloudalibabaapi.exception.AlertException;
@@ -13,7 +14,9 @@ import com.ciel.springcloudalibabaentity.entity.ScaUser;
 import com.ciel.springcloudalibabaentity.type2.Person;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -72,7 +75,6 @@ public class RestRpcController {
          */
         List<String> xiapeixin = fuckMyLifeXiaPeiXin.fml("xiapeixin");
 
-
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("1",select);
         hashMap.put("2",object);
@@ -86,7 +88,11 @@ public class RestRpcController {
      * 如果使用其他类里的函数,使用blockHandlerClass 指定类, 但是方法必须是 static;
      */
     public Result d2(String name, BlockException be) {
-        return Result.error("熔断降级").body(be.getRuleLimitApp().concat(be.getMessage()));
+        String msg = null;
+        if(null != be && !StringUtils.isEmpty(be.getRuleLimitApp())){
+            msg = be.getRuleLimitApp();
+        }
+        return Result.error("熔断降级").body(msg);
     }
 
     /**
@@ -135,7 +141,14 @@ public class RestRpcController {
 
         return Result.ok("code").body(isOk);
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
+    @GetMapping("/rocket/{money}")
+    public Result rocket(@PathVariable("money") BigDecimal money) throws AlertException {
 
+        boolean mqTran = transactional10x.rocketMqTran(money);
+
+        return Result.ok("ookk");
+    }
 
 }
