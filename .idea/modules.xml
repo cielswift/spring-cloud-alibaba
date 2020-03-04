@@ -2,14 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/sca-api/sca-api.iml" filepath="$PROJECT_DIR$/sca-api/sca-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-commons/sca-commons.iml" filepath="$PROJECT_DIR$/sca-commons/sca-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-consumer/sca-consumer.iml" filepath="$PROJECT_DIR$/sca-consumer/sca-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-entity/sca-entity.iml" filepath="$PROJECT_DIR$/sca-entity/sca-entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-gateway/sca-gateway.iml" filepath="$PROJECT_DIR$/sca-gateway/sca-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-producer1/sca-producer1.iml" filepath="$PROJECT_DIR$/sca-producer1/sca-producer1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-producer2/sca-producer2.iml" filepath="$PROJECT_DIR$/sca-producer2/sca-producer2.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-api/spring-cloud-alibaba-api.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-api/spring-cloud-alibaba-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-commons/spring-cloud-alibaba-commons.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-commons/spring-cloud-alibaba-commons.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-consumer/spring-cloud-alibaba-consumer.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-consumer/spring-cloud-alibaba-consumer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-entity/spring-cloud-alibaba-entity.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-entity/spring-cloud-alibaba-entity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway/spring-cloud-alibaba-gateway.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-gateway/spring-cloud-alibaba-gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-producer1/spring-cloud-alibaba-producer1.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-producer1/spring-cloud-alibaba-producer1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba-producer2/spring-cloud-alibaba-producer2.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba-producer2/spring-cloud-alibaba-producer2.iml" />
     </modules>
   </component>
 </project>

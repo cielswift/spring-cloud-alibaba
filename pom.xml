@@ -6,13 +6,13 @@
     <packaging>pom</packaging>
 
     <modules>
-      <module>spring-cloud-alibaba-producer1</module>
-        <module>spring-cloud-alibaba-producer2</module>
-        <module>spring-cloud-alibaba-consumer</module>
-        <module>spring-cloud-alibaba-api</module>
-        <module>spring-cloud-alibaba-gateway</module>
-        <module>spring-cloud-alibaba-entity</module>
-        <module>spring-cloud-alibaba-commons</module>
+      <module>sca-producer1</module>
+        <module>sca-producer2</module>
+        <module>sca-consumer</module>
+        <module>sca-api</module>
+        <module>sca-gateway</module>
+        <module>sca-entity</module>
+        <module>sca-commons</module>
     </modules>
 
     <parent>

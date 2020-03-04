@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-commons/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-consumer/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-entity/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-gateway/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-producer1/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/spring-cloud-alibaba-producer2/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-commons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-entity/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-producer1/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sca-producer2/src/main/java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

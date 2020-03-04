@@ -6,37 +6,37 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spring-cloud-alibaba-api" />
-        <module name="spring-cloud-alibaba-producer2" />
-        <module name="spring-cloud-alibaba-producer1" />
-        <module name="spring-cloud-alibaba-consumer" />
-        <module name="spring-cloud-alibaba-entity" />
-        <module name="spring-cloud-alibaba-gateway" />
-        <module name="spring-cloud-alibaba-commons" />
+        <module name="sca-commons" />
+        <module name="sca-consumer" />
+        <module name="sca-gateway" />
+        <module name="sca-api" />
+        <module name="sca-producer1" />
+        <module name="sca-producer2" />
+        <module name="sca-entity" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
+      <module name="sca-api" target="1.8" />
+      <module name="sca-commons" target="1.8" />
+      <module name="sca-consumer" target="1.8" />
+      <module name="sca-entity" target="1.8" />
+      <module name="sca-gateway" target="1.8" />
+      <module name="sca-producer1" target="1.8" />
+      <module name="sca-producer2" target="1.8" />
       <module name="spring-cloud-alibaba" target="1.8" />
-      <module name="spring-cloud-alibaba-api" target="1.8" />
-      <module name="spring-cloud-alibaba-commons" target="1.8" />
-      <module name="spring-cloud-alibaba-consumer" target="1.8" />
-      <module name="spring-cloud-alibaba-entity" target="1.8" />
-      <module name="spring-cloud-alibaba-gateway" target="1.8" />
-      <module name="spring-cloud-alibaba-producer1" target="1.8" />
-      <module name="spring-cloud-alibaba-producer2" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="sca-api" options="-parameters" />
+      <module name="sca-commons" options="-parameters" />
+      <module name="sca-consumer" options="-parameters" />
+      <module name="sca-entity" options="-parameters" />
+      <module name="sca-gateway" options="-parameters" />
+      <module name="sca-producer1" options="-parameters" />
+      <module name="sca-producer2" options="-parameters" />
       <module name="spring-cloud-alibaba" options="-parameters" />
-      <module name="spring-cloud-alibaba-api" options="-parameters" />
-      <module name="spring-cloud-alibaba-commons" options="-parameters" />
-      <module name="spring-cloud-alibaba-consumer" options="-parameters" />
-      <module name="spring-cloud-alibaba-entity" options="-parameters" />
-      <module name="spring-cloud-alibaba-gateway" options="-parameters" />
-      <module name="spring-cloud-alibaba-producer1" options="-parameters" />
-      <module name="spring-cloud-alibaba-producer2" options="-parameters" />
     </option>
   </component>
 </project>
