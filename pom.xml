@@ -64,6 +64,24 @@
             <version>1.2.62</version>
         </dependency>
 
+<!--        <dependency> &lt;!&ndash;excel工具&ndash;&gt;-->
+<!--            <groupId>com.github.liaochong</groupId>-->
+<!--            <artifactId>myexcel</artifactId>-->
+<!--            <version>3.4.2</version>-->
+<!--        </dependency>-->
+
+        <dependency> <!--excel工具-->
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.1.6</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.apache.poi</groupId>-->
+<!--            <artifactId>poi</artifactId>-->
+<!--            <version>4.1.2</version>-->
+<!--        </dependency>-->
+
         <dependency> <!--自动生成get,set-->
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

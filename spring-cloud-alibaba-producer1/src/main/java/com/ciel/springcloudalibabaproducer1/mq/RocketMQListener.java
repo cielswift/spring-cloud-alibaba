@@ -2,6 +2,8 @@ package com.ciel.springcloudalibabaproducer1.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ciel.springcloudalibabaapi.exception.AlertException;
+import lombok.SneakyThrows;
 import org.apache.rocketmq.spring.annotation.RocketMQTransactionListener;
 import org.apache.rocketmq.spring.core.RocketMQLocalTransactionListener;
 import org.apache.rocketmq.spring.core.RocketMQLocalTransactionState;
@@ -38,7 +40,12 @@ public class RocketMQListener implements RocketMQLocalTransactionListener {
         BigDecimal price = (BigDecimal) jb.get("PRICE");
         String txNo = (String) jb.get("TXNO");
 
-        boolean tran = rocketMQCCService.rocketMqTran(price, txNo);
+        boolean tran = false;
+        try {
+            tran = rocketMQCCService.rocketMqTran(price, txNo);
+        } catch (AlertException e) {
+            e.printStackTrace();
+        }
 
         if (tran) {
             return RocketMQLocalTransactionState.COMMIT; //可消费
@@ -49,7 +56,6 @@ public class RocketMQListener implements RocketMQLocalTransactionListener {
 
     @Override
     public RocketMQLocalTransactionState checkLocalTransaction(Message msg) {
-
         /**
          * 网络中断 事务状态回查
          */

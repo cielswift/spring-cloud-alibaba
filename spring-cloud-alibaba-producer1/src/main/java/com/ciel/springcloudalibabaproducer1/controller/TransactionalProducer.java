@@ -246,12 +246,12 @@ public class TransactionalProducer implements PublicTransactional {
                 rocketMQTemplate.sendMessageInTransaction("producer_group1",
                         "top_1", msg, null);
 
+       // rocketMQTemplate.convertAndSend();
         System.out.println(result.getSendStatus().toString());
         logger.info(result.getSendStatus().toString());
 
         return true;
     }
-
 
 
 }

@@ -14,6 +14,8 @@ spring:
     proxy-target-class: true #使用cglib代理
   main:
     allow-bean-definition-overriding: true #bean冲突覆盖
+  profiles:
+    active: dev #开发模式
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -79,7 +81,9 @@ spring:
 #      表示 一秒内，允许 一个请求通过，令牌桶的填充速率也是一秒钟添加一个令牌。
 #      最大突发状况 也只允许 一秒内有一次请求，可以根据业务来调整 。
 
-
+#    loadbalancer:
+#      retry:
+#        enabled: true #该参数用来开启重试机制
     sentinel: #限流
       transport:
         dashboard: 127.0.0.1:8080
@@ -94,7 +98,6 @@ ribbon:
   ReadTimeout: 5000
   ConnectTimeout: 5000
 
-
 management:
   endpoints:
     web:
@@ -103,3 +106,11 @@ management:
 
 logging:
   config: classpath:logback-spring.xml
+
+---
+custom-mod:  #多文档模式,定义一些其他配置
+  name: gateway
+
+spring:
+  profiles:
+    active: dev

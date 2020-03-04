@@ -2,6 +2,7 @@ package com.ciel.springcloudalibabaproducer2.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ciel.springcloudalibabaapi.exception.AlertException;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,18 @@ public class RocketMQReceive implements RocketMQListener<String> {
     protected ScaUserTransactionService userTransactionService;
 
     @Override
-    public void onMessage(String message) {
-
+    public void onMessage(String message) {  //分布式事务失败重复执行消息(出现异常循环接收循环接收)
         HashMap jb = JSON.parseObject(message, HashMap.class);
 
         String txno = (String) jb.get("TXNO");
         BigDecimal price = (BigDecimal) jb.get("PRICE");
         long accountReceive = (long)jb.get("ACCOUNT_RECEIVE");
 
-        boolean b = userTransactionService.tranAdd(price, txno);
+        try {
+            boolean b = userTransactionService.tranAdd(price, txno);
+        } catch (AlertException e) {
+           throw new RuntimeException("AAA");
+        }
 
     }
 

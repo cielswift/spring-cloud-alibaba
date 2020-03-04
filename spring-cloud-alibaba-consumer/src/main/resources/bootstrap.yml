@@ -36,6 +36,8 @@ spring:
     proxy-target-class: true #使用cglib代理
   main:
     allow-bean-definition-overriding: true #bean冲突覆盖
+  profiles:
+    active: dev #开发模式
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -109,3 +111,12 @@ management:
 
 logging:
   config: classpath:logback-spring.xml
+
+
+---
+custom-mod:  #多文档模式,定义一些其他配置
+  name: consumer
+
+spring:
+  profiles:
+    active: dev

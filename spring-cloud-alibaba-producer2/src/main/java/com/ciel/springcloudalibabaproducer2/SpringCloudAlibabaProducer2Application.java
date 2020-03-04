@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -52,10 +53,12 @@ public class SpringCloudAlibabaProducer2Application {
         SpringApplication.run(SpringCloudAlibabaProducer2Application.class, args);
     }
 
-//    @Bean
-//    public RedisTemplate stringRedis(){
-//        RedisTemplate redis = new RedisTemplate();
-//        redis.setDefaultSerializer(RedisSerializer.string());
-//        return redis;
-//    }
+
+    @Bean
+    public RedisTemplate<String, String> stringRedis(RedisConnectionFactory factory){
+        RedisTemplate<String, String> redis = new RedisTemplate<>();
+        redis.setConnectionFactory(factory);
+        redis.setDefaultSerializer(RedisSerializer.string());
+        return redis;
+    }
 }

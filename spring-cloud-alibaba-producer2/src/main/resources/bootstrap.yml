@@ -9,6 +9,8 @@ spring:
     proxy-target-class: true #使用cglib代理
   main:
     allow-bean-definition-overriding: true #bean冲突覆盖
+  profiles:
+    active: dev #开发模式
   redis:
     host: 127.0.0.1
     port: 6510
@@ -183,3 +185,11 @@ logging:
 clusters:
   datacenterId: 7
   machineId: 2
+
+---
+custom-mod:  #多文档模式,定义一些其他配置
+  name: producer20
+
+spring:
+  profiles:
+    active: dev

@@ -2,6 +2,7 @@ package com.ciel.springcloudalibabaproducer2.mq;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.ciel.springcloudalibabaapi.crud.IScaUserService;
+import com.ciel.springcloudalibabaapi.exception.AlertException;
 import com.ciel.springcloudalibabaentity.entity.ScaUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,7 +21,7 @@ public class ScaUserTransactionService {
     protected RedisTemplate redisTemplate;
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean tranAdd(BigDecimal price,String txNo){
+    public boolean tranAdd(BigDecimal price,String txNo) throws AlertException {
 
         if (null == redisTemplate.opsForValue().get(txNo)) {
 
@@ -28,12 +29,14 @@ public class ScaUserTransactionService {
                     .setSql("price = price+".concat(price.toString()))
                     .eq(ScaUser::getId, 425752880537804800L).ge(ScaUser::getPrice, price));
 
+            if(price.compareTo(new BigDecimal("45.5"))==0){
+                throw new AlertException("45.5人为异常");
+            }
+
             if (update) {
                 //添加事务日志
                 redisTemplate.opsForValue().set(txNo, 1);
-
                 return true;
-
             }else{
                 return false;
             }

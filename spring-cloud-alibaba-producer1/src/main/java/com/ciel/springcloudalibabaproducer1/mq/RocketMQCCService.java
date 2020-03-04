@@ -22,7 +22,7 @@ public class RocketMQCCService {
     protected RedisTemplate redisTemplate;
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean rocketMqTran(BigDecimal price,String txNo) {
+    public boolean rocketMqTran(BigDecimal price,String txNo) throws AlertException {
 
         if (null == redisTemplate.opsForValue().get(txNo)) {
 
@@ -30,10 +30,12 @@ public class RocketMQCCService {
                     .setSql("price = price-".concat(price.toString()))
                     .eq(ScaUser::getId, 425752943532056576L).ge(ScaUser::getPrice, price));
 
+            if(price.compareTo(new BigDecimal("35.5"))==0){
+                throw new AlertException("35.5人为异常");
+            }
             if (update) {
                 //添加事务日志
                 redisTemplate.opsForValue().set(txNo, 1);
-
                 return true;
 
             }else{

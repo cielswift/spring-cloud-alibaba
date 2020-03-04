@@ -31,7 +31,7 @@ import java.time.ZoneId;
 /**
  * 开启基于注解的aop
  */
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(exposeProxy = true,proxyTargetClass = true)
 
 public class SpringCloudAlibabaGatewayApplication {
 

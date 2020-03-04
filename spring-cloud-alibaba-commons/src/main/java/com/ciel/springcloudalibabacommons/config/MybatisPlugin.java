@@ -47,7 +47,6 @@ public class MybatisPlugin {
     @Value("${clusters.machineId}")
     private Integer machineId;
 
-
     @Bean
     public SnowFlake snowFlake() {
         return new SnowFlake(datacenterId, machineId);
@@ -65,6 +64,7 @@ public class MybatisPlugin {
     @Bean
     public PaginationInterceptor paginationInterceptor() {  //自动分页
         PaginationInterceptor page = new PaginationInterceptor();
+
         page.setDbType(DbType.MYSQL);
 
         // 设置请求的页面大于最大页后操作， true调回到首页，false 继续请求  默认false
