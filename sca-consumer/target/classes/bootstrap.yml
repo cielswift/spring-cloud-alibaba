@@ -1,5 +1,5 @@
 server:
-  port: 5110
+  port: 25110
   servlet:
     context-path: /consumer
   http2:  #2.0
@@ -38,6 +38,11 @@ spring:
     allow-bean-definition-overriding: true #bean冲突覆盖
   profiles:
     active: dev #开发模式
+  redis:
+    host: 127.0.0.1
+    port: 6510
+    password: ciel
+    database: 13
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -46,7 +51,7 @@ spring:
         group: DEFAULT_GROUP #组
       config:
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-        file-extension: yaml  #指定读取的配置文件后缀, dataId 默认就是spring.application.name + yaml, 可以通过prefix修改
+        file-extension: yaml  #指定读取的配置文件后缀, dataId 默认 ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
         prefix: consumer  #文件名 -- 如果没有配置则默认为 ${spring.appliction.name} (优先级高)
@@ -60,7 +65,8 @@ spring:
 
     sentinel: #限流
       transport:
-        dashboard: 127.0.0.1:8080
+        dashboard: 127.0.0.1:16820
+        port: 8719 #端口配置会在应用对应的机器上启动一个 Http Server，该 Server 会与 Sentinel 控制台做交互。比如 Sentinel 控制台添加了一个限流规则，会把规则数据 push 给这个 Http Server 接收，Http Server 再将规则注册到 Sentinel 中。若端口冲突会自动向下探测可用的端口。
       datasource: #添加Nacos数据源配置
         c1:
           nacos:
@@ -108,16 +114,28 @@ dubbo: #dubbo配置
 feign:
   sentinel: #开启对于sentinel的支持
     enabled: true
-  client:
+  client:  #feign超时
     config:
       default:
         connectTimeout: 600000
         readTimeout: 600000
         loggerLevel: basic
+  compression:
+    request:
+      enabled: true #是否对请求进行GZIP压缩
+      mime-types: text/xml,application/xml,application/json #指定压缩的请求数据类型
+      min-request-size: 2048 #超过该大小的请求会被压缩
+    response:
+      enabled: true #是否对响应进行GZIP压缩
 
 ribbon: #超时设置
   ReadTimeout: 600000
   ConnectTimeout: 600000
+#  OkToRetryOnAllOperations: true #对超时请求启用重试机制
+#  MaxAutoRetriesNextServer: 1 #切换重试实例的最大个数
+#  MaxAutoRetries: 1 # 切换实例后重试最大次数
+#  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #修改负载均衡算法
+
 
 management:
   endpoints:
@@ -127,7 +145,8 @@ management:
 
 logging:
   config: classpath:logback-spring.xml
-
+  level:
+    com.ciel.scaconsumer.controller: debug #配合feign 日志级别
 
 ---
 custom-mod:  #多文档模式,定义一些其他配置

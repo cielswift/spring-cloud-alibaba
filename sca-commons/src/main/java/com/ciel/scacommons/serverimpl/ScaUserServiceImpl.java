@@ -8,6 +8,7 @@ import com.ciel.scacommons.mapper.ScaUserMapper;
 import com.ciel.scaentity.entity.ScaApplication;
 import com.ciel.scaentity.entity.ScaUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2020-02-14
  */
 @Service
+@Primary
 public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> implements IScaUserService {
 
     @Autowired
     protected IScaApplicationService applicationService;
-
-
 
 
     @Override

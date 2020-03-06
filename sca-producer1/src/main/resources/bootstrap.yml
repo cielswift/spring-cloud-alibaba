@@ -1,5 +1,5 @@
 server:
-  port: 5010
+  port: 25010
   servlet:
     context-path: /producer10
 spring:

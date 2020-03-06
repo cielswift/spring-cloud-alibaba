@@ -5,9 +5,15 @@ import com.alibaba.csp.sentinel.adapter.gateway.sc.exception.SentinelGatewayBloc
 import com.alibaba.csp.sentinel.adapter.spring.webflux.SentinelWebFluxFilter;
 import com.alibaba.csp.sentinel.adapter.spring.webflux.exception.SentinelBlockExceptionHandler;
 import com.alibaba.fastjson.JSONObject;
+import com.ciel.scaapi.crud.IScaUserService;
+import com.ciel.scacommons.serverimpl.ScaUserServiceINIT;
+import com.ciel.scaentity.entity.ScaPermissions;
+import com.ciel.scaentity.entity.ScaRole;
+import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scagateway.filter.web.JsonExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
@@ -16,19 +22,33 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.ServerCodecConfigurer;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.result.view.ViewResolver;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Configuration
 public class GlobalFilterGatewayCustomFilter {
+
+    @Autowired
+    protected ScaUserServiceINIT userServiceINIT;
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     //整合Sentinel 限流相关
     private final List<ViewResolver> viewResolvers;
@@ -78,12 +98,41 @@ public class GlobalFilterGatewayCustomFilter {
      */
 
     @Bean
-    @Order(0)
+    @Order(-7)
     public GlobalFilter a() {
         return (exchange, chain) -> {
 
-            //  ServerWebExchange //请求上下文
             System.out.println("第1个过滤器在请求之前执行");
+
+            ServerHttpRequest request = exchange.getRequest();
+
+            if(request.getURI().getPath().endsWith("/login") && HttpMethod.POST.equals(request.getMethod())){
+
+                String username = request.getQueryParams().getFirst("username");
+                String password = request.getQueryParams().getFirst("password");
+
+                if(!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)){
+
+                    ScaUser scaUser = userServiceINIT.userByName(username);
+
+                    if(bCryptPasswordEncoder().matches(password,scaUser.getPassword())){
+
+                        List<ScaRole> roles = userServiceINIT.rolesByuId(scaUser.getId());
+
+                        List<ScaPermissions> scaPermissions = userServiceINIT.permissionsByuId(scaUser.getId());
+
+
+
+                    }
+                }else{
+
+                    //密码错误
+                }
+
+            }
+
+
+
 
            // List<String> authentication = exchange.getRequest().getQueryParams().get("Authentication");
 
@@ -114,7 +163,6 @@ public class GlobalFilterGatewayCustomFilter {
 
                 //return response.setComplete();  //请求已经结束
             }
-
         };
     }
 

@@ -1,6 +1,5 @@
 package com.ciel.scaconsumer.controller;
 
-import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

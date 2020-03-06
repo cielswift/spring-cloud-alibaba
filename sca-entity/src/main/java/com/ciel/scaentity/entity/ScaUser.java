@@ -21,10 +21,11 @@ import lombok.experimental.Accessors;
  * @since 2020-02-14
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "sca_user",autoResultMap = true) //开启注释映射
 public class ScaUser extends ScaBaseEntity {
+
 
     @TableField("USERNAME")
     private String username;

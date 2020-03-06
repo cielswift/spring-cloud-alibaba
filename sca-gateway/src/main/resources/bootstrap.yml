@@ -1,5 +1,5 @@
 server:
-  port: 5210
+  port: 25210
   servlet:
     context-path: /gateway
 spring:
@@ -18,6 +18,23 @@ spring:
     active: dev #开发模式
   jmx:
     enabled: true #启用jmx监控
+  datasource:
+    dynamic: #多数据源模式
+      primary: master #设置默认的数据源或者数据源组,默认值即为master ; 两套配置的主库和从库相反
+      druid: #druid 全局配置
+        filters: stat #Druid内置提供一个StatFilter，用于统计监控信息
+        initial-size: 8
+        min-idle: 8
+        max-active: 16
+        time-between-eviction-runs-millis: 5000
+        validation-query: SELECT 1 FROM dual
+      datasource:
+        master:
+          username: root
+          password: ciel
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          type: com.alibaba.druid.pool.DruidDataSource
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -96,6 +113,8 @@ spring:
 #      retry:
 #        enabled: true #该参数用来开启重试机制
     sentinel: #限流
+      filter:
+        enabled: false
       transport:
         dashboard: 127.0.0.1:16820
 
@@ -117,6 +136,10 @@ management:
 
 logging:
   config: classpath:logback-spring.xml
+
+clusters:
+  datacenterId: 3
+  machineId: 1
 
 ---
 custom-mod:  #多文档模式,定义一些其他配置

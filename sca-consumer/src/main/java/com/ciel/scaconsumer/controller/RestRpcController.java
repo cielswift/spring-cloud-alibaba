@@ -10,17 +10,17 @@ import com.ciel.scaconsumer.feignimpl.PublicTransactional10x;
 import com.ciel.scaconsumer.feignimpl.PublicTransactional20x;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@RefreshScope //更新配置文件
 @RestController
 public class RestRpcController {
     /**
@@ -28,7 +28,6 @@ public class RestRpcController {
      */
     @Reference
     protected ApplicationServer applicationServer;
-
 
     @GetMapping("/iw")
     public Result iw() {
@@ -40,6 +39,7 @@ public class RestRpcController {
         if((System.currentTimeMillis() & 3) == 0){
             throw new AlertException(" & 3 异常");
         }
+        List<String> aa = fuckMyLifeXiaPeiXin.fml("aa");
         return Result.ok("iw/iw").body("iw/iw");
     }
 
@@ -87,6 +87,14 @@ public class RestRpcController {
     }
 
     /**
+     *
+     * 在 Sentinel 中所有流控降级相关的异常都是异常类 BlockException 的子类：
+     *
+     * 流控异常：FlowException
+     * 熔断降级异常：DegradeException
+     * 系统保护异常：SystemBlockException
+     * 热点参数限流异常：ParamFlowException
+     *
      * 熔断降级,参数类型需要和原方法匹配,最后加上BlockException;
      * 如果使用其他类里的函数,使用blockHandlerClass 指定类, 但是方法必须是 static;
      */

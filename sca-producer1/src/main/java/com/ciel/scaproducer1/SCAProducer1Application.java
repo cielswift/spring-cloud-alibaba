@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -56,11 +57,14 @@ public class SCAProducer1Application {
 
 
     @Bean
-    public RedisTemplate<String, String> stringRedis(RedisConnectionFactory factory){
-        RedisTemplate<String, String> redis = new RedisTemplate<>();
-        redis.setConnectionFactory(factory);
-        redis.setDefaultSerializer(RedisSerializer.string());
-        return redis;
+    @Primary
+    public RedisTemplate<String, String> redisString(RedisConnectionFactory factory){
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(factory);
+        redisTemplate.setDefaultSerializer(RedisSerializer.string());
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setValueSerializer(RedisSerializer.string());
+        return redisTemplate;
     }
 
 }

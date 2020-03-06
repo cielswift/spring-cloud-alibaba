@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * @since 2020-02-14
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sca_permissions")
 public class ScaPermissions extends ScaBaseEntity {
