@@ -2,6 +2,7 @@ package com.ciel.scaconsumer.feignimpl;
 
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.feign.PublicTransactional;
+import com.ciel.scaapi.retu.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,4 +24,8 @@ public interface PublicTransactional10x extends PublicTransactional {
     @Override
     @PutMapping("/producer10/rocket_mq/{price}")
     boolean rocketMqTran(@PathVariable("price") BigDecimal price) throws AlertException;
+
+    @GetMapping(value = "/producer10/seata")
+    Result seata(@RequestParam("price") BigDecimal price, @RequestParam("sendUserId")Long sendUserId,
+                 @RequestParam("receiveUserId") Long receiveUserId);
 }

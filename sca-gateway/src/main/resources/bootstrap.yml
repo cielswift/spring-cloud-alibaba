@@ -16,6 +16,8 @@ spring:
     allow-bean-definition-overriding: true #bean冲突覆盖
   profiles:
     active: dev #开发模式
+  jmx:
+    enabled: true #启用jmx监控
   cloud:
     nacos:  #使用nacos注册中心
       discovery:
@@ -62,8 +64,17 @@ spring:
 #            #- Before=2019-05-13T17:20:10.789-07:00[Asia/Shanghai] #并且要在这个时间之前
 #            - After=2019-02-14T13:10:47.789-07:00[Asia/Shanghai]
 #            #- Header=X-Request-Id, \d+ #有请求头名为 x-request-id，其值与 \d+ 正则表达式匹配（值为一个或多个数字），则此路由匹配
+#            #- Method=GET
+#            #- RemoteAddr=192.168.1.1.24
+#            #- Weight=group1, 8
 #          filters:
 #            - StripPrefix=1 #访问路径 http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
+
+           # - StripPrefix=2 会把的请求的路径去除两位
+           # curl http://localhost:9201/user-service/a/user/1 =  curl http://localhost:8201/user/1
+          #  - PrefixPath=/user 会对原有路径进行增加操作
+          # http://localhost:9201/1 = curl http://localhost:8201/user/1
+
 #            - name: RequestRateLimiter #请求数限流 名字不能随便写
 #              args:
 #                key-resolver: "#{@ipKeyResolver}"  #获取刚才创建的对象
@@ -86,7 +97,7 @@ spring:
 #        enabled: true #该参数用来开启重试机制
     sentinel: #限流
       transport:
-        dashboard: 127.0.0.1:8080
+        dashboard: 127.0.0.1:16820
 
   zipkin:  #链路追踪
     base-url: http://127.0.0.1:9411/
@@ -110,6 +121,14 @@ logging:
 ---
 custom-mod:  #多文档模式,定义一些其他配置
   name: gateway
+
+newconfig:
+  rad: ${random.uuid}
+  ca: ${random.int}
+
+whitegirl:
+  name: ${random.uuid}
+  age: ${random.int}
 
 spring:
   profiles:

@@ -63,6 +63,9 @@ spring:
           - dataId: xiapeixin2.yaml
             group: DEFAULT_GROUP
             refresh: false
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group
 
   zipkin:  #链路追踪
     base-url: http://127.0.0.1:9411/
@@ -74,11 +77,12 @@ spring:
 seata:
   tx-service-group: pro10 #名称不能相同
   service:
-    grouplist: 127.0.0.1:19212
+    grouplist: 127.0.0.1:20922
   registry:
     nacos:  #使用nacos注册中心
       server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
       namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+      cluster: seata-sca
 
 #rocketmq 事务
 rocketmq:
@@ -86,25 +90,25 @@ rocketmq:
     group: transcation_1 #生产组
   name-server: 127.0.0.1:9876
 
-org:
-  dromara:
-    hmily :
-      serializer : kryo
-      recoverDelayTime : 128
-      retryMax : 30
-      scheduledDelay : 128
-      scheduledThreadMax :  10
-      repositorySupport : redis
-      started: true  #事务控制方改为true
-#      hmilyDbConfig :
-#        driverClassName: com.mysql.jdbc.Driver
-#        url: jdbc:mysql://127.0.0.1:1672/hmily_transaction?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-#        username : root
-#        password : ciel
-      hmilyRedisConfig:
-        hostName: 127.0.0.1
-        port: 6510
-        password: ciel
+#org:
+#  dromara:
+#    hmily :
+#      serializer : kryo
+#      recoverDelayTime : 128
+#      retryMax : 30
+#      scheduledDelay : 128
+#      scheduledThreadMax :  10
+#      repositorySupport : redis
+#      started: true  #事务控制方改为true
+##      hmilyDbConfig :
+##        driverClassName: com.mysql.jdbc.Driver
+##        url: jdbc:mysql://127.0.0.1:1672/hmily_transaction?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+##        username : root
+##        password : ciel
+#      hmilyRedisConfig:
+#        hostName: 127.0.0.1
+#        port: 6510
+#        password: ciel
 
 
     # repositorySupport : redis

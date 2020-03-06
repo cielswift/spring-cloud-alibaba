@@ -14,11 +14,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice
 public class AftermathController implements ResponseBodyAdvice<Object> {
 
+    @ExceptionHandler(Exception.class)
+    public Result error(Exception e) {
 
-    @ExceptionHandler(AlertException.class)
-    public Result error(AlertException e) {
-
-        return Result.error("异常::>>"+e.getMessage()==null?"null":e.getMessage());
+        return Result.error("全局兜底:服务器异常::>>"+e.getClass().getName()
+                .concat(e.getMessage()==null?"null":e.getMessage()));
     }
 
     @Override

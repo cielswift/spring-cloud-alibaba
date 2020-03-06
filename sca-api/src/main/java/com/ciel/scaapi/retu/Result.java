@@ -45,4 +45,7 @@ public class Result extends HashMap<String,Object> {
         return this;
     }
 
+    public boolean isOk(){
+        return get(CODE).equals(200);
+    }
 }

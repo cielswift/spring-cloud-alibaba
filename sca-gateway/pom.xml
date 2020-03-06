@@ -61,7 +61,7 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
 
-        <dependency> <!--流量控制、熔断降级-->
+        <dependency> <!--流量控制、熔断降级 客户端-->
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-transport-simple-http</artifactId>
             <version>1.7.1</version>

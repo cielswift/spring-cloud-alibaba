@@ -74,11 +74,12 @@ spring:
 seata:
   tx-service-group: pro20
   service:
-    grouplist: 127.0.0.1:19212
+    grouplist: 127.0.0.1:29222
   registry:
     nacos:  #使用nacos注册中心
       server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
       namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+      cluster: seata-sca
 
 #rocketmq 事务
 rocketmq:

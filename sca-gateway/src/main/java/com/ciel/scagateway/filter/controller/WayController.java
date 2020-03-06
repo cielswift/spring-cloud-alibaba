@@ -2,6 +2,7 @@ package com.ciel.scagateway.filter.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpHeaders;
@@ -32,8 +33,11 @@ public class WayController {
     //@Autowired
     private DiscoveryClient discoveryClient;
 
+    private AutowireCapableBeanFactory beanFactory;
+
     @GetMapping("/mono")
     public Mono<String> mono(){
+
         /**
          * 首先是Mono.just()，直接由这个对象构造出一个Mono。
          * 然后Mono.fromRunnable(），用一个线程来构建一个Mono。

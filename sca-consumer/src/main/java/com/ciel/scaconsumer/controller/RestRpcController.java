@@ -29,11 +29,20 @@ public class RestRpcController {
     @Reference
     protected ApplicationServer applicationServer;
 
-    @GetMapping("/")
-    public Result index() {
 
-        return Result.ok("olll").body("WELCOME-欢迎");
+    @GetMapping("/iw")
+    public Result iw() {
+        return Result.ok("iw").body("iw");
     }
+
+    @GetMapping("/iw/iw")
+    public Result iw2() throws AlertException {
+        if((System.currentTimeMillis() & 3) == 0){
+            throw new AlertException(" & 3 异常");
+        }
+        return Result.ok("iw/iw").body("iw/iw");
+    }
+
 
     @Autowired
     protected RestTemplate restTemplate;
@@ -83,8 +92,8 @@ public class RestRpcController {
      */
     public Result d2(String name, BlockException be) {
         String msg = null;
-        if(null != be && !StringUtils.isEmpty(be.getRuleLimitApp())){
-            msg = be.getRuleLimitApp();
+        if(null != be){
+            msg = be.getClass().getName();
         }
         return Result.error("熔断降级").body(msg);
     }
@@ -110,15 +119,6 @@ public class RestRpcController {
     @Autowired
     protected PublicTransactional20x transactional20x;
 
-
-    @GetMapping("/transactional")
-    public Result transactional(@RequestParam("money") BigDecimal money){
-
-        boolean isOk =
-                transactional10x.transactionPrice(money, 425752943532056576L,425752880537804800L,1);
-
-        return Result.ok("code").body(isOk);
-    }
 
 
     @GetMapping("/hmily")
