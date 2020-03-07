@@ -2,12 +2,13 @@ package com.ciel.scaconsumer.feignimpl;
 
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.feign.PublicTransactional;
+import com.ciel.scaapi.retu.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@FeignClient(contextId = "producer20x",name = "producer20")
+@FeignClient(contextId = "producer20x",name = "producer20",configuration = FeignInterceptor.class)
 public interface PublicTransactional20x extends PublicTransactional {
 
     @Override
@@ -23,4 +24,9 @@ public interface PublicTransactional20x extends PublicTransactional {
     @Override
     @PutMapping("/producer20/rocket_mq/{price}")
     boolean rocketMqTran(@PathVariable("price") BigDecimal price) throws AlertException;
+
+
+    @PutMapping("/producer20/sec/{y}")
+    Result sec(@PathVariable("y") String y);
+
 }

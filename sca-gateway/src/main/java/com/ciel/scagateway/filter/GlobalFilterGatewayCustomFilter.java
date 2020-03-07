@@ -2,18 +2,20 @@ package com.ciel.scagateway.filter;
 
 import com.alibaba.csp.sentinel.adapter.gateway.sc.SentinelGatewayFilter;
 import com.alibaba.csp.sentinel.adapter.gateway.sc.exception.SentinelGatewayBlockExceptionHandler;
-import com.alibaba.csp.sentinel.adapter.spring.webflux.SentinelWebFluxFilter;
-import com.alibaba.csp.sentinel.adapter.spring.webflux.exception.SentinelBlockExceptionHandler;
-import com.alibaba.fastjson.JSONObject;
-import com.ciel.scaapi.crud.IScaUserService;
+import com.alibaba.fastjson.JSON;
+import com.ciel.scaapi.retu.Result;
+import com.ciel.scacommons.jwt.JwtUtils;
 import com.ciel.scacommons.serverimpl.ScaUserServiceINIT;
+import com.ciel.scacommons.serverimpl.ScaUserServiceImpl;
 import com.ciel.scaentity.entity.ScaPermissions;
 import com.ciel.scaentity.entity.ScaRole;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scagateway.filter.web.JsonExceptionHandler;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
@@ -22,20 +24,31 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.result.view.ViewResolver;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Configuration
@@ -55,7 +68,7 @@ public class GlobalFilterGatewayCustomFilter {
     private final ServerCodecConfigurer serverCodecConfigurer;
 
     public GlobalFilterGatewayCustomFilter(ObjectProvider<List<ViewResolver>> viewResolversProvider,
-                                ServerCodecConfigurer serverCodecConfigurer) {
+                                           ServerCodecConfigurer serverCodecConfigurer) {
         this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
         this.serverCodecConfigurer = serverCodecConfigurer;
     }
@@ -72,10 +85,12 @@ public class GlobalFilterGatewayCustomFilter {
         return new SentinelGatewayFilter();
     }
 
-/**--------------------------------------------------------------------------------------------
-
     /**
+     * --------------------------------------------------------------------------------------------
+     * <p>
+     * /**
      * 自定义异常处理[@@]注册Bean时依赖的Bean，会从容器中直接获取，所以直接注入即可
+     *
      * @return
      */
     @Primary
@@ -92,6 +107,20 @@ public class GlobalFilterGatewayCustomFilter {
         return jsonExceptionHandler;
     }
 
+    /**
+     * 从Flux<DataBuffer>中获取字符串的方法
+     * @return 请求体
+     */
+    private String resolveBodyFromRequest(ServerHttpRequest serverHttpRequest) {
+        Flux<DataBuffer> body = serverHttpRequest.getBody();
+        AtomicReference<String> bodyRef = new AtomicReference<>();
+        body.subscribe(buffer -> {
+            CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
+            DataBufferUtils.release(buffer);
+            bodyRef.set(charBuffer.toString());
+        });
+        return bodyRef.get();
+    }
 
     /**
      * 全局过滤器
@@ -105,67 +134,107 @@ public class GlobalFilterGatewayCustomFilter {
             System.out.println("第1个过滤器在请求之前执行");
 
             ServerHttpRequest request = exchange.getRequest();
+            ServerHttpResponse response = exchange.getResponse();
 
-            if(request.getURI().getPath().endsWith("/login") && HttpMethod.POST.equals(request.getMethod())){
+            if (request.getURI().getPath().endsWith("/login") && HttpMethod.POST.equals(request.getMethod())) {
+
+                System.out.println("登录请求======================");
 
                 String username = request.getQueryParams().getFirst("username");
                 String password = request.getQueryParams().getFirst("password");
 
-                if(!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)){
+                ScaUser scaUser = userServiceINIT.userByName(username);
 
-                    ScaUser scaUser = userServiceINIT.userByName(username);
+                if (null != scaUser && bCryptPasswordEncoder().matches(password, scaUser.getPassword())) {
 
-                    if(bCryptPasswordEncoder().matches(password,scaUser.getPassword())){
+                    List<ScaRole> roles = userServiceINIT.rolesByuId(scaUser.getId());
 
-                        List<ScaRole> roles = userServiceINIT.rolesByuId(scaUser.getId());
+                    List<ScaPermissions> scaPermissions = userServiceINIT.permissionsByuId(scaUser.getId());
 
-                        List<ScaPermissions> scaPermissions = userServiceINIT.permissionsByuId(scaUser.getId());
+                    List<String> collect = Stream.concat(roles.stream().map(n -> "ROLE_".concat(n.getName())),
+                            scaPermissions.stream().map(ScaPermissions::getName)).collect(Collectors.toList());
 
+                    HashMap<String, Object> userInfo = new HashMap<>();
 
+                    userInfo.put("username", scaUser.getUsername());
+                    userInfo.put("realname", scaUser.getUsername());
+                    userInfo.put("id", scaUser.getId());
+                    userInfo.put("authorites", collect);
 
-                    }
-                }else{
+                    String token = JwtUtils.createToken(JSON.toJSONString(userInfo));
 
-                    //密码错误
+                    response.getHeaders().set("Authentication", token);
+
+                    byte[] bits = JSON.toJSONString(Result.ok("登录成功")).getBytes(StandardCharsets.UTF_8);
+
+                    DataBuffer buffer = response.bufferFactory().wrap(bits);
+                    response.setStatusCode(HttpStatus.OK); //设置状态码
+                    //指定编码，否则在浏览器中会中文乱码
+                    response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
+
+                    return response.writeWith(Mono.just(buffer));
+
+                    //return response.setComplete();  //请求已经结束
+
+                } else {
+
+                    byte[] bits = JSON.toJSONString(Result.error("账户密码错误")).getBytes(StandardCharsets.UTF_8);
+
+                    DataBuffer buffer = response.bufferFactory().wrap(bits);
+                    response.setStatusCode(HttpStatus.OK); //设置状态码
+                    //指定编码，否则在浏览器中会中文乱码
+                    response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
+
+                    return response.writeWith(Mono.just(buffer));
                 }
-
-            }
-
-
-
-
-           // List<String> authentication = exchange.getRequest().getQueryParams().get("Authentication");
-
-            List<String> token = exchange.getRequest().getHeaders().get("Authentication");
-
-            if ((null != token && !token.isEmpty()) || true) { //故意放行
-
-                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-
-                    System.out.println("第1个过滤器在请求之后执行");
-                }));
 
             } else {
 
-                ServerHttpResponse response = exchange.getResponse();
-                JSONObject message = new JSONObject();
+                String token = request.getHeaders().getFirst("Authentication");
 
-                message.put("status", -1);
-                message.put("data", "鉴权失败");
+                if (StringUtils.isEmpty(token)) {
 
-                byte[] bits = message.toJSONString().getBytes(StandardCharsets.UTF_8);
+                    byte[] bits = JSON.toJSONString(Result.error("未登录")).getBytes(StandardCharsets.UTF_8);
 
-                DataBuffer buffer = response.bufferFactory().wrap(bits);
-                response.setStatusCode(HttpStatus.UNAUTHORIZED); //设置状态码
-                //指定编码，否则在浏览器中会中文乱码
-                response.getHeaders().add("Content-Type", "text/plain;charset=UTF-8");
-                return response.writeWith(Mono.just(buffer));
+                    DataBuffer buffer = response.bufferFactory().wrap(bits);
+                    response.setStatusCode(HttpStatus.OK); //设置状态码
+                    //指定编码，否则在浏览器中会中文乱码
+                    response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
 
-                //return response.setComplete();  //请求已经结束
+                    return response.writeWith(Mono.just(buffer));
+                } else {
+
+                    try {
+                        //判断token 是否需要刷新
+                        boolean refresh = JwtUtils.isRefresh(token);
+                        if (refresh) {
+                            HashMap map =
+                                    JSON.parseObject(JwtUtils.parseToken(token), HashMap.class);
+
+                            response.getHeaders().set("Authentication", JSON.toJSONString(map));
+                        }
+
+                    } catch (Exception e) {
+
+                        byte[] bits = JSON.toJSONString(Result.error("TOKEN 解析失败,不是合法的")).getBytes(StandardCharsets.UTF_8);
+
+                        DataBuffer buffer = response.bufferFactory().wrap(bits);
+                        response.setStatusCode(HttpStatus.OK); //设置状态码
+                        //指定编码，否则在浏览器中会中文乱码
+                        response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
+
+                        return response.writeWith(Mono.just(buffer));
+                    }
+
+                    return chain.filter(exchange);
+                }
             }
+
         };
     }
 
+    @Autowired
+    protected AutowireCapableBeanFactory beanFactory;
 
     @Bean
     @Order(1)
@@ -177,6 +246,20 @@ public class GlobalFilterGatewayCustomFilter {
 
                 System.out.println("第2个过滤器在请求之后执行");
 
+                ScaUserServiceImpl bean = beanFactory.getBean(ScaUserServiceImpl.class);
+
+                for(int i =0 ; i < 20000000 ;i ++){
+
+                    ScaUser scaUser = new ScaUser();
+                    scaUser.setSex(false);
+                    scaUser.setUsername(UUID.randomUUID().toString());
+                    scaUser.setPrice(new BigDecimal(i));
+                    scaUser.setPassword("$10$qJHRHsDXSaUX7loQx4.FN.XpODhWpNmGZGi2AFClgjrO5e6p5lTve");
+
+                    boolean save = bean.save(scaUser);
+
+                    System.out.println("插入一条");
+                }
             }));
         };
 

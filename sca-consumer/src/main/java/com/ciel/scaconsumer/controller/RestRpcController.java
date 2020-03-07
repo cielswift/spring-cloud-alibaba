@@ -29,6 +29,9 @@ public class RestRpcController {
     @Reference
     protected ApplicationServer applicationServer;
 
+    @Autowired
+    protected PublicTransactional20x publicTransactional20x;
+
     @GetMapping("/iw")
     public Result iw() {
         return Result.ok("iw").body("iw");
@@ -41,6 +44,11 @@ public class RestRpcController {
         }
         List<String> aa = fuckMyLifeXiaPeiXin.fml("aa");
         return Result.ok("iw/iw").body("iw/iw");
+    }
+
+    @GetMapping("/sec/{y}")
+    public Result sec(@PathVariable("y") String y){
+       return publicTransactional20x.sec(y);
     }
 
 

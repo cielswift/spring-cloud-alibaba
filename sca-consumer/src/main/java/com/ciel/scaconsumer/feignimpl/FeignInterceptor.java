@@ -3,6 +3,10 @@ package com.ciel.scaconsumer.feignimpl;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -20,11 +24,15 @@ public class FeignInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate){
 
-        if(requestTemplate.url().contains("fuck")){
+        if(requestTemplate.url().contains("producer20")){
 
+            ServletRequestAttributes requestAttributes =
+                    (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+            HttpServletRequest request = requestAttributes.getRequest();
+
+            String authentication = request.getHeader("Authentication");
+            requestTemplate.header("Authentication", authentication);
         }
-
-        requestTemplate.header("token", "xiapeixin");
-
     }
 }

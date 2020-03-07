@@ -85,6 +85,17 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+        <dependency> <!--整合oauth2-->
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+        <dependency> <!--security相关-->
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>
+
+
 <!--        <dependency> &lt;!&ndash; 2pc (两阶段提交协议)seata 分布式事务 客户端&ndash;&gt;-->
 <!--            <groupId>com.alibaba.cloud</groupId>-->
 <!--            <artifactId>spring-cloud-alibaba-seata</artifactId>-->

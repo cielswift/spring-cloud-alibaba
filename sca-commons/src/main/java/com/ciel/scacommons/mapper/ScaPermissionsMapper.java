@@ -21,14 +21,14 @@ import java.util.List;
 public interface ScaPermissionsMapper extends MyBaseMapper<ScaPermissions> {
 
 
-    @Select("<script>"+
-            "select pe.* from sca_role_permissions as  rp" +
+    @Select("<script> "+
+            "select pe.* from sca_role_permissions as  rp " +
             "left join sca_permissions as  pe " +
-            "on rp.PERMISSIONS_ID = pe.id where rp.ROLE_ID in" +
-            "<foreach item='item' index='index' collection='list'  open='(' separator=',' close=')'>" +
-            "#{item}" +
-            "</foreach>" +
-            "</script>")
+            "on rp.PERMISSIONS_ID = pe.id where rp.ROLE_ID in " +
+            "<foreach item='item' index='index' collection='list'  open='(' separator=',' close=')'> " +
+            "#{item.id} " +
+            "</foreach> " +
+            "</script> ")
     public List<ScaPermissions> byRoles(@Param("list") List<ScaRole> list);
 
 }

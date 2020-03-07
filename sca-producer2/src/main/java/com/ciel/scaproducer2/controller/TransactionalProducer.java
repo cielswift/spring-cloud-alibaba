@@ -11,10 +11,13 @@ import com.ciel.scaapi.retu.Result;
 import com.ciel.scaentity.entity.ScaOrder;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scaentity.type2.Person;
+import com.ciel.scaproducer2.config.relm.CustomUser;
 import com.ciel.scaproducer2.feign.TransactionConsumer;
 import org.dromara.hmily.core.concurrent.threadlocal.HmilyTransactionContextLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +36,16 @@ public class TransactionalProducer implements PublicTransactional {
     @Autowired
     protected TransactionConsumer transactionConsumer;
 
+    
+    @PutMapping("/sec/{y}")
+    public Result sec(@PathVariable("y") String y){
+
+       CustomUser c =  (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return Result.ok("sec 访问成功"+y).body(c);
+    }
+    
+    
     @Transactional
     @Override
     @GetMapping("/transactional")
