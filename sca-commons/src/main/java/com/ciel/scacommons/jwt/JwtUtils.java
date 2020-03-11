@@ -23,12 +23,12 @@ public class JwtUtils {
     /**
      * token保存时间 秒
      */
-    public static final int time = 21600 ; // 6小时
+    public static final int time = 86400 ; // 24小时
 
     /**
      * token刷新时间 秒
      */
-    public static final int refresh = 3600; //
+    public static final int refresh = 43200; // 12
 
     /**
      * 生产md5 摘要

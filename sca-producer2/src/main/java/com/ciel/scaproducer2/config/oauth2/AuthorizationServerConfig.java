@@ -4,13 +4,34 @@ import com.ciel.scaproducer2.config.relm.CustomUserDetailService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.config.annotation.builders.ClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+
+import javax.sql.DataSource;
+import java.util.*;
 
 /**
  * oauth2授权服务器
@@ -23,38 +44,150 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 @Slf4j
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    protected PasswordEncoder passwordEncoder;
+    protected DataSource dataSource;
 
     protected AuthenticationManager authenticationManager;
 
-    protected CustomUserDetailService customUserDetailService;
+    protected AutowireCapableBeanFactory beanFactory;
 
     /**
-     * 使用密码模式需要配置
+     *
+     * get http://127.0.0.1:25011/producer20/oauth/authorize?client_id=p10&response_type=code&redirect_uri=https://translate.google.cn&Authentication=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqd3RfdG9rZW4iLCJhdWQiOiJ1c2VyIiwiaXNzIjoic3NvX3NlcnZlciIsImJvZHkiOiJ7XCJhdXRob3JpdGVzXCI6W1wiUk9MRV9BRE1JTlwiLFwiQ0hBTkdFXCIsXCJBRERcIixcIlJFTU9WRVwiXSxcImlkXCI6NDI1NzUyOTQzNTMyMDU2NTc2LFwidXNlcm5hbWVcIjpcIkFubmFTbWl0aFwiLFwicmVhbG5hbWVcIjpcIkFubmFTbWl0aFwifSIsImV4cCI6MTU4Mzc4MDI2NCwiaWF0IjoxNTgzNzU4NjY0fQ.6uEP3chze_JAmcgBeHwZf8BZ8hcDkA4rsk89caNR4Yw
+     *
+     * post http://127.0.0.1:25011/producer20/oauth/token?client_id=p10&client_secret=123456&grant_type=authorization_code&code=OF27D8&redirect_uri=https://translate.google.cn
+     *
+     *
+     * 同jdbc差不多,返回的是token
+     *
+     * {
+     *     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic3ByaW5nY2xvdWQtcHJvZHVjZXIiXSwidXNlcl9uYW1lIjoieGlhcGVpeGluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTU4MDY0NzU0MCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9hZG1pbiIsInN5c19hZGQiXSwianRpIjoiZjFjY2QwNWMtNTZhOS00OWFmLTgxNTgtMDljZDhkYzlmZGRmIiwiY2xpZW50X2lkIjoieGlhcGVpeGluIn0.PMmzM6r60sQ94e6U9kjdnBwZVXIMhToOBnYI8sMZPo4",
+     *     "token_type": "bearer",
+     *     "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic3ByaW5nY2xvdWQtcHJvZHVjZXIiXSwidXNlcl9uYW1lIjoieGlhcGVpeGluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImF0aSI6ImYxY2NkMDVjLTU2YTktNDlhZi04MTU4LTA5Y2Q4ZGM5ZmRkZiIsImV4cCI6MTU4MzIzMjM0MCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9hZG1pbiIsInN5c19hZGQiXSwianRpIjoiYTA1YjRjZDktMWIxMS00ZWI5LWI1MDMtMzQ1OTE1YmNhMmRiIiwiY2xpZW50X2lkIjoieGlhcGVpeGluIn0.XQxkTj6bc8XztgIPtgfra96OT_uZqnT5LYvajfsToWw",
+     *     "expires_in": 7199,
+     *     "scope": "read write",
+     *     "jti": "f1ccd05c-56a9-49af-8158-09cd8dc9fddf"
+     * }
      *
      */
+
+    /**
+     * jwt 内容增强器
+     */
+
+    @Bean
+    public TokenEnhancer enhancer(){
+        return new TokenEnhancer() {
+            @Override
+            public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+
+                Map<String, Object> info = new HashMap<>();
+                info.put("enhance", "夏培鑫202");
+
+                ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
+                return accessToken;
+            }
+        };
+    }
+
+    /**
+     * 令牌存储策略
+     */
+    @Bean
+    public TokenStore tokenStore() {
+
+//        RedisConnectionFactory bean = beanFactory.getBean(RedisConnectionFactory.class);
+//        return new RedisTokenStore(bean);
+
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
+        accessTokenConverter.setSigningKey("^x?ia-pe=i#xi&n!20_2$"); //密钥
+        return accessTokenConverter;
+    }
+
+
+    /**
+     * 授权码模式存储策略
+     */
+    @Bean
+    public AuthorizationCodeServices authorizationCodeServices() {
+        return new JdbcAuthorizationCodeServices(dataSource);
+    }
+
+    /**
+     * 授权信息保存策略
+     */
+    @Bean
+    public ApprovalStore approvalStore() {
+        return new JdbcApprovalStore(dataSource);
+    }
+
+    @Bean
+    public AuthorizationServerTokenServices tokenServices() {
+
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setClientDetailsService(jdbcClientDetailsService()); //客户端服务详情
+        tokenServices.setSupportRefreshToken(true); //支持刷新
+        tokenServices.setTokenStore(tokenStore()); //令牌存储策略
+
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter()));
+
+        tokenServices.setTokenEnhancer(tokenEnhancerChain);
+
+        tokenServices.setAccessTokenValiditySeconds(7200); //有效期
+        tokenServices.setRefreshTokenValiditySeconds(25920); //刷新时间
+
+        return tokenServices;
+    }
+
+    /**
+     * 检测token的策略
+     */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(customUserDetailService);
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.allowFormAuthenticationForClients();
+
+        security.checkTokenAccess("permitAll()") //检验必须认证; isAuthenticated()
+                .tokenKeyAccess("permitAll()");
     }
 
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                // 配置client_id
-                .withClient("admin")
-                // 配置client_secret
-                .secret(passwordEncoder.encode("admin123456"))
-                // 配置访问token的有效期
-                .accessTokenValiditySeconds(3600)
-                // 配置刷新token的有效期
-                .refreshTokenValiditySeconds(864000)
-                // 配置redirect_uri,用于授权成功后的跳转
-                .redirectUris("http://www.baidu.com")
-                // 配置申请的权限范围
-                .scopes("all")
-                // 配置grant_type,表示授权类型
-                .authorizedGrantTypes("authorization_code", "password");
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+
+        //endpoints.tokenEnhancer(enhancer());
+
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        List<TokenEnhancer> delegates = new ArrayList<>();
+        // 配置jwt内容增强器
+        delegates.add(enhancer());
+        delegates.add(accessTokenConverter());
+        tokenEnhancerChain.setTokenEnhancers(delegates);
+        endpoints.tokenEnhancer(tokenEnhancerChain);
+
+        endpoints.tokenStore(tokenStore())
+                .accessTokenConverter(accessTokenConverter())
+                .authenticationManager(authenticationManager);
     }
+
+    /**
+     * 客户端服务详情
+     */
+    @Bean
+    public JdbcClientDetailsService jdbcClientDetailsService() {
+        return new JdbcClientDetailsService(dataSource);
+    }
+
+    /**
+     * 客户端保存策略
+     */
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.withClientDetails(jdbcClientDetailsService());
+    }
+
 }

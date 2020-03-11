@@ -13,9 +13,6 @@ import java.io.UnsupportedEncodingException;
 public class ServerHttpResponseUtil {
     /**
      * JSON输出形式输出对象
-     * @param response
-     * @param object
-     * @return
      */
     public static Mono<Void> writeObjectAsJson(ServerHttpResponse response, Object object){
         return response.writeWith(Flux.create(sink -> {
@@ -33,9 +30,6 @@ public class ServerHttpResponseUtil {
     }
     /**
      * html输出
-     * @param response
-     * @param html
-     * @return
      */
     public static Mono<Void> writeHtml(ServerHttpResponse response,String html){
         return response.writeWith(Flux.create(sink -> {

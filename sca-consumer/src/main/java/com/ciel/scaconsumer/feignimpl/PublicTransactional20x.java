@@ -8,25 +8,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@FeignClient(contextId = "producer20x",name = "producer20",configuration = FeignInterceptor.class)
+@FeignClient(contextId = "producer20x",name = "producer20",
+        configuration = FeignInterceptor.class,
+        path = "/producer20")
 public interface PublicTransactional20x extends PublicTransactional {
 
     @Override
-    @GetMapping(value = "/producer20/transactional")
+    @GetMapping(value = "/transactional")
     boolean transactionPrice(@RequestParam("price")BigDecimal price, @RequestParam("sendUserId")Long sendUserId,
                              @RequestParam("receiveUserId")Long receiveUserId,@RequestParam("code") Integer code);
 
     @Override
-    @PutMapping(value = "/producer20/hmily/{price}/{sendUserId}/{receiveUserId}/{code}")
+    @PutMapping(value = "/hmily/{price}/{sendUserId}/{receiveUserId}/{code}")
     boolean hmilyTransaction(@PathVariable("price")  BigDecimal price, @PathVariable("sendUserId")  Long sendUserId,
                              @PathVariable("receiveUserId")  Long receiveUserId, @PathVariable("code")  Integer code) throws AlertException;
 
     @Override
-    @PutMapping("/producer20/rocket_mq/{price}")
+    @PutMapping("/rocket_mq/{price}")
     boolean rocketMqTran(@PathVariable("price") BigDecimal price) throws AlertException;
 
-
-    @PutMapping("/producer20/sec/{y}")
+    @PutMapping("/sec/{y}")
     Result sec(@PathVariable("y") String y);
 
 }

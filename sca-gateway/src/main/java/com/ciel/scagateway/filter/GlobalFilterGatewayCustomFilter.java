@@ -6,16 +6,13 @@ import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scacommons.jwt.JwtUtils;
 import com.ciel.scacommons.serverimpl.ScaUserServiceINIT;
-import com.ciel.scacommons.serverimpl.ScaUserServiceImpl;
 import com.ciel.scaentity.entity.ScaPermissions;
 import com.ciel.scaentity.entity.ScaRole;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scagateway.filter.web.JsonExceptionHandler;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +27,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -38,14 +34,11 @@ import org.springframework.web.reactive.result.view.ViewResolver;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -123,7 +116,7 @@ public class GlobalFilterGatewayCustomFilter {
     }
 
     /**
-     * 全局过滤器
+     * 登录过滤器
      */
 
     @Bean
@@ -165,7 +158,9 @@ public class GlobalFilterGatewayCustomFilter {
 
                     response.getHeaders().set("Authentication", token);
 
-                    byte[] bits = JSON.toJSONString(Result.ok("登录成功")).getBytes(StandardCharsets.UTF_8);
+                    userInfo.put("token", token);
+
+                    byte[] bits = JSON.toJSONString(Result.ok("登录成功").body(userInfo)).getBytes(StandardCharsets.UTF_8);
 
                     DataBuffer buffer = response.bufferFactory().wrap(bits);
                     response.setStatusCode(HttpStatus.OK); //设置状态码
@@ -233,8 +228,7 @@ public class GlobalFilterGatewayCustomFilter {
         };
     }
 
-    @Autowired
-    protected AutowireCapableBeanFactory beanFactory;
+
 
     @Bean
     @Order(1)
@@ -243,23 +237,7 @@ public class GlobalFilterGatewayCustomFilter {
         return (exchange, chain) -> {
             System.out.println("第2个过滤器在请求之前执行");
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-
                 System.out.println("第2个过滤器在请求之后执行");
-
-                ScaUserServiceImpl bean = beanFactory.getBean(ScaUserServiceImpl.class);
-
-                for(int i =0 ; i < 20000000 ;i ++){
-
-                    ScaUser scaUser = new ScaUser();
-                    scaUser.setSex(false);
-                    scaUser.setUsername(UUID.randomUUID().toString());
-                    scaUser.setPrice(new BigDecimal(i));
-                    scaUser.setPassword("$10$qJHRHsDXSaUX7loQx4.FN.XpODhWpNmGZGi2AFClgjrO5e6p5lTve");
-
-                    boolean save = bean.save(scaUser);
-
-                    System.out.println("插入一条");
-                }
             }));
         };
 

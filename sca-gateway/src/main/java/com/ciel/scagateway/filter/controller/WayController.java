@@ -37,7 +37,6 @@ public class WayController {
 
     @GetMapping("/mono")
     public Mono<String> mono(){
-
         /**
          * 首先是Mono.just()，直接由这个对象构造出一个Mono。
          * 然后Mono.fromRunnable(），用一个线程来构建一个Mono。

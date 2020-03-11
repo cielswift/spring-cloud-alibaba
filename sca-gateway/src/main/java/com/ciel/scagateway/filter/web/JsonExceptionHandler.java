@@ -25,9 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @classDesc: 统一异常处理,参考{@link org.springframework.web.server.AbstractErrorWebExceptionHandler}修改
- */
 public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(JsonExceptionHandler.class);
@@ -163,6 +160,5 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         public List<ViewResolver> viewResolvers() {
             return JsonExceptionHandler.this.viewResolvers;
         }
-
     }
 }

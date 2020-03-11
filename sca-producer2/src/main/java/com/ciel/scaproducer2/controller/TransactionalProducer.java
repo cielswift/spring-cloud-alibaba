@@ -12,15 +12,21 @@ import com.ciel.scaentity.entity.ScaOrder;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scaentity.type2.Person;
 import com.ciel.scaproducer2.config.relm.CustomUser;
+import com.ciel.scaproducer2.config.vali.NotSex;
+import com.ciel.scaproducer2.config.vali.People;
 import com.ciel.scaproducer2.feign.TransactionConsumer;
 import org.dromara.hmily.core.concurrent.threadlocal.HmilyTransactionContextLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -28,6 +34,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+//@Validated
 public class TransactionalProducer implements PublicTransactional {
 
     @Autowired
@@ -36,15 +43,26 @@ public class TransactionalProducer implements PublicTransactional {
     @Autowired
     protected TransactionConsumer transactionConsumer;
 
-    
-    @PutMapping("/sec/{y}")
-    public Result sec(@PathVariable("y") String y){
 
-       CustomUser c =  (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @PreAuthorize("hasAnyRole('MANAGER') and hasAnyAuthority('CHANGE')")
+    @PutMapping(value = "/sec/{yy}",
+            produces = {"application/toString","application/json","application/xml"})
+    public Result sec(@PathVariable("yy") @NotSex String y){
+
+        //需要在类上增加@Validated 注解
+        //如果 yy中含有. 需要{yy:.+}
+        CustomUser c =  (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return Result.ok("sec 访问成功"+y).body(c);
     }
-    
+
+    @GetMapping("/secn")
+    public Result sec2(@Validated(People.Big.class) People people){
+
+        // @Valid 不能识别 自定义注解,以及含有group的注解
+        return Result.ok("sec 访问成功");
+    }
+
     
     @Transactional
     @Override
