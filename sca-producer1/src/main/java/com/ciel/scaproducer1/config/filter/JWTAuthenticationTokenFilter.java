@@ -1,14 +1,12 @@
-package com.ciel.scaproducer2.config.filter;
+package com.ciel.scaproducer1.config.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.ciel.scacommons.jwt.JwtUtils;
-import com.ciel.scaproducer2.config.relm.CustomUser;
+import com.ciel.scaproducer1.config.relm.CustomUser;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -19,7 +17,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 //这里不能加入spring 容器 否则成为全局过滤器
@@ -52,6 +52,7 @@ public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
 
         if (!StringUtils.isEmpty(token)) {
             try {
+
                 HashMap<String, Object> map = JSON.parseObject(JwtUtils.parseToken(token), HashMap.class);
 
                 List<String> authorites = (List<String>)map.get("authorites");

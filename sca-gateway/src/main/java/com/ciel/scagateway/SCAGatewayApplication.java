@@ -49,7 +49,6 @@ import java.time.ZoneId;
 
 @EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE)
 
-
 @ConfigurationPropertiesScan("com.ciel.scagateway.filter.config")
 
 public class SCAGatewayApplication {

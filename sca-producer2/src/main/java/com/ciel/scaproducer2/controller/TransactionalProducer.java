@@ -254,6 +254,7 @@ public class TransactionalProducer implements PublicTransactional {
         LambdaQueryWrapper<ScaOrder> lambdaQueryWrapper = new LambdaQueryWrapper<ScaOrder>()
                 .eq(ScaOrder::getOrderNumber, 123456)
                 .or(i -> i.eq(ScaOrder::getId, 123).ne(ScaOrder::getId, 456))
+                .and(i -> i.eq(ScaOrder::getId,25))
                 .orderByAsc(ScaOrder::getOrderNumber);
 
         List<ScaOrder> list = scaOrderService.list();

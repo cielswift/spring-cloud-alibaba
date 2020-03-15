@@ -1,19 +1,13 @@
 package com.ciel.scaproducer2.config.oauth2;
 
-import com.ciel.scaproducer2.config.relm.CustomUserDetailService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.config.annotation.builders.ClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -28,7 +22,6 @@ import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeSe
 import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -147,15 +140,34 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * 检测token的策略
+     * 配置 AuthorizationServer 安全认证的相关信息，创建 ClientCredentialsTokenEndpointFilter 核心过滤器
+     *
+     * TokenEndpoint 加载客户端信息,结合请求信息，创建 TokenRequest,将 TokenRequest 传递给 TokenGranter 颁发 token
+     *  就是 OAuth2AccessToken 的实现类 DefaultOAuth2AccessToken 就是最终在控制台得到的 token 序列化之前的原始类
+     *
+     *      TokenGranter 的设计思路是使用 CompositeTokenGranter 管理一个 List 列表，每一种 grantType 对应一个具体的真正授权者，
+     *      在 debug 过程中可以发现 CompositeTokenGranter 内部就是在循环调用五种 TokenGranter 实现类的 grant 方法，
+     *      而 granter 内部则是通过 grantType 来区分是否是各自的授权类型。
+     *             5种模式
+     *          ResourceOwnerPasswordTokenGranter ==> password 密码模式
+     *          AuthorizationCodeTokenGranter ==> authorization_code 授权码模式
+     *          ClientCredentialsTokenGranter ==> client_credentials 客户端模式
+     *          ImplicitTokenGranter ==> implicit 简化模式
+     *          RefreshTokenGranter ==>refresh_token 刷新 token 专用
+     *  通过 TokenGranter 的 AuthorizationServerTokenServices.createAccessToken() 来创建 token
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.allowFormAuthenticationForClients();
+        security.allowFormAuthenticationForClients();  // 允许表单认证
 
         security.checkTokenAccess("permitAll()") //检验必须认证; isAuthenticated()
                 .tokenKeyAccess("permitAll()");
     }
 
+    /**
+     *  配置 AuthorizationServerEndpointsConfigurer 众多相关类，包括配置身份认证器，配置认证方式，
+     *  TokenStore，TokenGranter，OAuth2RequestFactory
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
@@ -184,6 +196,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * 客户端保存策略
+     * 配置 OAuth2 的客户端相关信息
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

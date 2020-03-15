@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/sca-gateway/sca-gateway.iml" filepath="$PROJECT_DIR$/sca-gateway/sca-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/sca-producer1/sca-producer1.iml" filepath="$PROJECT_DIR$/sca-producer1/sca-producer1.iml" />
       <module fileurl="file://$PROJECT_DIR$/sca-producer2/sca-producer2.iml" filepath="$PROJECT_DIR$/sca-producer2/sca-producer2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-producer3/sca-producer3.iml" filepath="$PROJECT_DIR$/sca-producer3/sca-producer3.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba.iml" />
     </modules>
   </component>

@@ -6,8 +6,9 @@
     <packaging>pom</packaging>
 
     <modules>
-      <module>sca-producer1</module>
+        <module>sca-producer1</module>
         <module>sca-producer2</module>
+        <module>sca-producer3</module>
         <module>sca-consumer</module>
         <module>sca-api</module>
         <module>sca-gateway</module>
@@ -136,13 +137,5 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

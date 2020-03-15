@@ -1,4 +1,4 @@
-package com.ciel.scaproducer2.config.relm;
+package com.ciel.scaproducer1.config.relm;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +14,7 @@ public class CustomUser extends User {
     private Long id;
     private String realName;
     private String ip;
+
 
     public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities,
                       Long userId,String realName,String ip) {

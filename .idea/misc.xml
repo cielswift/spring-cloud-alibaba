@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/spring-cloud-alibaba-consumer/pom.xml" />
         <option value="$PROJECT_DIR$/spring-cloud-alibaba-producer2/pom.xml" />
         <option value="$PROJECT_DIR$/spring-cloud-alibaba-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/sca-producer3/pom.xml" />
       </list>
     </option>
   </component>

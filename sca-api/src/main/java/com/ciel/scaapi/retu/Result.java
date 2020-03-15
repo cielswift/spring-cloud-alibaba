@@ -1,11 +1,14 @@
 package com.ciel.scaapi.retu;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * 统一返回格式
  */
-public class Result extends HashMap<String,Object> {
+public final class Result extends HashMap<String,Object> {
 
     /**
      * 200 正常
@@ -47,5 +50,11 @@ public class Result extends HashMap<String,Object> {
 
     public boolean isOk(){
         return get(CODE).equals(200);
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(5%2);
+
     }
 }

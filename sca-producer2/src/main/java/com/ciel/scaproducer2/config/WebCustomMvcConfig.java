@@ -1,10 +1,7 @@
 package com.ciel.scaproducer2.config;
 
-import com.ciel.scaproducer2.config.vali.People;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -16,12 +13,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 

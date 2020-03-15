@@ -1,5 +1,6 @@
-package com.ciel.scaproducer2;
+package com.ciel.scaproducer3;
 
+import com.alibaba.druid.pool.DruidAbstractDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -37,20 +38,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * 开启feign调用
  */
-@EnableFeignClients
+//@EnableFeignClients
 
 @EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE)
-
-/**
- * hmily 要扫描的包
- */
-@ComponentScan("org.dromara.hmily")
-
-@EnableScheduling  //开启定时任务
-public class SCAProducer2Application {
+public class SCAProducer3Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SCAProducer2Application.class, args);
+        SpringApplication.run(SCAProducer3Application.class, args);
     }
 
 
