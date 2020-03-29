@@ -23,6 +23,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -56,6 +57,12 @@ public class SCAGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(SCAGatewayApplication.class, args);
     }
+
+    @Bean
+    public WebClient.Builder webb(){
+        return WebClient.builder();
+    }
+
 
 //http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
     @Bean

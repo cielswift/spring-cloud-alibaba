@@ -45,7 +45,7 @@ public class AfterExceptionController implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(Exception.class)
     public Result error(Exception e) {
-       return Result.error("异常$$").body(e.getClass().getName().concat(e.getMessage()==null?"NON":e.getMessage()));
+       return Result.error("异常$$").data(e.getClass().getName().concat(e.getMessage()==null?"NON":e.getMessage()));
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

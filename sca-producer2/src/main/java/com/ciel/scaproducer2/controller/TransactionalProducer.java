@@ -53,7 +53,7 @@ public class TransactionalProducer implements PublicTransactional {
         //如果 yy中含有. 需要{yy:.+}
         CustomUser c =  (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return Result.ok("sec 访问成功"+y).body(c);
+        return Result.ok("sec 访问成功"+y).data(c);
     }
 
     @GetMapping("/secn")
@@ -227,7 +227,7 @@ public class TransactionalProducer implements PublicTransactional {
 
         List<ScaUser> list = userService.list();
 
-        return Result.ok("ok").body(list);
+        return Result.ok("ok").data(list);
     }
 
     @Autowired
@@ -258,7 +258,7 @@ public class TransactionalProducer implements PublicTransactional {
                 .orderByAsc(ScaOrder::getOrderNumber);
 
         List<ScaOrder> list = scaOrderService.list();
-        return Result.ok("ok").body(list);
+        return Result.ok("ok").data(list);
     }
 
 

@@ -6,6 +6,8 @@ server:
     enabled: true
   compression:   #压缩
     enabled: true
+    mime-types: #压缩支持的类型
+      - application/json,application/ xml,text/html,text/xml,text/plain
   undertow:
     # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
     # 不要设置过大，如果过大，启动项目会报错：打开文件数过多

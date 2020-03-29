@@ -11,6 +11,7 @@ import org.springframework.http.ZeroCopyHttpOutputMessage;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -35,8 +36,14 @@ public class WayController {
 
     private AutowireCapableBeanFactory beanFactory;
 
+    private WebClient.Builder webb;
+
+
     @GetMapping("/mono")
     public Mono<String> mono(){
+
+        webb.build().get().uri("http:192.5").retrieve().bodyToMono(String.class);
+
         /**
          * 首先是Mono.just()，直接由这个对象构造出一个Mono。
          * 然后Mono.fromRunnable(），用一个线程来构建一个Mono。

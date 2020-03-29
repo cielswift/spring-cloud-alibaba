@@ -160,7 +160,7 @@ public class GlobalFilterGatewayCustomFilter {
 
                     userInfo.put("token", token);
 
-                    byte[] bits = JSON.toJSONString(Result.ok("登录成功").body(userInfo)).getBytes(StandardCharsets.UTF_8);
+                    byte[] bits = JSON.toJSONString(Result.ok("登录成功").data(userInfo)).getBytes(StandardCharsets.UTF_8);
 
                     DataBuffer buffer = response.bufferFactory().wrap(bits);
                     response.setStatusCode(HttpStatus.OK); //设置状态码

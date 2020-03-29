@@ -25,5 +25,11 @@
             <version>4.9.28.ALL</version>
         </dependency>
 
+        <dependency> <!--数据转换-->
+            <groupId>com.github.dozermapper</groupId>
+            <artifactId>dozer-spring-boot-starter</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -7,6 +7,7 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.DefaultReflectorFactory;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
 import org.apache.ibatis.session.ResultHandler;
@@ -36,8 +37,6 @@ public class GlobalInterceptor implements Interceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalInterceptor.class);
 
-    private static String[] officeIdNames = new String[]{"OFFICE_ID", "OFFICEID", "PK_OFFICE_ID"};
-
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -48,6 +47,12 @@ public class GlobalInterceptor implements Interceptor {
         if(StringUtils.isEmpty(sql)){
             return invocation.proceed();
         }
+
+
+//        MetaObject metaObject =
+//                SystemMetaObject.forObject(invocation.getTarget()); //获取源数据
+//        metaObject.getValue("parameterHandle.param");
+//        metaObject.setValue();
 
         logger.info("执行sql语句:".concat(sql));
 

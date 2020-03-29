@@ -29,7 +29,7 @@ public class OAuth2Controller {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         System.out.println(principal);
-        return Result.ok("sec 访问成功"+y).body(principal);
+        return Result.ok("sec 访问成功"+y).data(principal);
     }
 
     @PreAuthorize("hasAnyAuthority('CHANGE')")
@@ -39,7 +39,7 @@ public class OAuth2Controller {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         System.out.println(principal);
-        return Result.ok("sec 访问成功"+y).body(principal);
+        return Result.ok("sec 访问成功"+y).data(principal);
     }
 
 }

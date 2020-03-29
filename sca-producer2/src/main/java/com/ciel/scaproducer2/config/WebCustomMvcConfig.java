@@ -35,7 +35,6 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
                 (new MediaType("application", "toString", StandardCharsets.UTF_8)) {
 
             //构造函数指定媒体类型
-
             @Override
             protected boolean supports(@NonNull Class<?> clazz) {
                 return true;
@@ -59,7 +58,7 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 配置自定义的消息转换器
+     * 配置自定义的消息转换器;注意会关闭默认转换器;简单添加使用extendMessageConverters()
      *
      * 通过@PutMapping(value = "/sec/{yy}",
      *             produces = {"application/toString","application/json","application/xml"}) 配置返回类型
@@ -67,7 +66,6 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
      *    header头 Accept 的类型，即可获得不同形式的 Book 返回结果
      *    ，可以是 application/toString，application/json，application/xml，都会对应各自的 HttpMessageConverter。
      */
-
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(toStringHttpMessageConverter());

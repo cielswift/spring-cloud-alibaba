@@ -6,4 +6,6 @@ package com.ciel.scaapi.crud;
 public interface ApplicationServer {
 
     public String select(String name);
+
+    
 }

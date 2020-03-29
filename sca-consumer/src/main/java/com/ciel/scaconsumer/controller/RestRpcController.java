@@ -34,7 +34,7 @@ public class RestRpcController {
 
     @GetMapping("/iw")
     public Result iw() {
-        return Result.ok("iw").body("iw");
+        return Result.ok("iw").data("iw");
     }
 
     @GetMapping("/iw/iw")
@@ -43,7 +43,7 @@ public class RestRpcController {
             throw new AlertException(" & 3 异常");
         }
         List<String> aa = fuckMyLifeXiaPeiXin.fml("aa");
-        return Result.ok("iw/iw").body("iw/iw");
+        return Result.ok("iw/iw").data("iw/iw");
     }
 
     @GetMapping("/sec/{y}")
@@ -91,7 +91,7 @@ public class RestRpcController {
         hashMap.put("2",object);
         hashMap.put("3",xiapeixin);
 
-        return Result.ok("ok").body(hashMap);
+        return Result.ok("ok").data(hashMap);
     }
 
     /**
@@ -111,7 +111,7 @@ public class RestRpcController {
         if(null != be){
             msg = be.getClass().getName();
         }
-        return Result.error("熔断降级").body(msg);
+        return Result.error("熔断降级").data(msg);
     }
 
     /**
@@ -121,7 +121,7 @@ public class RestRpcController {
      * exceptionsToTrace 来指定要跟踪的异常(默认所有异常);
      */
     public Result d3(String name, Throwable te) {
-        return Result.error("异常降级").body(te.getClass().getName());
+        return Result.error("异常降级").data(te.getClass().getName());
     }
 
 
@@ -149,7 +149,7 @@ public class RestRpcController {
            throw new AlertException("调用异常");
         }
 
-        return Result.ok("code").body(isOk);
+        return Result.ok("code").data(isOk);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////
 

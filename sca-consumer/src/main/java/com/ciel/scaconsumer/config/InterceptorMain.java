@@ -25,7 +25,6 @@ public class InterceptorMain extends HandlerInterceptorAdapter {
         System.out.println(request.getRemoteHost().concat(":访问:").concat(request.getRequestURI()));
 
         redisTemplate.opsForValue().increment(request.getRemoteHost(),1);
-
         return true;
         //当请求到达时 第一个执行此方法; 在执行controller处理之前执行
         //返回true 放行或进入下一个拦截器 ,返回false,不放行;

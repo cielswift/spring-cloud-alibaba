@@ -5,6 +5,7 @@ import com.ciel.scaapi.retu.Result;
 import com.ciel.scaconsumer.config.PersonCon;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +74,11 @@ public class FileController {
         String fileName = URLEncoder.encode("测试", "UTF-8");
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
         EasyExcel.write(response.getOutputStream(), PersonCon.class).sheet("模板").doWrite(dataList);
+
+
+        //////////////////////////////////////////////////////////
+        MultipartFile file = null;
+       // EasyExcel.read(file.getInputStream(),PersonCon.class,)
     }
 
 }

@@ -2,6 +2,7 @@ package com.ciel.scaproducer3;
 
 import com.alibaba.druid.pool.DruidAbstractDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
+import com.google.common.collect.Multiset;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
