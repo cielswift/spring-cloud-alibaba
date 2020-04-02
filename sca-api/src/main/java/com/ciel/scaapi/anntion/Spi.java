@@ -13,4 +13,8 @@ public class Spi {
             t.vue("a");
         });
     }
+
+    static {
+        System.out.println("aaaaaaaaaa");
+    }
 }
