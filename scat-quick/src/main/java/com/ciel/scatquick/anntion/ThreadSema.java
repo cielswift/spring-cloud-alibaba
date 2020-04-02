@@ -1,7 +1,8 @@
-package com.ciel.scaapi.anntion;
+package com.ciel.scatquick.anntion;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+
 import java.util.concurrent.Semaphore;
 
 public class ThreadSema {
@@ -23,12 +24,13 @@ public class ThreadSema {
 
     }
 }
+
 class Hels implements Runnable{
 
     private Semaphore semaphore;
     private Num num;
 
-    public Hels(Num num,Semaphore semaphore){
+    public Hels(Num num, Semaphore semaphore){
         this.semaphore=semaphore;
         this.num=num;
     }
@@ -44,6 +46,7 @@ class Hels implements Runnable{
 
     }
 }
+
 @Data
 class Num{
     private int num = 0;

@@ -1,0 +1,40 @@
+server:
+  port: 29090
+  servlet:
+    context-path: /quick
+  http2:  #2.0
+    enabled: true
+  compression:   #压缩
+    enabled: true
+    mime-types: #压缩支持的类型
+      - application/json
+      - application/xml
+      - text/html
+      - text/xml
+      - text/plain
+  undertow:
+    io-threads: 8
+    worker-threads: 128
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  application:
+    name: quick
+  aop:
+    proxy-target-class: true #使用cglib代理
+  main:
+    allow-bean-definition-overriding: true #bean冲突覆盖
+  profiles:
+    active: dev #开发模式
+
+logging:
+  config: classpath:logback-spring.xml
+
+---
+custom-mod:  #多文档模式,定义一些其他配置
+  name: quick
+
+spring:
+  profiles:
+    active: dev

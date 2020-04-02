@@ -1,4 +1,4 @@
-package com.ciel.scaapi.anntion;
+package com.ciel.scatquick.anntion;
 
 import lombok.SneakyThrows;
 
@@ -15,6 +15,7 @@ public class ThreadCyclic  {
 
     }
 }
+
 class Empty implements Runnable{
 
     private CyclicBarrier cyclicBarrier;
@@ -31,6 +32,7 @@ class Empty implements Runnable{
         cyclicBarrier.await(); //阻塞当前线程; 已到达屏障 ;或已执行完毕
     }
 }
+
 class Sth implements Runnable{
 
     @Override

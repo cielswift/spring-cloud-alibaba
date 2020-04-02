@@ -1,4 +1,4 @@
-package com.ciel.scaapi.anntion;
+package com.ciel.scatquick.anntion;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +26,7 @@ public class A {
 //        }
     }
 
+    // git config --global user.name "你的名字"
     public static String aaa(Lambd lambd){
 
         return lambd.xxx("aa");  //第2方法引用,这里相当于bbb是 xxx的方法实现

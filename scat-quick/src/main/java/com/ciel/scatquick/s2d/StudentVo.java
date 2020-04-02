@@ -1,4 +1,4 @@
-package com.ciel.scaapi.converters.s2d;
+package com.ciel.scatquick.s2d;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDomain {
+public class StudentVo {
     // 身份ID
     private Long id;
     // 姓名

@@ -1,12 +1,10 @@
-package com.ciel.scaapi.converters.beanload;
+package com.ciel.scatquick.beanload;
 
-import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.*;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +15,7 @@ import javax.annotation.PreDestroy;
  * spring 的 bean 加载流程
  */
 @Component
-public class MEBeanLoad implements BeanPostProcessor, InitializingBean, //加载
-        DisposableBean, //销毁
+public class MEBean implements InitializingBean, DisposableBean, //加载 //销毁
         BeanNameAware , //bean Name
         BeanClassLoaderAware, //加载器
         BeanFactoryAware, //factor
@@ -33,59 +30,39 @@ public class MEBeanLoad implements BeanPostProcessor, InitializingBean, //加载
     private Cik cik;
 
     //@EventListener
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
-        System.out.println("BeanPostProcessor before");
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-
-        System.out.println("BeanPostProcessor after");
-        return bean;
-    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("InitializingBean");
+        System.out.println("属性 set 方法执行之后");
     }
 
 
     @PostConstruct
     public void init() {
-
-        System.out.println("PostConstruct init");
+        System.out.println("@PostConstruct 方法初始化");
     }
-
-    /**
-     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     */
 
     @PreDestroy
     public void dead() {
-        System.out.println("PreDestroy dead");
+        System.out.println("@PreDestroy 销毁方法");
     }
 
     @Override
     public void destroy() throws Exception {
-        System.out.println("destroy dead");
+        System.out.println("销毁方法");
     }
 
-    /**
-     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     */
     @Override
     public void setBeanName(String s) {
-
         //依赖注入一旦结束，BeanNameAware.setBeanName()会被调用，它设置该 bean 在 Bean Factory 中的名称
-        System.out.println("setBeanName  "+s);
+        System.out.println("bean的name属性:"+s);
     }
 
 
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
+        System.out.println("bean加载器:"+classLoader.getClass().getName());
         //为 bean 实例提供类加载器，
     }
 

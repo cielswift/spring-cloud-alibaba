@@ -1,4 +1,4 @@
-package com.ciel.scaapi.converters.beanload;
+package com.ciel.scatquick.beanload;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -7,5 +7,6 @@ import org.springframework.stereotype.Component;
 @Data
 public class Cik {
 
-    private String msg;
+    private String msg ="aac";
+
 }

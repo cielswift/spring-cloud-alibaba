@@ -1,4 +1,4 @@
-package com.ciel.scaapi.anntion;
+package com.ciel.scatquick.anntion;
 
 import lombok.SneakyThrows;
 
