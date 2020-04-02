@@ -2,6 +2,7 @@ package com.ciel.scaproducer3.dubbos;
 
 import com.ciel.scaapi.crud.GirlsServer;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Service
 public class InfoService implements GirlsServer {

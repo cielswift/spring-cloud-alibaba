@@ -1,0 +1,16 @@
+package com.ciel.scaapi.anntion;
+
+import java.util.ServiceLoader;
+
+public class Spi {
+
+    public static void main(String[] args) {
+
+        ServiceLoader<SpiInterface> serviceLoader = ServiceLoader.load(SpiInterface.class);
+
+        serviceLoader.forEach(t -> {
+
+            t.vue("a");
+        });
+    }
+}

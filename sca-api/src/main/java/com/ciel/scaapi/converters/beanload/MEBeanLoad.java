@@ -6,6 +6,7 @@ import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.*;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -27,9 +28,11 @@ public class MEBeanLoad implements BeanPostProcessor, InitializingBean, //加载
         ResourceLoaderAware
 {
 
+
     @Autowired
     private Cik cik;
 
+    //@EventListener
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
