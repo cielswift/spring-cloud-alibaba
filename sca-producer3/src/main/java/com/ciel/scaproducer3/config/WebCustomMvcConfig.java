@@ -61,6 +61,7 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")  //允许所有跨域请求
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(false).maxAge(3600);
+                .allowCredentials(false).maxAge(3600)
+                .exposedHeaders("Authentication"); //重要: 暴露响应头
     }
 }

@@ -43,7 +43,6 @@ public class TransactionalProducer implements PublicTransactional {
     @Autowired
     protected TransactionConsumer transactionConsumer;
 
-
     @PreAuthorize("hasAnyRole('MANAGER') and hasAnyAuthority('CHANGE')")
     @PutMapping(value = "/sec/{yy}",
             produces = {"application/toString","application/json","application/xml"})

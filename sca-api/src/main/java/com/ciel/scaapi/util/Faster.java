@@ -1,8 +1,14 @@
 package com.ciel.scaapi.util;
 
 import com.ciel.scaapi.exception.AlertException;
+import org.apache.commons.codec.CharEncoding;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.*;
+
 
 /**
  * 一些常用快捷方法组合; 避免冗余
@@ -12,7 +18,57 @@ import java.util.*;
 public final class Faster {
 
     /**
-     * 单个对象转list, 适应于如:单个删除调用批量删除,转换参数
+     * 文件下载
+     */
+    public static void download(HttpServletResponse response, File file) throws IOException {
+
+        response.setCharacterEncoding(CharEncoding.UTF_8);
+        response.addHeader("Content-Disposition", "attachment;filename=" +
+                URLEncoder.encode(file.getName(), CharEncoding.UTF_8).replace("+", "%20"));
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        //打开本地文件流
+        InputStream inputStream = new FileInputStream(file);
+        //激活下载操作
+        OutputStream os = response.getOutputStream();
+
+        //循环写入输出流
+        byte[] b = new byte[2048];
+        int length;
+        while ((length = inputStream.read(b)) > 0) {
+            os.write(b, 0, length);
+        }
+        // 这里主要关闭。
+        os.close();
+        inputStream.close();
+    }
+
+
+    //求百分比
+    public static Double getPercentage(Integer tag,Integer all){
+        try{
+            return new BigDecimal(tag).divide(new BigDecimal(all),2, BigDecimal.ROUND_HALF_DOWN)
+                    .multiply(new BigDecimal("100")).doubleValue();
+        }catch (Exception e){
+            return 0.00;
+        }
+    }
+
+    /**
+     * 枚举值是否再合法的枚举序列中
+     */
+    public static <T> void throwNotIn(T t, List<T> list) throws AlertException {
+        for (T ts : list) {
+            if(ts.equals(t)){
+                return;
+            }
+        }
+        throw new AlertException(t + "不包含在:"+ list + "中");
+    }
+
+    /**
+     * 单个或多个对象转list, 适应于如:单个删除调用批量删除,转换参数
      */
     public static <T> List<T> toList(T...ts){
         return new ArrayList<T>(Arrays.asList(ts));
@@ -41,6 +97,13 @@ public final class Faster {
         throwNull(obj,"对象为空异常");
     }
 
+    public static boolean isNull(Object obj){
+        return obj == null;
+    }
+
+    public static boolean isNotNull(Object obj){
+        return obj != null;
+    }
     /**
      * 集合不为null ,且不为空
      */
@@ -55,6 +118,9 @@ public final class Faster {
         return map != null && !map.isEmpty();
     }
 
+    public static Date now(){
+        return new Date();
+    }
 
     private Faster(){}
 }

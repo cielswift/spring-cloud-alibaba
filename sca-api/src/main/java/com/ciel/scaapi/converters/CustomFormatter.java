@@ -18,14 +18,14 @@ import java.util.Locale;
 public class CustomFormatter implements Formatter<String> {
 
     @Override
-    public String parse(@NonNull String s, Locale locale) throws ParseException {
+    public String parse(@NonNull String str, Locale locale) throws ParseException {
 
-        return "fuck2";
+        return str.concat("(PARSE)");
     }
 
     @Override
-    public String print(@NonNull String s, Locale locale) {
+    public String print(@NonNull String str, Locale locale) {
 
-        return "fuck1";
+        return str.concat("(PRINT)");
     }
 }

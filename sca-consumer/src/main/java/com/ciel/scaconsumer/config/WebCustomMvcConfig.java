@@ -31,7 +31,8 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*")  //允许所有跨域请求
                 .allowedMethods("*")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .exposedHeaders("Authentication"); //重要: 暴露响应头
     }
 
     @Override  //注册拦截器
