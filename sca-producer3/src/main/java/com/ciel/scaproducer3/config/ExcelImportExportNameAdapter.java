@@ -1,6 +1,5 @@
 package com.ciel.scaproducer3.config;
 
-
 import com.ciel.scaapi.exception.AlertException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -20,9 +19,10 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+/**
+ * 扫包
+ */
 public class ExcelImportExportNameAdapter {
-
-
 
 
     public static final Logger log = LoggerFactory.getLogger(ExcelImportExportNameAdapter.class);

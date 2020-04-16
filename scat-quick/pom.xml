@@ -37,6 +37,24 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 
+        <dependency> <!--整合 WebSocket
+         如果使用外置的 tomcat 需要引入 javaee-api 我们这里不引入是因为spring-boot 内置tomcat 包含拉 javaee-api 。-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency> <!--操作el 客户端-->
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>6.8.0</version>
+        </dependency>
+
+        <dependency> <!--el-->
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>6.8.0</version>
+        </dependency>
+
         <dependency> <!--security相关-->
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>

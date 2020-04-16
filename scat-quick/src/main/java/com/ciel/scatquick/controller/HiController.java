@@ -2,9 +2,8 @@ package com.ciel.scatquick.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.beanload.AppEvn;
-import com.ciel.scatquick.config.MultiRequestBody;
-import com.ciel.scatquick.s2d.Zxing;
 import lombok.AllArgsConstructor;
 import org.sagacity.sqltoy.dao.SqlToyLazyDao;
 import org.sagacity.sqltoy.service.SqlToyCRUDService;
@@ -14,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,8 +29,6 @@ public class HiController {
 
     private SqlToyCRUDService sqlToyCRUDService;
 
-    private Zxing zx;
-
     @EventListener  //代替事件监听器,不用写ApplicationListener
     public void listenHello(AppEvn event) {
         System.out.println(event.getName());
@@ -39,6 +36,11 @@ public class HiController {
 
     @GetMapping("/pu")
     public Result pu(){
+
+        Map<String, String> map = new HashMap<>();
+        map.put("name","xiapeixin");
+
+        ScaUser scaUser = new ScaUser();
 
         String[] paramNames = { "staffName", "status" };
         Object[] paramValue = { "陈", 431173673996394496L };

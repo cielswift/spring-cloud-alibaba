@@ -16,7 +16,7 @@ spring:
     port: 6510
     password: ciel
     database: 15
-  elasticsearch:
+  elasticsearch:  #分布式搜索
     rest:
       uris: http://127.0.0.1:19200
   datasource:

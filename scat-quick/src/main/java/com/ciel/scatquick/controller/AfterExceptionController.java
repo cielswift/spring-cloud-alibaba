@@ -33,7 +33,7 @@ public class AfterExceptionController implements ResponseBodyAdvice<Object> {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-        System.out.println("+++++++++++++++++++++++++++++++");
+        System.out.println("参数预处理");
     }
 
     @Override

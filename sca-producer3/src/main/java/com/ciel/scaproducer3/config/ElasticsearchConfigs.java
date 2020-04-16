@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ElasticsearchConfigs {
 
-
+//    Relational DB -> Databases -> Tables -> Rows -> Columns
+//    Elasticsearch -> Indices -> Types -> Documents -> Fields
 
 }

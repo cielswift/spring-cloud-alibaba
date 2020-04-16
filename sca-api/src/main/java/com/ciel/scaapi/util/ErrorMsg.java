@@ -1,5 +1,10 @@
 package com.ciel.scaapi.util;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 public enum ErrorMsg {
 
     NF_TEAM("找不到团队信息"),
@@ -17,5 +22,17 @@ public enum ErrorMsg {
 
     public String v(){
         return name;
+    }
+
+    static{
+
+        try {
+            List<String> strings = Files.readAllLines(Paths.get("c:/ciel/cc.mp4"));
+
+            System.out.println(strings);
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+
     }
 }

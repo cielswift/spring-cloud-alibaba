@@ -30,10 +30,22 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
             if (converters.get(i) instanceof MappingJackson2HttpMessageConverter) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 // 统一返回数据的输出风格
-                objectMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
+                //驼峰
+                objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+                //null值字段不返回
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                //null值字段不返回
+                objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+
+                //允许对象忽略json中不存在的属性
                 objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+                //
+                objectMapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
+
+                //时区
                 objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+
                 MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
                 converter.setObjectMapper(objectMapper);
                 converters.set(i, converter);
