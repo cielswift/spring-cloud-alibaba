@@ -1,0 +1,80 @@
+server:
+  port: 29090
+  servlet:
+    context-path: /quick
+  http2:  #2.0
+    enabled: true
+  compression:   #压缩
+    enabled: true
+    mime-types: #压缩支持的类型
+      - application/json
+      - application/xml
+      - text/html
+      - text/xml
+      - text/plain
+  undertow:
+    io-threads: 8
+    worker-threads: 128
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  application:
+    name: quick
+  aop:
+    proxy-target-class: true #使用cglib代理
+  main:
+    allow-bean-definition-overriding: true #bean冲突覆盖
+  profiles:
+    active: dev #开发模式
+  datasource:
+    name: dataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: ciel
+    url: jdbc:mysql://127.0.0.1:1672/spring_alibaba??seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    druid:
+      initial-size: 5
+      min-idle: 5
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      numTestsPerEvictionRun: 3
+      keepAlive: true
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 120000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 600000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: true
+      testOnReturn: false
+      removeAbandoned: true
+      removeAbandonedTimeout: 300
+    sqltoy:
+      # 这里要注意，指定sql文件的路径,多个可以用逗号分隔，会自动向下寻找
+      sqlResourcesDir: /sql
+      # debug模式会打印执行sql
+      debug: true
+
+elasticsearch:
+  schema: http
+  address: 127.0.0.1:19390
+  connectTimeout: 5000
+  socketTimeout: 5000
+  connectionRequestTimeout: 5000
+  maxConnectNum: 100
+  maxConnectPerRoute: 100
+
+
+logging:
+  config: classpath:logback-spring.xml
+
+---
+custom-mod:  #多文档模式,定义一些其他配置
+  name: quick
+
+spring:
+  profiles:
+    active: dev
