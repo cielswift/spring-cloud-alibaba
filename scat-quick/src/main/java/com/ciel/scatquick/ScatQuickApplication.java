@@ -1,11 +1,16 @@
 package com.ciel.scatquick;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.ciel.scatquick.anntion.SpiInterface;
+import com.ciel.scatquick.init.AppScontext;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.Ordered;
@@ -16,15 +21,21 @@ import java.util.ServiceLoader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
 @EnableAspectJAutoProxy(exposeProxy = true,proxyTargetClass = true)
-@ComponentScan(basePackages = { "com.ciel" })
+@ComponentScan(basePackages = "com.ciel")
+@MapperScan("com.ciel.scacommons.mapper")
 @EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE)
 @Order(value=1) //配合CommandLineRunner 控制初始化顺序
 public class ScatQuickApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(ScatQuickApplication.class, args);
+
+        SpringApplication springApplication = new SpringApplication(ScatQuickApplication.class);
+        springApplication.addInitializers(new AppScontext());
+        springApplication.run(args);
+
+       // ConfigurableApplicationContext app = SpringApplication.run(ScatQuickApplication.class, args);
     }
 
 

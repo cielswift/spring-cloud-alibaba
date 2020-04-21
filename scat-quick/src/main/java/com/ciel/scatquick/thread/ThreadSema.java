@@ -1,4 +1,4 @@
-package com.ciel.scatquick.anntion;
+package com.ciel.scatquick.thread;
 
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -15,7 +15,6 @@ public class ThreadSema {
         for(int i=0; i<5000; i ++){
             new Thread(new Hels(num,semaphore)).start();
         }
-
 
         while (true){
             System.out.println(num.getNum());

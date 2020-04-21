@@ -1,4 +1,4 @@
-package com.ciel.scatquick.anntion;
+package com.ciel.scatquick.thread;
 
 import lombok.SneakyThrows;
 
@@ -7,7 +7,9 @@ import java.util.concurrent.CyclicBarrier;
 public class ThreadCyclic  {
 
     public static void main(String[] args) {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(5,new Sth()); //5个线程为一组,当一组执行完后就会执行Sth任务;
+
+        //5个线程为一组,当一组执行完后就会执行Sth任务;
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5,new Sth());
 
         for(int i=0 ;i<10;i++){
             new Thread(new Empty(cyclicBarrier), "名"+i).start();

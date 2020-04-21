@@ -3,8 +3,7 @@ package com.ciel.scatquick.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -223,12 +222,7 @@ public class MultiRequestBodyArgumentResolver implements HandlerMethodArgumentRe
         String jsonBody = (String) webRequest.getAttribute(JSONBODY_ATTRIBUTE, NativeWebRequest.SCOPE_REQUEST);
         // 没有就从请求中读取
         if (jsonBody == null) {
-            try {
-                jsonBody = IOUtils.toString(servletRequest.getReader());
-                webRequest.setAttribute(JSONBODY_ATTRIBUTE, jsonBody, NativeWebRequest.SCOPE_REQUEST);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            webRequest.setAttribute(JSONBODY_ATTRIBUTE, jsonBody, NativeWebRequest.SCOPE_REQUEST);
         }
         return jsonBody;
     }

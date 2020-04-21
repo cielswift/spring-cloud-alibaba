@@ -1,4 +1,4 @@
-package com.ciel.scatquick.anntion;
+package com.ciel.scatquick.thread;
 
 import lombok.SneakyThrows;
 
@@ -12,6 +12,7 @@ public class ThreadCountD {
 
         new Thread(new ThreadA(countDownLatch)).start();
         new Thread(new ThreadB(countDownLatch)).start();
+
 
     }
 }

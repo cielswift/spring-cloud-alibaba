@@ -1,5 +1,6 @@
 package com.ciel.scatquick.config;
 
+import com.ciel.scatquick.controller.LoginInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
@@ -41,6 +43,15 @@ public class WebMvcConfig implements WebMvcConfigurer   {
     public FormContentFilter formContentFilter() {
         return new FormContentFilter();
     }
+
+
+    @Override  //注册拦截器
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**").excludePathPatterns("/error/**");
+        //拦截的地址和排除的地址
+    }
+
 
     /**
      * 跨域设置

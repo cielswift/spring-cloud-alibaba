@@ -49,38 +49,15 @@
             <version>6.8.0</version>
         </dependency>
 
-        <dependency> <!--el-->
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>6.8.0</version>
-        </dependency>
-
         <dependency> <!--security相关-->
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
 
-        <dependency> <!--api-->
+        <dependency> <!--commons-->
             <groupId>com.ciel</groupId>
-            <artifactId>sca-api</artifactId>
+            <artifactId>sca-commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion> <!--消费者不需要连接jdbc-->
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-jdbc</artifactId>
-                </exclusion>
-
-                <exclusion> <!--消费者不需要连接mybatis-->
-                    <groupId>com.baomidou</groupId>
-                    <artifactId>mybatis-plus-boot-starter</artifactId>
-                </exclusion>
-
-                <exclusion> <!--消费者不需要连接mybatis-->
-                    <groupId>com.baomidou</groupId>
-                    <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-                </exclusion>
-
-            </exclusions>
         </dependency>
 
         <dependency> <!--druid-->
@@ -95,23 +72,10 @@
             <version>5.1.48</version>
         </dependency>
 
-        <dependency> <!--sql toy-->
-            <groupId>com.sagframe</groupId>
-            <artifactId>sagacity-sqltoy-starter</artifactId>
-            <version>4.10.5</version>
-        </dependency>
-
-        <!-- ehcache 用作缓存翻译 -->
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.8.1</version>
-        </dependency>
-
-        <dependency> <!--数据转换-->
-            <groupId>com.github.dozermapper</groupId>
-            <artifactId>dozer-spring-boot-starter</artifactId>
-            <version>6.5.0</version>
+        <dependency> <!--mybatis plus 执行 SQL 分析打印-->
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.8.7</version>
         </dependency>
 
     </dependencies>

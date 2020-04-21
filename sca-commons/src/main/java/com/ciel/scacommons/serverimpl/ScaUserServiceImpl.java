@@ -1,6 +1,7 @@
 package com.ciel.scacommons.serverimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ciel.scaapi.crud.IScaApplicationService;
 import com.ciel.scaapi.crud.IScaUserService;
@@ -38,6 +39,11 @@ public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> impl
         return "yes";
     }
 
+
+    @Override
+    public ScaUser getByName(String name) {
+       return baseMapper.selectOne(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,name));
+    }
 
     //////////////////////////////////////////////////////
 

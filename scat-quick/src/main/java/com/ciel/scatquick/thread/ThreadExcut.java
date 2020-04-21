@@ -1,4 +1,4 @@
-package com.ciel.scatquick.anntion;
+package com.ciel.scatquick.thread;
 
 import lombok.SneakyThrows;
 
