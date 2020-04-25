@@ -41,6 +41,20 @@ public class ScaUserDealService implements UserDetailsService {
         if(Faster.isNull(scaUser)){
             throw new UsernameNotFoundException("找不到此用户");
         }
+        return loadUserDetail(scaUser);
+
+    }
+
+    public UserDetails loadUserByIp(String ip) throws UsernameNotFoundException {
+        ScaUser scaUser = scaUserService.getByIp(ip);
+        if(Faster.isNull(scaUser)){
+            throw new UsernameNotFoundException("找不到此用户");
+        }
+        return loadUserDetail(scaUser);
+    }
+
+
+    private ScaCusUser loadUserDetail(ScaUser scaUser) throws UsernameNotFoundException {
 
         List<ScaRole> scaRoles = scaRoleService.rolesByUserId(scaUser.getId());
 

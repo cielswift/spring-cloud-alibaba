@@ -79,7 +79,6 @@ public class MybatisPlugin {
             }
         });
 
-
         // 动态表名SQL解析器
         DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
 

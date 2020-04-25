@@ -1,10 +1,13 @@
 package com.ciel.scatquick.config;
 
+import com.ciel.scatquick.security.filter.IpFilter;
 import com.ciel.scatquick.security.filter.JwtFilter;
 import com.ciel.scatquick.security.filter.LoginTokenFilter;
-import com.ciel.scatquick.security.provider.JwtProvider;
+import com.ciel.scatquick.security.provider.IPProvider;
+import com.ciel.scatquick.security.provider.JwtLoginProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -38,10 +43,23 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 认证处理类
+     * 登录认证处理类
      */
     @Autowired
-    private JwtProvider jwtProvider;
+    private JwtLoginProvider jwtProvider;
+
+    /**
+     * ip登录处理类
+     */
+    @Autowired
+    private IPProvider ipProvider;
+
+
+    // 配置ip登录端点
+    @Bean
+    public LoginUrlAuthenticationEntryPoint loginUrlAuthenticationEntryPoint(){
+        return new LoginUrlAuthenticationEntryPoint("/ipAuth");
+    }
 
     /**
      * 配置登录验证逻辑
@@ -50,6 +68,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) {
         //这里可启用我们自己的登陆验证逻辑
         auth.authenticationProvider(jwtProvider);
+        //配置IP登录逻辑
+        auth.authenticationProvider(ipProvider);
     }
 
     /**
@@ -58,6 +78,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/ipLogin").permitAll() //ip登录端点
                 .anyRequest().authenticated()  // 其他的需要登陆后才能访问
                 .and()//未登录
                 .httpBasic()//.authenticationEntryPoint(userAuthenticationEntryPointHandler)
@@ -72,6 +93,13 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
 
                 .and()
+
+                .exceptionHandling()
+                .accessDeniedPage("/ipLogin") //ip登录页面
+                .authenticationEntryPoint(loginUrlAuthenticationEntryPoint())
+
+                .and()
+
                 // 开启跨域
                 .cors()
                 .and()
@@ -87,5 +115,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
         http.addFilterAt(new LoginTokenFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 
+        // 注册 IpFilter  注意放置的顺序 这很关键
+        http.addFilterBefore(new IpFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 }

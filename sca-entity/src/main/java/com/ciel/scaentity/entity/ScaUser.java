@@ -8,14 +8,13 @@ import java.time.LocalDate;
 
 import com.ciel.scaentity.type2.Person;
 import com.ciel.scaentity.type2.json2Person;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
  *
  * @author xiapeixin
  * @since 2020-02-14
@@ -24,6 +23,12 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "sca_user",autoResultMap = true) //开启注释映射
+
+
+//@JsonIgnoreProperties，忽略一组属性，作用于类上，比如JsonIgnoreProperties({ "password", "age" })。
+
+//@JsonSerialize，指定一个实现类来自定义序列化。类必须实现JsonSerializer接口，代码如下：
+//@JsonDeserialize，用户自定义反序列化，同@JsonSerialize ，类需要实现JsonDeserializer接口。
 public class ScaUser extends ScaBaseEntity {
 
 
@@ -34,16 +39,20 @@ public class ScaUser extends ScaBaseEntity {
     private LocalDate birthday;
 
     @TableField("SEX")
-    private Boolean sex;
+    private Integer sex;
 
     @TableField("IMAGE")
     private String image;
 
     @TableField("PASSWORD")
+    @JsonIgnore  //返回时排除掉这个字段
     private String password;
 
     @TableField("PRICE")
     private BigDecimal price;
+
+    @TableField("IP")
+    private String ip;
 
     /**
      * 乐观锁

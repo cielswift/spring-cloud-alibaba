@@ -1,9 +1,5 @@
 package com.ciel.scaapi.retu;
 
-
-import com.alibaba.fastjson.JSON;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-
 public enum RespCode {
 
     OK(200),

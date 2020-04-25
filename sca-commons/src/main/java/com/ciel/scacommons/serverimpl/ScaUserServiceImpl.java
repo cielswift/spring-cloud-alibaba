@@ -47,4 +47,9 @@ public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> impl
 
     //////////////////////////////////////////////////////
 
+
+    @Override
+    public ScaUser getByIp(String ip) {
+        return baseMapper.selectOne(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getIp,ip));
+    }
 }

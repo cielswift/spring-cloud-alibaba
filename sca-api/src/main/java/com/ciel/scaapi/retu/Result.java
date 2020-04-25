@@ -23,7 +23,6 @@ public final class Result extends HashMap<String,Object> {
 
     /**
      * 200 正常
-     * 400 异常
      */
     private static final String CODE = "code";
     private static final String MSG = "msg";
@@ -43,6 +42,10 @@ public final class Result extends HashMap<String,Object> {
 
     public static Result error(String msg){
         return  new Result(RespCode.ERROR.code(),msg);
+    }
+
+    public static Result error(Integer code,String msg){
+        return  new Result(code,msg);
     }
 
     public static Result error(){
@@ -97,25 +100,5 @@ public final class Result extends HashMap<String,Object> {
             put(DATA,JSON.toJSONString(get(DATA), config));
         }
         return this;
-    }
-
-    public static void main(String[] args) throws ParseException, AlertException {
-
-        Date date = new Date();
-
-        LocalDateTime lo = LocalDateTime.now();
-
-        DayOfWeek dayOfWeek = lo.getDayOfWeek();
-
-        System.out.println(dayOfWeek.getValue());
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date parse = format.parse("2020-03-22");
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(parse);
-        int week  = cal.get(Calendar.DAY_OF_WEEK);
-
-        System.out.println(week);
     }
 }

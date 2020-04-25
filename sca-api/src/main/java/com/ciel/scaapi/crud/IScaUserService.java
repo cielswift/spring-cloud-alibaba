@@ -21,4 +21,7 @@ public interface IScaUserService extends IService<ScaUser> {
 
     ScaUser getByName(String name);
 
+
+    ScaUser getByIp(String ip);
+
 }

@@ -1,6 +1,9 @@
 package com.ciel.scaapi.util;
 
+import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.exception.AlertException;
+import com.ciel.scaapi.retu.Result;
+import com.ciel.scaentity.entity.ScaUser;
 import org.apache.commons.codec.CharEncoding;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +12,6 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.*;
 
-
 /**
  * 一些常用快捷方法组合; 避免冗余
  * @author xiapeixin
@@ -17,14 +19,31 @@ import java.util.*;
  */
 public final class Faster {
 
+
+    /**
+     * 响应json
+     */
+    public static void respJson(Result result, HttpServletResponse response) throws IOException {
+
+        response.setHeader("Access-control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+
+        response.setHeader("access-control-expose-headers", "Authentication");
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().println(JSON.toJSONString(result));
+        response.getWriter().close();
+    }
+
     /**
      * 文件下载
      */
-    public static void download(HttpServletResponse response, File file) throws IOException {
+    public static void download(File file, HttpServletResponse response) throws IOException {
 
         response.setCharacterEncoding(CharEncoding.UTF_8);
-        response.addHeader("Content-Disposition", "attachment;filename=" +
-                URLEncoder.encode(file.getName(), CharEncoding.UTF_8).replace("+", "%20"));
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), CharEncoding.UTF_8).replace("+", "%20"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -43,7 +62,6 @@ public final class Faster {
         os.close();
         inputStream.close();
     }
-
 
     //求百分比
     public static Double getPercentage(Integer tag,Integer all){

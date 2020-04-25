@@ -27,6 +27,13 @@ spring:
     allow-bean-definition-overriding: true #bean冲突覆盖
   profiles:
     active: dev #开发模式
+  jackson:  #json 序列化策略
+    property-naming-strategy: LOWER_CAMEL_CASE  #LOWER_CAMEL_CASE	userName	默认策略;KEBAB_CASE	user-name ;LOWER_CASE	username;SNAKE_CASE	user_name;UPPER_CAMEL_CASE	UserName
+  redis:
+    database: 10
+    password: ciel
+    host: 127.0.0.1
+    port: 6510
   datasource:
     dynamic: #多数据源模式
       primary: master #设置默认的数据源或者数据源组,默认值即为master ; 两套配置的主库和从库相反
@@ -64,7 +71,6 @@ elasticsearch:
   maxConnectNum: 100
   maxConnectPerRoute: 100
 
-
 clusters:
   datacenterId: 2
   machineId: 2
@@ -72,6 +78,9 @@ clusters:
 logging:
   config: classpath:logback-spring.xml
 
+mybatisplus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志
 ---
 custom-mod:  #多文档模式,定义一些其他配置
   name: quick

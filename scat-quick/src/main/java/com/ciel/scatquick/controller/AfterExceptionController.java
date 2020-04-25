@@ -1,5 +1,6 @@
 package com.ciel.scatquick.controller;
 
+import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.MethodParameter;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -22,11 +24,25 @@ import java.util.Date;
 @RestControllerAdvice
 public class AfterExceptionController implements ResponseBodyAdvice<Object> {
 
+    @ExceptionHandler(AlertException.class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY) //状态码
+    public Result alertException(AlertException e){
+        return Result.error(e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN) //状态码
+    public Result accessException(AccessDeniedException e){
+        return Result.error("权限不足:".concat(e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) //状态码
-    public Result notFountHandler(Exception e){
-        return Result.error("SERVER-ERROR");
+    public Result globalException(Exception e){
+        return Result.error("服务器异常:".concat(e.getMessage()!=null?e.getMessage():"未知异常:"
+                .concat(e.getClass().getName())));
     }
+
 
     @InitBinder
     public void init(WebDataBinder binder, HttpServletRequest request){

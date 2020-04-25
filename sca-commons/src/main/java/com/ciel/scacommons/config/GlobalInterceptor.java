@@ -48,13 +48,12 @@ public class GlobalInterceptor implements Interceptor {
             return invocation.proceed();
         }
 
-
 //        MetaObject metaObject =
 //                SystemMetaObject.forObject(invocation.getTarget()); //获取源数据
 //        metaObject.getValue("parameterHandle.param");
 //        metaObject.setValue();
 
-        logger.info("执行sql语句:".concat(sql));
+      //  logger.info("执行sql语句:".concat(sql));
 
         // sql交由处理类处理  对sql语句进行处理  此处是范例  不做任何处理
         // 包装sql后，重置到invocation中

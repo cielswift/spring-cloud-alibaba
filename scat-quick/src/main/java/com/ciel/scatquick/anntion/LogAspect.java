@@ -38,6 +38,7 @@ public class LogAspect {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
+        log.info("LOG-START-----------------------------------------------------------------------------------------------");
         log.info("请求参数:{}", point.getArgs());
         log.info("请求方式:{}", request.getMethod());
         log.info("请求URL:{}", request.getRequestURI());
@@ -52,7 +53,7 @@ public class LogAspect {
         log.info("响应数据:{}", result.toString());
         //执行时长
         log.info("执行时间:{}ms", System.currentTimeMillis() - str);
-
+        log.info("LOG-END-----------------------------------------------------------------------------------------------");
         return result;
     }
 

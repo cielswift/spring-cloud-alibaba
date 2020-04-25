@@ -5,12 +5,13 @@ import com.ciel.scaapi.util.Faster;
 import com.ciel.scatquick.security.jwt.JWTPayload;
 import com.ciel.scatquick.security.jwt.JWTUtils;
 import com.ciel.scatquick.security.realm.ScaCusUser;
-import com.ciel.scatquick.security.token.JwtToken;
+import com.ciel.scatquick.security.token.IPToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,28 +20,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
+public class IpFilter extends AbstractAuthenticationProcessingFilter {
 
-
-    public LoginTokenFilter(AuthenticationManager authenticationManager) {
-       setAuthenticationManager(authenticationManager);
+    // 使用 /ipAuth 该端点进行 ip 认证
+    public IpFilter(AuthenticationManager authenticationManager) {
+        super(new AntPathRequestMatcher("/ipLogin","POST"));
+        this.setAuthenticationManager(authenticationManager);
     }
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
+        // 获取 host 信息
+        String host = request.getRemoteHost();
+        // 交给内部的 AuthenticationManager 去认证，实现解耦
 
-        JwtToken jwtToken = new JwtToken(request.getParameter("username"),request.getParameter("password"));
-
-        setDetails(request, jwtToken);
-
-        return this.getAuthenticationManager().authenticate(jwtToken);
+        return getAuthenticationManager().authenticate(new IPToken(host));
     }
 
-
-    /**
-     *优先执行
-     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
@@ -54,14 +52,13 @@ public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
         String token = JWTUtils.createToken(payload);
 
         Faster.respJson(Result.ok().data(token),response);
-
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
 
         Faster.respJson(Result.error("ERROR"),response);
-
     }
+
+
 }
