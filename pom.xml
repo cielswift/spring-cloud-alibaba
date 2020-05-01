@@ -66,7 +66,20 @@
             <version>1.2.62</version>
         </dependency>
 
-<!--        <dependency> &lt;!&ndash;excel工具&ndash;&gt;-->
+        <dependency> <!--io工具-->
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency> <!--lang-->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
+
+
+        <!--        <dependency> &lt;!&ndash;excel工具&ndash;&gt;-->
 <!--            <groupId>com.github.liaochong</groupId>-->
 <!--            <artifactId>myexcel</artifactId>-->
 <!--            <version>3.4.2</version>-->

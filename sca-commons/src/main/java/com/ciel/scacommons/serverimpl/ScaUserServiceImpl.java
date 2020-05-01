@@ -9,9 +9,14 @@ import com.ciel.scacommons.mapper.ScaUserMapper;
 import com.ciel.scaentity.entity.ScaApplication;
 import com.ciel.scaentity.entity.ScaUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,22 +28,27 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Primary
+
+/**
+ * 指定缓存通用配置; cacheManager指定使用哪一个缓存管理器
+ */
+@CacheConfig(cacheNames = "scaUser",cacheManager = "cacheManagerJSON")
 public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> implements IScaUserService {
 
     @Autowired
     protected IScaApplicationService applicationService;
 
-
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Object testTransaction() {
-        remove(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,"aaa"));
-
-        applicationService.remove(new LambdaQueryWrapper<ScaApplication>().eq(ScaApplication::getName,"aaa"));
-
-        return "yes";
+    @Cacheable(value = "scaUser", keyGenerator = "autoGenMy")
+    public List<ScaUser> lists(String name) {
+        return baseMapper.selectList(null);
     }
 
+    @Override
+    @CachePut(value = "scaUser",keyGenerator = "autoGenMy")
+    public boolean deleteByName(String name) {
+        return baseMapper.delete(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,name)) > 1;
+    }
 
     @Override
     public ScaUser getByName(String name) {
@@ -51,5 +61,13 @@ public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> impl
     @Override
     public ScaUser getByIp(String ip) {
         return baseMapper.selectOne(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getIp,ip));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Object testTransaction() {
+        remove(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,"aaa"));
+        applicationService.remove(new LambdaQueryWrapper<ScaApplication>().eq(ScaApplication::getName,"aaa"));
+        return "yes";
     }
 }

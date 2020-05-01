@@ -88,3 +88,11 @@ custom-mod:  #多文档模式,定义一些其他配置
 spring:
   profiles:
     active: dev
+### QQ,wechar
+constants:
+  qqAppId: 101513767
+  qqAppSecret: b1d978cefcf405388893d8e686d307b0
+  qqRedirectUrl: http://127.0.0.1:8080/QQLogin
+  weCatAppId: wxa997b110821cbfd6
+  weCatAppSecret: a5cee82a40995afc5bc14d17058908c1
+  weCatRedirectUrl: http://wsryao.free.idcfengye.com

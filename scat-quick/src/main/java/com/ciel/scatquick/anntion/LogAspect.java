@@ -38,22 +38,16 @@ public class LogAspect {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        log.info("LOG-START-----------------------------------------------------------------------------------------------");
-        log.info("请求参数:{}", point.getArgs());
-        log.info("请求方式:{}", request.getMethod());
-        log.info("请求URL:{}", request.getRequestURI());
-        log.info("请求IP:{}", request.getRemoteAddr());
-
         ScaCusUser scaCusUser = (ScaCusUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("当前用户:ID:{},USERNAME:{}", scaCusUser.getId(),scaCusUser.getUsername());
 
         //执行方法
         Object result = point.proceed();
 
-        log.info("响应数据:{}", result.toString());
-        //执行时长
-        log.info("执行时间:{}ms", System.currentTimeMillis() - str);
-        log.info("LOG-END-----------------------------------------------------------------------------------------------");
+        log.info("请求参数:{},请求方式:{},请求URL:{},请求IP:{}," +
+                        "响应数据:{} ,当前用户:ID:{},当前用户:姓名:{}, 执行时间:{}ms",
+                point.getArgs(),request.getMethod(),request.getRequestURI(),request.getRemoteAddr(),
+                result.toString(), scaCusUser.getId(),scaCusUser.getUsername(),System.currentTimeMillis()-str);
+
         return result;
     }
 

@@ -1,5 +1,7 @@
 package com.ciel.scacommons.config;
 
+import java.util.TreeSet;
+
 /**
  * Twitter的分布式自增ID雪花算法snowflake
  *
@@ -15,7 +17,7 @@ public class SnowFlake {
     /**
      * 起始的时间戳
      */
-    private final static long START_STMP = 1480166465631L;
+    private final static long START_STMP = 1587878818176L;
 
     /**
      * 每一部分占用的位数
@@ -102,11 +104,14 @@ public class SnowFlake {
     public static void main(String[] args) {
         SnowFlake snowFlake = new SnowFlake(2, 3);
 
+        TreeSet<Long> treeSet = new TreeSet<>();
+
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1000000; i++) {
-            System.out.println(snowFlake.nextId());
+            treeSet.add(snowFlake.nextId());
         }
-        
+
+        System.out.println(treeSet.size());
         System.out.println(System.currentTimeMillis() - start);
 
     }

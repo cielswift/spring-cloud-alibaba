@@ -5,7 +5,7 @@ import com.ciel.scaapi.util.Faster;
 import com.ciel.scatquick.security.jwt.JWTPayload;
 import com.ciel.scatquick.security.jwt.JWTUtils;
 import com.ciel.scatquick.security.realm.ScaCusUser;
-import com.ciel.scatquick.security.token.JwtToken;
+import com.ciel.scatquick.security.token.LoginToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-
     public LoginTokenFilter(AuthenticationManager authenticationManager) {
        setAuthenticationManager(authenticationManager);
     }
@@ -30,13 +29,14 @@ public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-        JwtToken jwtToken = new JwtToken(request.getParameter("username"),request.getParameter("password"));
+        LoginToken jwtToken = new LoginToken(request.getParameter("username"),
+                request.getParameter("password"),
+                request.getParameter("sms"));
 
         setDetails(request, jwtToken);
 
         return this.getAuthenticationManager().authenticate(jwtToken);
     }
-
 
     /**
      *优先执行
@@ -45,11 +45,12 @@ public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
-        ScaCusUser scaCusUser =  (ScaCusUser)authResult.getPrincipal();
+        ScaCusUser scaUser = (ScaCusUser)authResult.getPrincipal();
+
         JWTPayload payload = new JWTPayload();
-        payload.setUserName(scaCusUser.getUsername());
-        payload.setId(scaCusUser.getId());
-        payload.setAuthority(scaCusUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        payload.setUserName(scaUser.getUsername());
+        payload.setId(scaUser.getId());
+        payload.setAuthority(scaUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
 
         String token = JWTUtils.createToken(payload);
 

@@ -3,7 +3,7 @@ package com.ciel.scatquick.security.filter;
 import com.ciel.scatquick.security.jwt.JWTPayload;
 import com.ciel.scatquick.security.jwt.JWTUtils;
 import com.ciel.scatquick.security.realm.ScaCusUser;
-import com.ciel.scatquick.security.token.JwtToken;
+import com.ciel.scatquick.security.token.LoginToken;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +46,7 @@ public class JwtFilter extends BasicAuthenticationFilter {
                         user.getRealName(),
                         user.getIp());
 
-                JwtToken jwtToken = new JwtToken(cusUser,"",cusUser.getAuthorities());
+                LoginToken jwtToken = new LoginToken(cusUser,"",cusUser.getAuthorities());
                 /**
                  * 放入security 上下文中
                  */

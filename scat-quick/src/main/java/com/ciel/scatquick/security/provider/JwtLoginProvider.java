@@ -1,8 +1,9 @@
 package com.ciel.scatquick.security.provider;
 
 import com.ciel.scatquick.security.realm.ScaUserDealService;
-import com.ciel.scatquick.security.token.JwtToken;
+import com.ciel.scatquick.security.token.LoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -22,12 +23,15 @@ public class JwtLoginProvider implements AuthenticationProvider {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 是否支持这个 Authentication 针对什么样的认证进行校验; 原本是UsernamePasswordAuthenticationToken;
      */
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(JwtToken.class);
+        return authentication.equals(LoginToken.class);
     }
 
 
@@ -38,6 +42,13 @@ public class JwtLoginProvider implements AuthenticationProvider {
         // 获取表单中输入的密码
         String password = (String) authentication.getCredentials();
         // 查询用户是否存在
+
+        String sms = ((LoginToken) authentication).getSms();
+        Object smsRedis = redisTemplate.opsForValue().get("sms_".concat(userName));
+        if(!sms.equals(smsRedis)){
+            throw new BadCredentialsException("验证码不正确");
+        }
+
 
         UserDetails userDetails = userDetailService.loadUserByUsername(userName);
 
@@ -54,9 +65,8 @@ public class JwtLoginProvider implements AuthenticationProvider {
         if (!userDetails.isEnabled()){
             throw new LockedException("该用户已被冻结");
         }
-
         // 进行登录
-        return new JwtToken(userDetails, password, userDetails.getAuthorities());
+        return new LoginToken(userDetails, password, userDetails.getAuthorities());
     }
 
 }

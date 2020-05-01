@@ -5,10 +5,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class ThreadCusMap {
 
     public static void main(String[] args) throws InterruptedException {
+
+        //线程安全的集合
 
         Map<String, String> map = new HashMap<>();
 
@@ -25,9 +28,9 @@ public class ThreadCusMap {
         new Thread(new Jobs(skip)).start();
         new Thread(new Jobs(skip)).start();
 
-          //适合 读多写少
-        CopyOnWriteArrayList<String> copy = new CopyOnWriteArrayList<>();
-
+          //适合 读多写少的
+        CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+        CopyOnWriteArraySet<String> set = new CopyOnWriteArraySet<>();
 
         while (true){
 

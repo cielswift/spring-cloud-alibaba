@@ -83,6 +83,5 @@ public class ScaUserDealService implements UserDetailsService {
                 scaUser.getId(),
                 scaUser.getUsername(),
                 "");
-
     }
 }

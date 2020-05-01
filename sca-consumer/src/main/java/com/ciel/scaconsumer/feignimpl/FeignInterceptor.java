@@ -7,6 +7,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -31,6 +32,9 @@ public class FeignInterceptor implements RequestInterceptor {
                     (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
             HttpServletRequest request = requestAttributes.getRequest();
+
+            //spring 获取当前请求的response对象
+            //HttpServletResponse response = requestAttributes.getResponse();
 
             String authentication = request.getHeader("Authentication");
             requestTemplate.header("Authentication", authentication);

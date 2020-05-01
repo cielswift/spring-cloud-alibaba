@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 @ServerEndpoint("/websocket")
 public class WebSocketController {
 
-
     //通过 Session.getBasicRemote().sendText(String message) 想客户端推送消息。
 
     /*websocket 客户端会话 通过Session 向客户端发送数据*/

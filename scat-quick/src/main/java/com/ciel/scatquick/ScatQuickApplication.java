@@ -19,12 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -38,11 +37,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
+
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 @ComponentScan(basePackages = "com.ciel")
 @MapperScan("com.ciel.scacommons.mapper")
 @EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE)
 @Order(value = 1) //配合CommandLineRunner 控制初始化顺序
+
+@ConfigurationPropertiesScan("com.ciel.scatquick.oauth2")
 public class ScatQuickApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
@@ -94,31 +96,31 @@ public class ScatQuickApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        //设置git 提交的名字
         // git config --global user.name "你的名字"
 
 //        File chm = new File(serverImagePath);
 //        chm.setExecutable(true);//设置可执行权限
 //        chm.setReadable(true);//设置可读权限
 //        chm.setWritable(true);//设置可写权限
-//
+
+        //设置文件权限
 //        if (!System.getProperty("os.name").startsWith("Win")) { //设置文件权限, 执行终端/脚本命令
 //            String cmdGrant = "chmod -R 777 " + serverImagePath;
 //            Runtime.getRuntime().exec(cmdGrant);
 //        }
 
+        //spi 机制
         ServiceLoader<SpiInterface> serviceLoader = ServiceLoader.load(SpiInterface.class);
-
         serviceLoader.forEach(t -> {
             t.vue("a");
         });
 
 
+        //正则表达式
         String reg = "\\d{2}\\w";
-
         String str = "29c";
-
         System.out.println(str.matches(reg));
-
         Pattern pa = Pattern.compile(reg);
         Matcher matcher = pa.matcher(str);
 

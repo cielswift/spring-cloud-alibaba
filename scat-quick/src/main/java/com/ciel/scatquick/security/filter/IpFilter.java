@@ -43,7 +43,8 @@ public class IpFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
-        ScaCusUser scaCusUser =  (ScaCusUser)authResult.getPrincipal();
+        ScaCusUser scaCusUser =  (ScaCusUser) authResult.getPrincipal();
+
         JWTPayload payload = new JWTPayload();
         payload.setUserName(scaCusUser.getUsername());
         payload.setId(scaCusUser.getId());
