@@ -22,15 +22,17 @@ public class MEBean implements InitializingBean, DisposableBean, //加载 //销�
         ApplicationContextAware,
         MessageSourceAware,
         ApplicationEventPublisherAware, //发布事件
-        ResourceLoaderAware
-{
+        ResourceLoaderAware {
 
-
-    @Autowired
     private Cik cik;
 
-    //@EventListener
+    public MEBean(){ //优先加载无参构造函数
 
+    }
+
+    public MEBean(Cik cik){
+        this.cik=cik;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -47,6 +49,7 @@ public class MEBean implements InitializingBean, DisposableBean, //加载 //销�
     public void dead() {
         System.out.println("@PreDestroy 销毁方法");
     }
+
 
     @Override
     public void destroy() throws Exception {

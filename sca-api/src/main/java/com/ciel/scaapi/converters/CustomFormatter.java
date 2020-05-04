@@ -20,12 +20,12 @@ public class CustomFormatter implements Formatter<String> {
     @Override
     public String parse(@NonNull String str, Locale locale) throws ParseException {
 
-        return str.concat("(PARSE)");
+        return str.concat("_||_");
     }
 
     @Override
     public String print(@NonNull String str, Locale locale) {
 
-        return str.concat("(PRINT)");
+        return str.concat("_||_");
     }
 }

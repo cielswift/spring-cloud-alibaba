@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
  * 类中的字段是int类型，那肯定会报错的。如果出现这种情况我们可以容忍，则需要配置该属性值为true。该参数值默认为false
  *
  */
-
 @ConfigurationProperties(prefix = "newconfig")
 @Data
 @Slf4j
@@ -37,7 +36,6 @@ public class NewConfig {
     }
 
     private String rad;
-
     private Integer ca;
 
     @Bean

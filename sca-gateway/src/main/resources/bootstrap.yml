@@ -56,19 +56,6 @@ spring:
             refresh: false
 
     gateway:  #路由规则
-#      globalcors: #跨域设置
-#        corsConfigurations:
-#          '[/**]':
-#            allow-credentials: true
-#            allowedHeaders: "*"
-#            allowedOrigins: "*"
-#            allowedMethods:
-#              - GET
-#                POST
-#                DELETE
-#                PUT
-#                OPTION
-#            max-age: 3600
       discovery:
         locator:
           enabled: true  #开启根据服务名称进行转发
@@ -94,20 +81,20 @@ spring:
 
 #            - name: RequestRateLimiter #请求数限流 名字不能随便写
 #              args:
-#                key-resolver: "#{@ipKeyResolver}"  #获取刚才创建的对象
+#                key-resolver: "#{@ipKeyResolver}"  #获取刚才创建的对象,代码手动创建
 #                redis-rate-limiter.replenishRate: 1  #令牌桶每秒填充平均速率
 #                redis-rate-limiter.burstCapacity: 1  #令牌桶总容量
 
-#        - burstCapacity：令牌桶总容量。
-#        - replenishRate：令牌桶每秒填充平均速率。
-#        - key-resolver：用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
-#
-#      通过在replenishRate和中设置相同的值来实现稳定的速率burstCapacity。设置burstCapacity高于时，可以允许临时突发replenishRate。
-#      在这种情况下，需要在突发之间允许速率限制器一段时间（根据replenishRate），因为2次连续突发将导致请求被丢弃（HTTP 429 - Too Many Requests）
-#      key-resolver: "#{@userKeyResolver}" 用于通过SPEL表达式来指定使用哪一个KeyResolver.
-#      如上配置：
-#      表示 一秒内，允许 一个请求通过，令牌桶的填充速率也是一秒钟添加一个令牌。
-#      最大突发状况 也只允许 一秒内有一次请求，可以根据业务来调整 。
+        #- burstCapacity：令牌桶总容量。
+        #- replenishRate：令牌桶每秒填充平均速率。
+        #- key-resolver：用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
+
+      #通过在replenishRate和中设置相同的值来实现稳定的速率burstCapacity。设置burstCapacity高于时，可以允许临时突发replenishRate。
+      #在这种情况下，需要在突发之间允许速率限制器一段时间（根据replenishRate），因为2次连续突发将导致请求被丢弃（HTTP 429 - Too Many Requests）
+      #key-resolver: "#{@userKeyResolver}" 用于通过SPEL表达式来指定使用哪一个KeyResolver.
+      #如上配置：
+      #表示 一秒内，允许 一个请求通过，令牌桶的填充速率也是一秒钟添加一个令牌。
+      #最大突发状况 也只允许 一秒内有一次请求，可以根据业务来调整 。
 
 #    loadbalancer:
 #      retry:

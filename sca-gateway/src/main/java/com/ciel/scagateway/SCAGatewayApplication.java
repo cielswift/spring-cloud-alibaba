@@ -63,6 +63,9 @@ public class SCAGatewayApplication {
         return WebClient.builder();
     }
 
+    static {
+
+    }
 
 //http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
     @Bean
@@ -137,7 +140,7 @@ public class SCAGatewayApplication {
         return retryConfig;
     }
 
-//返回429
+//限流返回429
 
     @Bean(name = "limitconfig")
     public RequestRateLimiterGatewayFilterFactory.Config limitconfig(){
@@ -148,29 +151,28 @@ public class SCAGatewayApplication {
     }
 
     @Bean
-    public RedisRateLimiter redisRateLimiter(){
-       return new RedisRateLimiter(1, 1);
-    }
-
-    @Bean
     public RequestRateLimiterGatewayFilterFactory requestRateLimiterGateway(){
         return new RequestRateLimiterGatewayFilterFactory(redisRateLimiter(),ipKeyResolver());
     }
 
-    //定义一个KeyResolver
+    @Bean
+    public RedisRateLimiter redisRateLimiter(){
+        return new RedisRateLimiter(1, 1);
+    }
+
+    /**
+     * 基于ip的限流
+     */
     @Bean
     public KeyResolver ipKeyResolver(){
-        return new KeyResolver() {
-            @Override
-            public Mono<String> resolve(ServerWebExchange exchange) {
-                //获取访问者的ip地址, 通过访问者ip地址进行限流, 限流使用的是Redis中的令牌桶算法
-                String hostString = exchange.getRequest().getRemoteAddress().getHostString();
-                return Mono.just(hostString);
-            }
+        return exchange -> {
+            //获取访问者的ip地址, 通过访问者ip地址进行限流, 限流使用的是Redis中的令牌桶算法
+            String ip = exchange.getRequest().getRemoteAddress().getHostString();
+            String ip1 = exchange.getRequest().getHeaders().getFirst("x-forworded-for");
+            return Mono.just(ip);
         };
-
-      //  return (exchange) -> Mono.just(exchange.getRequest().getRemoteAddress().getHostString());
     }
+
 
     @Bean
     @Primary

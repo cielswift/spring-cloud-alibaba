@@ -1,9 +1,8 @@
 package com.ciel.scagateway.filter;
 
-import com.alibaba.csp.sentinel.adapter.gateway.sc.SentinelGatewayFilter;
-import com.alibaba.csp.sentinel.adapter.gateway.sc.exception.SentinelGatewayBlockExceptionHandler;
 import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.Faster;
 import com.ciel.scacommons.jwt.JwtUtils;
 import com.ciel.scacommons.serverimpl.ScaUserServiceINIT;
 import com.ciel.scaentity.entity.ScaPermissions;
@@ -45,7 +44,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Configuration
-public class GlobalFilterGatewayCustomFilter {
+public class GlobalCustomFilter {
 
     @Autowired
     protected ScaUserServiceINIT userServiceINIT;
@@ -54,35 +53,12 @@ public class GlobalFilterGatewayCustomFilter {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-    //整合Sentinel 限流相关
-    private final List<ViewResolver> viewResolvers;
-    private final ServerCodecConfigurer serverCodecConfigurer;
-
-    public GlobalFilterGatewayCustomFilter(ObjectProvider<List<ViewResolver>> viewResolversProvider,
-                                           ServerCodecConfigurer serverCodecConfigurer) {
-        this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
-        this.serverCodecConfigurer = serverCodecConfigurer;
-    }
-
-    @Bean
-    @Order(-2)
-    public SentinelGatewayBlockExceptionHandler sentinelGatewayBlockExceptionHandler() {
-        return new SentinelGatewayBlockExceptionHandler(viewResolvers, serverCodecConfigurer);
-    }
-
-    @Bean
-    @Order(-1)
-    public GlobalFilter sentinelGatewayFilter() {
-        return new SentinelGatewayFilter();
-    }
-
+    
     /**
      * --------------------------------------------------------------------------------------------
      * <p>
      * /**
-     * 自定义异常处理[@@]注册Bean时依赖的Bean，会从容器中直接获取，所以直接注入即可
+     * 自定义异常处理[]注册Bean时依赖的Bean，会从容器中直接获取，所以直接注入即可
      *
      * @return
      */
@@ -115,16 +91,17 @@ public class GlobalFilterGatewayCustomFilter {
         return bodyRef.get();
     }
 
-    /**
-     * 登录过滤器
-     */
 
+    /**
+     * 全局过滤器
+     * @return
+     */
     @Bean
-    @Order(-7)
-    public GlobalFilter a() {
+    @Order(-7) //执行顺序
+    public GlobalFilter aFilter() {
         return (exchange, chain) -> {
 
-            System.out.println("第1个过滤器在请求之前执行");
+            Faster.println("第1个过滤器在请求之前执行");
 
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
@@ -165,7 +142,7 @@ public class GlobalFilterGatewayCustomFilter {
                     DataBuffer buffer = response.bufferFactory().wrap(bits);
                     response.setStatusCode(HttpStatus.OK); //设置状态码
                     //指定编码，否则在浏览器中会中文乱码
-                    response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
+                    response.getHeaders().add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
                     return response.writeWith(Mono.just(buffer));
 
@@ -228,18 +205,4 @@ public class GlobalFilterGatewayCustomFilter {
         };
     }
 
-
-
-    @Bean
-    @Order(1)
-    public GlobalFilter b() {
-
-        return (exchange, chain) -> {
-            System.out.println("第2个过滤器在请求之前执行");
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                System.out.println("第2个过滤器在请求之后执行");
-            }));
-        };
-
-    }
 }

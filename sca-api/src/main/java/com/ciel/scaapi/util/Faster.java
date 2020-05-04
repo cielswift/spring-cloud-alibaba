@@ -28,9 +28,7 @@ public final class Faster {
         response.setHeader("Access-control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
-
         response.setHeader("access-control-expose-headers", "Authentication");
-
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().println(JSON.toJSONString(result));
@@ -140,5 +138,8 @@ public final class Faster {
         return new Date();
     }
 
+    public static void println(Object obj){
+        System.out.println(obj);
+    }
     private Faster(){}
 }

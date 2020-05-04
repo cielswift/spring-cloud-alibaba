@@ -34,7 +34,7 @@ public class BaseProjectConfig {
         //converters 为注入到容器里的2个转换器
         GenericConversionService conversionService = new GenericConversionService(); //提供类型转换服务的注册接口
 
-        converters.forEach(c -> conversionService.addConverter(c));
+        converters.forEach(conversionService::addConverter);
         return conversionService;
     }
 
@@ -48,7 +48,7 @@ public class BaseProjectConfig {
 
         //FormattingConversionService formattirvice = new DefaultFormattingConversionService();
 
-        formatters.forEach(f ->formatCS.addFormatter(f));
+        formatters.forEach(formatCS::addFormatter);
         return formatCS;
     }
 

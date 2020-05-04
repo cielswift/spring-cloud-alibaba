@@ -67,7 +67,7 @@
             <version>1.7.1</version>
         </dependency>
 
-        <dependency> <!--redis 配合限流-->
+        <dependency> <!--redis 配合限流 注意是reactive-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>

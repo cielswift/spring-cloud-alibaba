@@ -100,6 +100,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         Map<String,Object> result = new HashMap<>(2,1);
         result.put("httpStatus",httpStatus);
         result.put("body",body);
+
         /**
          * 错误记录
          */
@@ -117,8 +118,6 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
                 .switchIfEmpty(Mono.error(ex))
                 .flatMap((handler) -> handler.handle(newRequest))
                 .flatMap((response) -> write(exchange, response));
-
-
     }
 
     /**
@@ -129,8 +128,8 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
     protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         Map<String,Object> result = exceptionHandlerResult.get();
         return ServerResponse.status((HttpStatus) result.get("httpStatus"))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(BodyInserters.fromObject(result.get("body")));
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(result.get("body")));
     }
 
     /**

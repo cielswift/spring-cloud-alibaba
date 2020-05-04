@@ -114,7 +114,6 @@ public class WayController {
                     log.error("{}", o);
                     log.error("当前线程名称" + Thread.currentThread().getName());
                 });
-
     }
 
     /**
