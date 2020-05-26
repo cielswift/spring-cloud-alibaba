@@ -43,10 +43,15 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
-        <dependency> <!--操作el 客户端-->
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>6.8.0</version>
+<!--        <dependency> &lt;!&ndash;操作el 客户端&ndash;&gt;-->
+<!--            <groupId>org.elasticsearch.client</groupId>-->
+<!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+<!--            <version>6.8.0</version>-->
+<!--        </dependency>-->
+
+        <dependency> <!--整合el-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
         <dependency> <!--security相关-->

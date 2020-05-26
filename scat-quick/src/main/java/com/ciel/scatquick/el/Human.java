@@ -1,4 +1,4 @@
-package com.ciel.scaproducer3.el;
+package com.ciel.scatquick.el;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,21 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
+
+
+/**
+ *索引库（indices）--------------------------------Databases 数据库
+ *类型（type）-----------------------------Table 数据表
+ *文档（Document）----------------Row 行
+ *字段（Field）-------------------Columns 列
+ */
 
 /**
  * @Document 作用在类，标记实体类为文档对象，一般有两个属性
@@ -25,7 +36,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public class Human {
 
     @Id
-    private Long id;
+    protected Long id;
 
     /**
      * @Field 作用在成员变量，标记为文档的字段，并指定字段映射属性：
@@ -43,11 +54,18 @@ public class Human {
      * analyzer：分词器名称，这里的ik_max_word即使用ik分词器
      */
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
-    private String content;
-
     @Field(type = FieldType.Integer)
-    private Integer type;
+    protected Integer age;
 
+    @Field(type = FieldType.Text)
+    protected String address;
 
+    @Field(type = FieldType.Text)
+    protected String name;
+
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    protected String content;
+
+    @Field(type = FieldType.Date)
+    protected Date birthday;
 }

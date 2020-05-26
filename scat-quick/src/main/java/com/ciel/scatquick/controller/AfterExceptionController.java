@@ -44,6 +44,7 @@ public class AfterExceptionController implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) //状态码
     public Result globalException(Exception e){
+        e.printStackTrace();
         return Result.error(500,"服务器异常:".concat(getMessage(e)));
     }
 

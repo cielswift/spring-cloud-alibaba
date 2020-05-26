@@ -3,6 +3,7 @@ package com.ciel.scatquick.thread;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class ThreadCountD {
 
@@ -13,39 +14,34 @@ public class ThreadCountD {
         new Thread(new ThreadA(countDownLatch)).start();
         new Thread(new ThreadB(countDownLatch)).start();
 
-
     }
 }
 
-class ThreadA implements Runnable{
-
+class ThreadA implements Runnable {
     private CountDownLatch countDownLatch;
 
-    public ThreadA(CountDownLatch count){
+    public ThreadA(CountDownLatch count) {
         this.countDownLatch = count;
     }
 
-
+    @SneakyThrows
     @Override
     public void run() {
-
         System.out.println("A");
 
-        try {
-            countDownLatch.await(); //当前线程让出cpu,计数器减到0时 才继续执行
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
+        countDownLatch.await(); //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+
+        //和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+        countDownLatch.await(2, TimeUnit.SECONDS);
 
         System.out.println("C");
     }
 }
 
-class ThreadB implements Runnable{
-
+class ThreadB implements Runnable {
     private CountDownLatch countDownLatch;
 
-    public ThreadB(CountDownLatch count){
+    public ThreadB(CountDownLatch count) {
         this.countDownLatch = count;
     }
 
@@ -54,6 +50,7 @@ class ThreadB implements Runnable{
     public void run() {
 
         System.out.println("B");
+
         countDownLatch.countDown(); //计数器-1
     }
 }

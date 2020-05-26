@@ -1,4 +1,4 @@
-package com.ciel.scaproducer3.el;
+package com.ciel.scatquick.el;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

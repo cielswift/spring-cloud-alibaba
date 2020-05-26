@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebCustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-
     /**
      * spring security的角色继承
      * ROLE_dba具备 ROLE_admin的所有权限，而 ROLE_admin则具备 ROLE_user的所有权限，继承与继承之间用一个空格隔开

@@ -114,7 +114,7 @@ spring:
     base-url: http://127.0.0.1:9411/
   sleuth:
     sampler:
-      probability: 1 #percentage是采样比例
+      probability: 1 #percentage是采样比例 1所有
 
 ribbon:
   ReadTimeout: 5000

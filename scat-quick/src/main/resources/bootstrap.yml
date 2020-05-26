@@ -61,15 +61,10 @@ spring:
           type: com.alibaba.druid.pool.DruidDataSource
           druid:
             initial-size: 16
-
-elasticsearch:
-  schema: http
-  address: 127.0.0.1:19390
-  connectTimeout: 5000
-  socketTimeout: 5000
-  connectionRequestTimeout: 5000
-  maxConnectNum: 100
-  maxConnectPerRoute: 100
+  #整合el
+  elasticsearch:
+    rest:
+      uris: http://127.0.0.1:19390
 
 clusters:
   datacenterId: 2

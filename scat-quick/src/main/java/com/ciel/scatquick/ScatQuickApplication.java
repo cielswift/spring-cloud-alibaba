@@ -110,7 +110,7 @@ public class ScatQuickApplication implements CommandLineRunner {
 //            Runtime.getRuntime().exec(cmdGrant);
 //        }
 
-        //spi 机制
+        //spi机制
         ServiceLoader<SpiInterface> serviceLoader = ServiceLoader.load(SpiInterface.class);
         serviceLoader.forEach(t -> {
             t.vue("a");

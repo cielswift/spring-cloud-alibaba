@@ -3,7 +3,6 @@ package com.ciel.scaapi.util;
 import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
-import com.ciel.scaentity.entity.ScaUser;
 import org.apache.commons.codec.CharEncoding;
 
 import javax.servlet.http.HttpServletResponse;

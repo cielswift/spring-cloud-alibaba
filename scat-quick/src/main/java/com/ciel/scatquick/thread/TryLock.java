@@ -12,8 +12,6 @@ public class TryLock {
 
     public static void main(String[] args) throws InterruptedException {
 
-
-
     }
     public static void mains(String[] args) throws InterruptedException {
 

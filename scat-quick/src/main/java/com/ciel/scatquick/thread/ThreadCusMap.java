@@ -40,8 +40,8 @@ public class ThreadCusMap {
             System.out.println("HashMap:"+ map.size());
 
             System.out.println("ConcurrentSkipListMap:"+ skip.size());
-            Thread.sleep(1000);
             System.out.println("===========================");
+            Thread.sleep(1000);
         }
 
     }
@@ -58,7 +58,7 @@ class Jobs implements Runnable{
     @Override
     public void run() {
 
-        for(int i = 0; i<5000;i++){
+        for(int i = 0; i<50000;i++){
 
             map.put(Thread.currentThread().getName()+i,"20");
         }
