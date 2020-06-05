@@ -18,7 +18,6 @@ import java.util.*;
  */
 public final class Faster {
 
-
     /**
      * 响应json
      */
@@ -36,7 +35,7 @@ public final class Faster {
 
     /**
      * 文件下载
-     */
+     */ 
     public static void download(File file, HttpServletResponse response) throws IOException {
 
         response.setCharacterEncoding(CharEncoding.UTF_8);

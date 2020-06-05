@@ -24,6 +24,5 @@ public class AppInitializer implements ApplicationContextInitializer<Configurabl
         MapPropertySource mapPropertySource = new MapPropertySource("demoInitializer", map);
         environment.getPropertySources().addLast(mapPropertySource);
         System.out.println("应用程序初始化-------------------------------");
-
     }
 }

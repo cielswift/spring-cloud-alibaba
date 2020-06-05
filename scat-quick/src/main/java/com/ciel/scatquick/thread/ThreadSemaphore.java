@@ -8,18 +8,37 @@ import java.util.concurrent.Semaphore;
 public class ThreadSemaphore {
 
     public static void main(String[] args) throws InterruptedException {
-        Semaphore semaphore = new Semaphore(1); //控制线程并发数量 ,1个线程相当于同步代码
+        Semaphore semaphore = new Semaphore(3); //控制线程并发数量 ,1个线程相当于同步代码
 
         Num num = new Num();
 
+//        for (int i = 0; i < 5000; i++) {
+//            new Thread(new Helstrd(num, semaphore)).start();
+//        }
+
         for (int i = 0; i < 5000; i++) {
-            new Thread(new Helstrd(num, semaphore)).start();
+            new Thread(() -> {
+                try {
+                    semaphore.acquire();
+
+                    System.out.println(Thread.currentThread().getName() + ":运行中");
+
+                    Thread.sleep(3000);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    semaphore.release();
+                }
+
+            }, i + "==线程==").start();
         }
 
-        while (true) {
-            System.out.println(num.getNum());
-            Thread.sleep(1000);
-        }
+
+//        while (true) {
+//            System.out.println(num.getNum());
+//            Thread.sleep(1000);
+//        }
     }
 }
 

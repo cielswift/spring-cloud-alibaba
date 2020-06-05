@@ -25,6 +25,7 @@ public class WebSocketController {
     private static CopyOnWriteArraySet<WebSocketController> webSocketSet = new CopyOnWriteArraySet<>();
     /*websocket 连接建立成功后进行调用*/
 
+
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;

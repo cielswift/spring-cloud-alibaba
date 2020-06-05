@@ -66,6 +66,11 @@ spring:
     rest:
       uris: http://127.0.0.1:19390
 
+  #整合Elastic-Job
+elasticjob:
+  serverlists:
+  namespace: boot-job
+
 clusters:
   datacenterId: 2
   machineId: 2

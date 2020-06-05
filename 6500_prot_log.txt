@@ -1,0 +1,24 @@
+[10444] 03 Jun 11:32:47.023 # Windows does not support daemonize. Start Redis as service
+[10444] 03 Jun 11:32:47.035 * Redis 3.2.100 (00000000/0) 64 bit, standalone mode, port 6510, pid 10444 ready to start.
+[10444] 03 Jun 11:32:47.035 # Server started, Redis version 3.2.100
+[10444] 03 Jun 11:32:50.757 * DB loaded from append only file: 3.722 seconds
+[10444] 03 Jun 11:32:50.758 * The server is now ready to accept connections on port 6510
+[4336] 03 Jun 11:47:42.766 # Windows does not support daemonize. Start Redis as service
+[4336] 03 Jun 11:47:42.778 * Redis 3.2.100 (00000000/0) 64 bit, standalone mode, port 6510, pid 4336 ready to start.
+[4336] 03 Jun 11:47:42.779 # Server started, Redis version 3.2.100
+[4336] 03 Jun 11:47:44.898 * DB loaded from append only file: 2.118 seconds
+[4336] 03 Jun 11:47:44.898 * The server is now ready to accept connections on port 6510
+[2040] 03 Jun 11:55:14.487 # Windows does not support daemonize. Start Redis as service
+[2040] 03 Jun 11:55:14.498 * Redis 3.2.100 (00000000/0) 64 bit, standalone mode, port 6510, pid 2040 ready to start.
+[2040] 03 Jun 11:55:14.498 # Server started, Redis version 3.2.100
+[2040] 03 Jun 11:55:16.481 * DB loaded from append only file: 1.982 seconds
+[2040] 03 Jun 11:55:16.482 * The server is now ready to accept connections on port 6510
+[4944] 03 Jun 11:55:24.044 # Windows does not support daemonize. Start Redis as service
+[4944] 03 Jun 11:55:24.051 # Creating Server TCP listening socket *:6510: bind: No error
+[28368] 05 Jun 08:29:06.683 # Windows does not support daemonize. Start Redis as service
+[28368] 05 Jun 08:29:06.699 * Redis 3.2.100 (00000000/0) 64 bit, standalone mode, port 6510, pid 28368 ready to start.
+[28368] 05 Jun 08:29:06.699 # Server started, Redis version 3.2.100
+[28368] 05 Jun 08:29:09.123 * DB loaded from append only file: 2.422 seconds
+[28368] 05 Jun 08:29:09.123 * The server is now ready to accept connections on port 6510
+[14632] 05 Jun 08:29:32.014 # Windows does not support daemonize. Start Redis as service
+[14632] 05 Jun 08:29:32.024 # Creating Server TCP listening socket *:6510: bind: No error

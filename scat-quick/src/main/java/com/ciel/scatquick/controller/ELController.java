@@ -14,10 +14,12 @@ import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Range;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.*;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @RestController
 @Slf4j
@@ -35,6 +38,9 @@ public class ELController {
     protected ElasticsearchRestTemplate elasticsearchTemplate;
 
     protected ElasticMapper elasticMapper;
+
+    protected RedisTemplate<String, Object> redisTemplate;
+
 
     @GetMapping("/els")
     public Result els() {
@@ -48,7 +54,7 @@ public class ELController {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.queryStringQuery("夏培鑫"))
-                .withQuery(QueryBuilders.matchQuery("content", "在心碎中认清遗憾"))
+                .withQuery(QueryBuilders.matchQuery("content", "生命漫长也短暂"))
                 //matchPhraseQuery //短语查询
                 //termQuery 严格查询 适合id
                 //multiMatchQuery 多个字段匹配某字符串
@@ -68,75 +74,36 @@ public class ELController {
         AggregatedPage<Human> humans1 = elasticsearchTemplate.queryForPage(searchQuery, Human.class);
 
         Map<String, Object> mapping = elasticsearchTemplate.getMapping(Human.class);
+
         Human human = new Human();
-        human.setId(System.currentTimeMillis());
+        human.setId(System.currentTimeMillis() + new Random().nextInt(80));
         human.setName("夏培鑫");
         human.setAge(24);
         human.setBirthday(new Date());
         human.setAddress("山东省烟台市芝罘区");
 
-        human.setContent("也许很远或是昨天\n" +
-                "在这里或在对岸\n" +
-                "长路辗转离合悲欢\n" +
-                "人聚又人散\n" +
-                "放过对错才知答案\n" +
-                "活着的勇敢\n" +
-                "没有神的光环\n" +
-                "你我生而平凡\n" +
-                "在心碎中认清遗憾\n" +
-                "生命漫长也短暂\n" +
-                "跳动心脏长出藤蔓\n" +
-                "愿为险而战\n" +
-                "跌入灰暗坠入深渊\n" +
-                "沾满泥土的脸\n" +
-                "没有神的光环\n" +
-                "握紧手中的平凡\n" +
-                "此心此生无憾\n" +
-                "生命的火已点燃\n" +
-                "有一天也许会走远\n" +
-                "也许还能再相见\n" +
-                "无论在人群在天边\n" +
-                "让我再看清你的脸\n" +
-                "任泪水铺满了双眼\n" +
-                "虽无言泪满面\n" +
-                "不要神的光环\n" +
-                "只要你的平凡\n" +
-                "\n" +
-                "音乐制作人：黄超\n" +
-                "编曲：黄超\n" +
-                "吉他：黄超\n" +
-                "单簧管：刘峤\n" +
-                "和音编写：黄超\n" +
-                "和音演唱：张杰 张碧晨\n" +
-                "人声录音师：汝文博/朱玉婷\n" +
-                "录音工作室：BIG.J Studio/香蕉计划录音棚\n" +
-                "混音师：周天澈\n" +
-                "母带工程师：周天澈\n" +
-                "母带工作室：TC Faders\n" +
-                "\n" +
-                "在心碎中认清遗憾\n" +
-                "生命漫长也短暂\n" +
-                "跳动心脏长出藤蔓\n" +
-                "愿为险而战\n" +
-                "跌入灰暗坠入深渊\n" +
-                "沾满泥土的脸\n" +
-                "没有神的光环\n" +
-                "握紧手中的平凡\n" +
-                "有一天也许会走远\n" +
-                "也许还能再相见\n" +
-                "无论在人群在天边\n" +
-                "让我再看清你的脸\n" +
-                "任泪水铺满了双眼\n" +
-                "虽无言泪满面\n" +
-                "不要神的光环\n" +
-                "只要你的平凡\n" +
-                "此心此生无憾\n" +
-                "生命的火已点燃");
-
+        human.setContent("也许很远或是昨天 在这里或在对岸 长路辗转离合悲欢 人聚又人散\n" +
+                "放过对错才知答案 活着的勇敢 没有神的光环 你我生而平凡\n" +
+                "在心碎中认清遗憾 生命漫长也短暂 跳动心脏长出藤蔓 愿为险而战\n" +
+                "跌入灰暗坠入深渊 沾满泥土的脸 没有神的光环 握紧手中的平凡\n" +
+                "此心此生无憾 生命的火已点燃 有一天也许会走远 也许还能再相见\n" +
+                "无论在人群在天边 让我再看清你的脸 任泪水铺满了双眼\n" +
+                "虽无言泪满面 不要神的光环 只要你的平凡\n" +
+                "在心碎中认清遗憾 生命漫长也短暂 跳动心脏长出藤蔓 愿为险而战\n" +
+                "跌入灰暗坠入深渊 沾满泥土的脸 没有神的光环 握紧手中的平凡\n" +
+                "有一天也许会走远 也许还能再相见 无论在人群在天边\n" +
+                "让我再看清你的脸 任泪水铺满了双眼 虽无言泪满面\n" +
+                "不要神的光环 只要你的平凡 此心此生无憾 生命的火已点燃");
         elasticMapper.save(human); //修改也是这个,id区分
+
+
+        redisTemplate.opsForValue().set(String.valueOf(System.currentTimeMillis()),human);
+
+        // elasticMapper.deleteById(1590463896756L);
+        // elasticsearchTemplate.delete(Human.class,String.valueOf(1590463896756L));
         // elasticMapper.saveAll(List<Human>...)
         Iterable<Human> all = elasticMapper.findAll(Sort.by("id").ascending());//正序
-        all.forEach(System.out::println);
+
 ///////////////////////////////////////////////////////////////////////////////////////
 
 //        must代表返回的文档必须满足must子句的条件，会参与计算分值；
@@ -198,6 +165,6 @@ public class ELController {
 //（12）反转嵌套
 //        AggregationBuilders.reverseNested("res_negsted").path("kps ");
 
-        return Result.ok().data(humans2);
+        return Result.ok().data(humans);
     }
 }
