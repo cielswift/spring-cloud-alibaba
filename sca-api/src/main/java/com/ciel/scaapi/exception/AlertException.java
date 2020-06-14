@@ -9,5 +9,7 @@ public class AlertException extends Exception {
         super(msg);
     }
 
-
+    public AlertException(String msg,Throwable throwable){
+        super(msg,throwable);
+    }
 }

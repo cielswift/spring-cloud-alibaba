@@ -30,7 +30,11 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/sms/**","/qq/**","/els/**");
+        web.ignoring().antMatchers("/sms/**",
+                "/qq/**",
+                "/els/**",
+                "/sharding/**",
+                "/asyn/**");
     }
 
     /**

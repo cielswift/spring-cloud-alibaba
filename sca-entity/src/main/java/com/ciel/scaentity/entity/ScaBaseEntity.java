@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public abstract class ScaBaseEntity implements Serializable {
@@ -20,12 +21,12 @@ public abstract class ScaBaseEntity implements Serializable {
     @TableField(value = "CREATE_DATE", fill = FieldFill.INSERT)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createDate;
+    private Date createDate;
 
     @TableField(value = "UPDATE_DATE", fill = FieldFill.INSERT_UPDATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime updateDate;
+    private Date updateDate;
 
     @TableLogic
     @TableField(value = "DELETED", fill = FieldFill.INSERT)

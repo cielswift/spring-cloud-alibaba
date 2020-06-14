@@ -3,6 +3,7 @@ package com.ciel.scacommons.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
 import com.baomidou.mybatisplus.extension.parsers.DynamicTableNameParser;
 import com.baomidou.mybatisplus.extension.parsers.ITableNameHandler;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import net.sf.jsqlparser.statement.delete.Delete;
+import net.sf.jsqlparser.statement.update.Update;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * mybatis plus 全局拦截器
+ */
 @Configuration
 public class MybatisPlugin {
 
@@ -28,7 +33,6 @@ public class MybatisPlugin {
      *
      * @return
      */
-
     @Value("${clusters.datacenterId}")
     private Integer datacenterId;
 
@@ -41,7 +45,7 @@ public class MybatisPlugin {
     }
 
     /**
-     * 全局拦截器
+     * 自定义全局拦截器
      * @return
      */
     @Bean
@@ -49,47 +53,68 @@ public class MybatisPlugin {
         return new GlobalInterceptor();
     }
 
+    /**
+     * mybatis plus全局拦截器
+     * @return
+     */
     @Bean
     public PaginationInterceptor paginationInterceptor() {  //自动分页
-        PaginationInterceptor page = new PaginationInterceptor();
+        PaginationInterceptor interceptor = new PaginationInterceptor();
 
-        page.setDbType(DbType.MYSQL);
-
+        /**
+         * 分页插件
+         */
+        interceptor.setDbType(DbType.MYSQL);
         // 设置请求的页面大于最大页后操作， true调回到首页，false 继续请求  默认false
         // paginationInterceptor.setOverflow(false);
         // 设置最大单页限制数量，默认 500 条，-1 不受限制
         // paginationInterceptor.setLimit(-1);
         // 开启 count 的 join 优化,只针对部分 left join
-        page.setCountSqlParser(new JsqlParserCountOptimize(true));
+        interceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
 
 
-        // 创建SQL解析器集合
+        /**
+         * 创建SQL解析器集合
+         */
+        //
         List<ISqlParser> sqlParserList = new ArrayList<>(); //解析链
 
-        // 攻击 SQL 阻断解析器、加入解析链
+        /**
+         * 攻击SQL阻断解析器
+         */
         sqlParserList.add(new BlockAttackSqlParser() {
+
+            //防止全局删除
             @Override
             public void processDelete(Delete delete) {
-                // 如果你想自定义做点什么，可以重写父类方法像这样子
+                // 如果你想自定义做点什么，可以重写父类方法像这样子  //自定义跳过某个表，
                 if ("user".equals(delete.getTable().getName())) {
-                    // 自定义跳过某个表，其他关联表可以调用 delete.getTables() 判断
                     return ;
                 }
                 super.processDelete(delete);
             }
+
+            //防止全局更新
+            @Override
+            public void processUpdate(Update update) {
+                super.processUpdate(update);
+            }
+
         });
 
-        // 动态表名SQL解析器
+        /**
+         * 动态表名SQL解析器
+         */
         DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
 
         Map<String, ITableNameHandler> tableNameHandlerMap = new HashMap<>();
 
         // Map的key就是需要替换的原始表名, 其他表不会经过这个解析器;
         tableNameHandlerMap.put("sca_order",new ITableNameHandler(){
+
             @Override
             public String dynamicTableName(MetaObject metaObject, String sql, String tableName) {
                 // 自定义表名规则，或者从配置文件、request上下文中读取
-
                 // 假设这里的用户表根据年份来进行分表操作
                 String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM"));
                 // 返回最后需要操作的表名，sys_user_2019
@@ -97,13 +122,14 @@ public class MybatisPlugin {
             }
         });
 
+
         dynamicTableNameParser.setTableNameHandlerMap(tableNameHandlerMap);
 
         sqlParserList.add(dynamicTableNameParser);
 
-        page.setSqlParserList(sqlParserList);
-
-        return page;
+        //添加解析链
+        interceptor.setSqlParserList(sqlParserList);
+        return interceptor;
     }
 
     /**
@@ -121,8 +147,11 @@ public class MybatisPlugin {
         return new OptimisticLockerInterceptor();
     }
 
-
-    @Bean //分布式id生成器
+    /**
+     * 分布式id生成器 配合 @TableId(value = "ID", type = IdType.ASSIGN_ID)
+     * @return
+     */
+    @Bean
     public IdentifierGenerator identifierGenerator() {
         return new IdentifierGenerator() {
 
@@ -131,15 +160,10 @@ public class MybatisPlugin {
              */
             @Override
             public Number nextId(Object entity) {
-
 //                //可以将当前传入的class全类名来作为bizKey,或者提取参数来生成bizKey进行分布式Id调用生成;
 //                String bizKey = entity.getClass().getName();
-//                //根据bizKey调用分布式ID生成
-//                return bizKey.hashCode()+entity.hashCode() +
-//                        System.currentTimeMillis() +
-//                        new Random().nextInt(95276);
 
-                return snowFlake().nextId();
+                return snowFlake().nextId(false);
             }
 
             /**

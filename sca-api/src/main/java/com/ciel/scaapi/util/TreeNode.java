@@ -16,7 +16,6 @@ public class TreeNode {
     TreeNode(int x) { val = x; }
 
     public static void main(String[] args) {
-
         TreeNode treeNode = new TreeNode(5);
 
         TreeNode treeNode3 = new TreeNode(3);

@@ -1,14 +1,11 @@
 package com.ciel.scaproducer2.config.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.ciel.scacommons.jwt.JwtUtils;
 import com.ciel.scaproducer2.config.relm.CustomUser;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;

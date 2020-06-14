@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer   {
 
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new MultiRequestBodyArgumentResolver());

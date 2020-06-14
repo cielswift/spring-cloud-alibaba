@@ -57,21 +57,4 @@ public class IndexController {
         }
        return Result.ok();
     }
-    
-    protected AutowireCapableBeanFactory beanFactory;
-
-
-    /**
-     * BEAN (FactoryBean)工厂获取bean
-     * @return
-     */
-
-    @GetMapping("/fb")
-    public Result fb(){
-        Object o1 = beanFactory.getBean("customFactorBean");
-        Object o2 = beanFactory.getBean("&customFactorBean");
-        return Result.ok();
-    }
-
-
 }

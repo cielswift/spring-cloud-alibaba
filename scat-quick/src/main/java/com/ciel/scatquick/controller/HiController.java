@@ -3,11 +3,9 @@ package com.ciel.scatquick.controller;
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaentity.entity.ScaUser;
-import com.ciel.scatquick.anntion.Logs;
-import com.ciel.scatquick.oauth2.Constants;
+import com.ciel.scatquick.aoptxspi.Logs;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,8 +44,6 @@ public class HiController {
         redisTemplate.opsForValue().set("sms_".concat(username),"xia123",30, TimeUnit.SECONDS);
     }
 
-    @Autowired
-    protected Constants constants;
 
     @GetMapping("/qq")
     public Result qq(@NotNull String str) throws Exception {

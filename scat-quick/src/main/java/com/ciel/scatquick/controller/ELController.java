@@ -1,30 +1,37 @@
 package com.ciel.scatquick.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ciel.scaapi.crud.IScaDictService;
+import com.ciel.scaapi.crud.IScaGirlsService;
+import com.ciel.scaapi.crud.IScaRoleService;
+import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.SysUtils;
+import com.ciel.scaentity.entity.ScaDict;
+import com.ciel.scaentity.entity.ScaGirls;
+import com.ciel.scaentity.entity.ScaRole;
+import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.el.ElasticMapper;
 import com.ciel.scatquick.el.Human;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Range;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.query.*;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +47,6 @@ public class ELController {
     protected ElasticMapper elasticMapper;
 
     protected RedisTemplate<String, Object> redisTemplate;
-
 
     @GetMapping("/els")
     public Result els() {
@@ -95,7 +101,6 @@ public class ELController {
                 "让我再看清你的脸 任泪水铺满了双眼 虽无言泪满面\n" +
                 "不要神的光环 只要你的平凡 此心此生无憾 生命的火已点燃");
         elasticMapper.save(human); //修改也是这个,id区分
-
 
         redisTemplate.opsForValue().set(String.valueOf(System.currentTimeMillis()),human);
 

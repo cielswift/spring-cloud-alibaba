@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 
 public class ThreadSemaphore {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Semaphore semaphore = new Semaphore(3); //控制线程并发数量 ,1个线程相当于同步代码
 
         Num num = new Num();
@@ -22,7 +22,6 @@ public class ThreadSemaphore {
                     semaphore.acquire();
 
                     System.out.println(Thread.currentThread().getName() + ":运行中");
-
                     Thread.sleep(3000);
 
                 } catch (Exception e) {
@@ -40,30 +39,33 @@ public class ThreadSemaphore {
 //            Thread.sleep(1000);
 //        }
     }
-}
 
-class Helstrd implements Runnable {
 
-    private Semaphore semaphore;
-    private Num num;
+    public static class Helstrd implements Runnable {
 
-    public Helstrd(Num num, Semaphore semaphore) {
-        this.semaphore = semaphore;
-        this.num = num;
+        private Semaphore semaphore;
+        private Num num;
+
+        public Helstrd(Num num, Semaphore semaphore) {
+            this.semaphore = semaphore;
+            this.num = num;
+        }
+
+        @SneakyThrows
+        @Override
+        public void run() {
+
+            semaphore.acquire();//许可
+            System.out.println(Thread.currentThread().getName() + ":A");
+            num.setNum(num.getNum() + 1);
+            semaphore.release(); //释放 acquire 和 release 中间是同步代码
+        }
+
     }
 
-    @SneakyThrows
-    @Override
-    public void run() {
-
-        semaphore.acquire();//许可
-        System.out.println(Thread.currentThread().getName() + ":A");
-        num.setNum(num.getNum() + 1);
-        semaphore.release(); //释放 acquire 和 release 中间是同步代码
+    @Data
+    public static class Num {
+        private int num = 0;
     }
 }
 
-@Data
-class Num {
-    private int num = 0;
-}

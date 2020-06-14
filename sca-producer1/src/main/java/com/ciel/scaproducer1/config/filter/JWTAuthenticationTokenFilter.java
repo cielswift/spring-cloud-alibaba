@@ -1,7 +1,6 @@
 package com.ciel.scaproducer1.config.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.ciel.scacommons.jwt.JwtUtils;
 import com.ciel.scaproducer1.config.relm.CustomUser;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,5 @@
 package com.ciel.scatquick.algorithm;
 
-import java.lang.reflect.InvocationTargetException;
 
 public class BobbleSort {
 

@@ -37,17 +37,33 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 
+        <dependency> <!--邮件-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <dependency> <!-- 定时任务 -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
         <dependency> <!--整合 WebSocket
          如果使用外置的 tomcat 需要引入 javaee-api 我们这里不引入是因为spring-boot 内置tomcat 包含拉 javaee-api 。-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
-<!--        <dependency> &lt;!&ndash;操作el 客户端&ndash;&gt;-->
-<!--            <groupId>org.elasticsearch.client</groupId>-->
-<!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
-<!--            <version>6.8.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>25.1-jre</version>
+        </dependency>
+
+        <!--        <dependency> &lt;!&ndash;操作el 客户端&ndash;&gt;-->
+        <!--            <groupId>org.elasticsearch.client</groupId>-->
+        <!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+        <!--            <version>6.8.0</version>-->
+        <!--        </dependency>-->
 
         <dependency> <!--整合el-->
             <groupId>org.springframework.boot</groupId>
@@ -63,6 +79,14 @@
             <groupId>com.ciel</groupId>
             <artifactId>sca-commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+
+            <exclusions>
+                <exclusion> <!--取消掉mp 多数据源-->
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+
         </dependency>
 
         <dependency> <!--druid-->
@@ -105,7 +129,7 @@
             <artifactId>elastic-job-lite-spring</artifactId>
             <version>2.1.5</version>
         </dependency>
-
+        <!--分布式任务调度-->
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
@@ -117,6 +141,34 @@
             <version>2.10.0</version>
         </dependency>
 
+
+        <!--分库分表-->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <!-- for spring namespace -->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-namespace</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <!-- 使用XA事务时，需要引入此模块 -->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-transaction-xa-core</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <!-- 使用BASE事务时，需要引入此模块 -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.shardingsphere</groupId>-->
+        <!--            <artifactId>sharding-transaction-base-seata-at</artifactId>-->
+        <!--            <version>4.1.0</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 

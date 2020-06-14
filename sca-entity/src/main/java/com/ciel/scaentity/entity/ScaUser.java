@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.ciel.scaentity.type2.Person;
 import com.ciel.scaentity.type2.json2Person;
@@ -36,7 +37,7 @@ public class ScaUser extends ScaBaseEntity {
     private String username;
 
     @TableField("BIRTHDAY")
-    private LocalDate birthday;
+    private Date birthday;
 
     @TableField("SEX")
     private Integer sex;
