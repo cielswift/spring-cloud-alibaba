@@ -75,10 +75,19 @@ spring:
     rest:
       uris: http://127.0.0.1:19390
 
+#id生成器的因子
 clusters:
   datacenterId: 3
   machineId: 2
 
+#文件上传下载
+upload:
+  fileSaveUri: C:/ciel/nginx-1.17.7/public/file/
+  imgSaveUri: C:/ciel/nginx-1.17.7/public/image/
+  fileAccUri: http://127.0.0.1/file/
+  imgAccUri: http://127.0.0.1/image/
+
+#日志
 logging:
   config: classpath:logback-spring.xml
 
@@ -99,6 +108,9 @@ spring:
       names: ds0,ds1 #数据源名称，多数据源以逗号分隔
       ds0:
         type: com.alibaba.druid.pool.DruidDataSource
+        initial-size: 16
+        min-idle: 16
+        max-active: 32
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root

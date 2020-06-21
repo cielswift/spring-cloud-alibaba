@@ -1,0 +1,11 @@
+server:
+  port: 29190
+  http2:  #2.0
+    enabled: true
+spring:
+  application:
+    name: flux
+
+
+logging:
+  config: classpath:logback-spring.xml

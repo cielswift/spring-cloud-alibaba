@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
  */
 public class AppRunners implements ApplicationRunner,CommandLineRunner {
 
-
     @Override
     public void run(String... args) throws Exception {
         System.out.println("INIT ORDER 3 -> CommandLineRunner");

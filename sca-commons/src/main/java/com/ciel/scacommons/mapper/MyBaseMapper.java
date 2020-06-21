@@ -1,5 +1,6 @@
 package com.ciel.scacommons.mapper;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 public interface MyBaseMapper<T> extends BaseMapper<T> {

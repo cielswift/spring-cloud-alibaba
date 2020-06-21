@@ -3,7 +3,10 @@ package com.ciel.scatquick.j8;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 public class J8DATE {
@@ -68,7 +71,7 @@ public class J8DATE {
         System.out.println(localDateTime3);
 
         Set<String> availableZoneIds = ZoneId.getAvailableZoneIds(); //返回所有时区
-        availableZoneIds.forEach( t -> System.err.println(t));
+        availableZoneIds.forEach(System.err::println);
 
         ZonedDateTime zonedDateTime = ZonedDateTime.now(Clock.systemUTC()); //世界标准时间
         ZonedDateTime zonedDateTime1 = ZonedDateTime.now();
@@ -83,6 +86,7 @@ public class J8DATE {
         LocalDateTime localDateTime11 =
                 LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         System.out.println(localDateTime);
+
 
     }
 }

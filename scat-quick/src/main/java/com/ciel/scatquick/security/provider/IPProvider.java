@@ -37,7 +37,6 @@ public class IPProvider implements AuthenticationProvider {
 
         // 封装权限信息，并且此时身份已经被认证
         return new IPToken(userDetails, userDetails.getAuthorities());
-
     }
 
 }

@@ -1,11 +1,13 @@
 package com.ciel.scatquick.algorithm;
 
-
+/**
+ * 冒泡排序
+ */
 public class BobbleSort {
 
     public static void main(String[] args) {
 
-        int [] arr = {1,8,5,21};
+        int [] arr = {3,1,8,5,21};
         sort(arr);
 
         for(int i : arr){
@@ -24,7 +26,7 @@ public class BobbleSort {
 //					arr[j]= temp;
 //				}
 
-                if(arr[i]<arr[j]){
+                if(arr[i]>arr[j]){
                     int temp = arr[i];
                     arr[i] = arr[j];
                     arr[j]= temp;

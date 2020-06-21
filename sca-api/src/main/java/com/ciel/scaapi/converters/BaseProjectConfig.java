@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
-
 @Slf4j
 public class BaseProjectConfig {
 
@@ -33,7 +32,6 @@ public class BaseProjectConfig {
 
         //converters 为注入到容器里的2个转换器
         GenericConversionService conversionService = new GenericConversionService(); //提供类型转换服务的注册接口
-
         converters.forEach(conversionService::addConverter);
         return conversionService;
     }
@@ -45,9 +43,7 @@ public class BaseProjectConfig {
     public FormattingConversionService formattingConversionService(List<Formatter> formatters){
 
         FormattingConversionService formatCS = new FormattingConversionService();
-
         //FormattingConversionService formattirvice = new DefaultFormattingConversionService();
-
         formatters.forEach(formatCS::addFormatter);
         return formatCS;
     }

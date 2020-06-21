@@ -54,6 +54,7 @@ public class HiController {
 
     @Logs
     @GetMapping("/hi")
+    //spring security 权限注解
     @PreAuthorize("hasAnyAuthority('add') and hasAnyRole('ADMIN')")
     public Result hi(String name){
 

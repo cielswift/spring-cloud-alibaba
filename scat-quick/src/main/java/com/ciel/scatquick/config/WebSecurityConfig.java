@@ -23,18 +23,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //开启权限注解,默认是关闭的
-public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      *不经过security的过滤器
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/sms/**",
-                "/qq/**",
-                "/els/**",
-                "/sharding/**",
-                "/asyn/**");
+        web.ignoring().antMatchers("/socket/**",
+                "/websocket/**", "/els/**", "/sharding/**", "/asyn/**");
     }
 
     /**
@@ -79,6 +76,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     /**
      * 配置security的控制逻辑
      */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

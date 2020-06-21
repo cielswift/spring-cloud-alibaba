@@ -33,7 +33,7 @@ public class LineToHumpHandler implements HandlerMethodArgumentResolver {
         for (Map.Entry<String, String[]> pms : parameterMap.entrySet()){
 
             String key = pms.getKey();
-            String hump = StringHelpers.underlineToHump(key);
+            String hump = key;
 
             Field[] declaredFields = type.getDeclaredFields();
 

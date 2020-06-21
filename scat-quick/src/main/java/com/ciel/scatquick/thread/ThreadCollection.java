@@ -1,5 +1,7 @@
 package com.ciel.scatquick.thread;
 
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,10 +11,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class ThreadCollection {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, FileNotFoundException {
+
+
 
         //线程安全的集合
-
         Map<String, String> map = new HashMap<>();
 
         Map<String, String> cus = new ConcurrentHashMap<>(); //适合少量并发 线程安全
@@ -32,8 +35,8 @@ public class ThreadCollection {
         CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
         CopyOnWriteArraySet<String> set = new CopyOnWriteArraySet<>();
 
-        while (true) {
 
+        while (true) {
             System.out.println("===========================");
             System.out.println("ConcurrentHashMap:" + cus.size());
 

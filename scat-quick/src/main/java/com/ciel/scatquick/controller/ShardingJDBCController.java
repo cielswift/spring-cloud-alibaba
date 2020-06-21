@@ -8,6 +8,7 @@ import com.ciel.scaapi.crud.IScaRoleService;
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.FileUpload2Nginx;
 import com.ciel.scaentity.entity.ScaDict;
 import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaRole;
@@ -16,14 +17,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
-import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -46,10 +45,20 @@ public class ShardingJDBCController {
 
     protected WebApplicationContext webApplicationContext;
 
+    protected FileUpload2Nginx fileUpload2Nginx;
+
+
+    @PostMapping("/upl")
+    public Result upload(@RequestParam("file") MultipartFile file) throws IOException {
+        String img = fileUpload2Nginx.imgSaveReturn(file);
+        return Result.ok().data(img);
+    }
+
 
     @GetMapping("/tran")
     @Transactional(rollbackFor = Exception.class)
     // 支持TransactionType.LOCAL, TransactionType.XA, TransactionType.BASE
+    //Sharding 事务注解
     @ShardingTransactionType(TransactionType.XA)
     public Result tran(@RequestParam(value = "type",required = false,defaultValue = "1") Integer type,
                        @RequestParam(value = "date",required = false,defaultValue = "2020-05-24") Date date,

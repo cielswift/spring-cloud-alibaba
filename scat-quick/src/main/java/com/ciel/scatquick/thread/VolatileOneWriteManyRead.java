@@ -11,8 +11,8 @@ public class VolatileOneWriteManyRead {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
 
-                while(true){
-                    System.out.println(String.format("线程 %s 读取到距离 %s",Thread.currentThread().getName(),fox.getSpace()));
+                while (true) {
+                    System.out.println(String.format("线程 %s 读取到距离 %s", Thread.currentThread().getName(), fox.getSpace()));
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -24,7 +24,7 @@ public class VolatileOneWriteManyRead {
 
         new Thread(() -> {
             for (int i = 0; i < 100; i++) {
-                System.out.println(String.format("写线程修改距离: %s",i));
+                System.out.println(String.format("写线程修改距离: %s", i));
                 fox.setSpace(i);  //volatile 修改不能依赖于当前值 , volatile适合一写多读
                 try {
                     Thread.sleep(300);

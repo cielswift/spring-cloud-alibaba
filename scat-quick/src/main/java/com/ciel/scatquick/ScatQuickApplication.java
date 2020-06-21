@@ -29,6 +29,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
@@ -101,12 +102,6 @@ public class ScatQuickApplication implements CommandLineRunner {
 
         //设置git 提交的名字
         // git config --global user.name "你的名字"
-
-        //设置文件权限
-//        if (!System.getProperty("os.name").startsWith("Win")) { //设置文件权限, 执行终端/脚本命令
-//            String cmdGrant = "chmod -R 777 " + serverImagePath;
-//            Runtime.getRuntime().exec(cmdGrant);
-//        }
 
         //spi机制
         ServiceLoader<SpiInterface> serviceLoader = ServiceLoader.load(SpiInterface.class);
