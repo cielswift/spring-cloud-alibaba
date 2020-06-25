@@ -22,5 +22,4 @@ public class ScaCusUser extends User {
         setRealName(realName);
         setIp(ip);
     }
-
 }

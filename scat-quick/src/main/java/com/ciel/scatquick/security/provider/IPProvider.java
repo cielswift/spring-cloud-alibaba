@@ -24,9 +24,9 @@ public class IPProvider implements AuthenticationProvider {
     // 只支持 IpToken 该身份
     @Override
     public boolean supports(Class<?> authentication) {
-
         return authentication.equals(IPToken.class);
     }
+
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

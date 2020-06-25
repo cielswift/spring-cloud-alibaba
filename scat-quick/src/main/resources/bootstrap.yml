@@ -75,11 +75,6 @@ spring:
     rest:
       uris: http://127.0.0.1:19390
 
-#id生成器的因子
-clusters:
-  datacenterId: 3
-  machineId: 2
-
 #文件上传下载
 upload:
   fileSaveUri: C:/ciel/nginx-1.17.7/public/file/
@@ -95,116 +90,14 @@ mybatisplus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志
 ---
+spring:
+  profiles:
+    active: dev #首先定义模式  dev模式
+
 custom-mod:  #多文档模式,定义一些其他配置
   name: quick
 
-spring:
-  profiles:
-    active: dev
-
-  #分库分表
-  shardingsphere:
-    datasource:
-      names: ds0,ds1 #数据源名称，多数据源以逗号分隔
-      ds0:
-        type: com.alibaba.druid.pool.DruidDataSource
-        initial-size: 16
-        min-idle: 16
-        max-active: 32
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-        username: root
-        password: ciel
-      ds1:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-        username: root
-        password: ciel
-    sharding:
-      tables:
-        sca_girls:
-          actual-data-nodes: ds$->{0..1}.sca_girls$->{0..1} #由数据源名 + 表名组成，以小数点分隔。多个表以逗号分隔，支持inline表达式。缺省表示使用已知数据源与逻辑表名称生成数据节点
-          database-strategy: #分库策略
-            inline:
-              sharding-column: ID #分片列名称
-              algorithm-expression: ds$->{ID % 2}
-            #standard:
-              #sharding-column: ID
-              #precise-algorithm-class-name: com.ciel.scatquick.sharding.ExactSelectAlgorithm  #精确分片算法类名称，用于=和IN。该类需实现PreciseShardingAlgorithm接口并提供无参数的构造器
-              #range-algorithm-class-name: com.ciel.scatquick.sharding.RangeSelectAlgorithm #范围分片算法类名称，用于BETWEEN，可选。该类需实现RangeShardingAlgorithm接口并提供无参数的构造器
-          table-strategy: #分表策略
-            inline:
-              sharding-column: ID
-              algorithm-expression: sca_girls$->{ID % 2}
-#          key-generator:
-#          column: #自增列名称，缺省表示不使用自增主键生成器
-#          type: #自增列值生成器类型，缺省表示使用默认自增列值生成器。可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
-#          props: #属性配置, 注意：使用SNOWFLAKE算法，需要配置worker.id与max.tolerate.time.difference.milliseconds属性。若使用此算法生成值作分片值，建议配置max.vibration.offset属性
-#            max:
-#              vibration:
-#                offset:
-      default-data-source-name: ds0  #未配置分片规则的表将通过默认数据源定位
-      broadcast-tables: sca_dict  #公共表 两个库中的数据是一样的 如字典表
-      #读写分离
-#      master-slave-rules:
-#        dufl1: #逻辑名称
-#          master-data-source-name: ds0   #主库数据源名称
-#          slave-data-source-names[0]: ds1 #从库数据源名称列表
-#          #slave-data-source-names[1]: ds2
-#          load-balance-algorithm-class-name: org.apache.shardingsphere.core.strategy.masterslave.RoundRobinMasterSlaveLoadBalanceAlgorithm #从库负载均衡算法类名称。该类需实现MasterSlaveLoadBalanceAlgorithm接口且提供无参数构造器
-#          load-balancer-name: xiapeixin #从库负载均衡算法名称
-    props:
-      sql:
-        show: true #是否开启SQL显示，默认值: false
-      executor:
-        size: 8 #工作线程数量，默认值: CPU核数
-      check:
-        table:
-          metadata:
-            enabled: false #是否在启动时检查分表元数据一致性，默认值: false
-#    rules:
-#      master-slave:
-#        type:
-
-#  #分库策略，缺省表示使用默认分库策略，以下的分片策略只能选其一
-#  #用于单分片键的标准分片场景
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.standard.sharding-column=
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.standard.precise-algorithm-class-name= #精确分片算法类名称，用于=和IN。该类需实现PreciseShardingAlgorithm接口并提供无参数的构造器
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.standard.range-algorithm-class-name=
-#
-#  #用于多分片键的复合分片场景
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.complex.sharding-columns= #分片列名称，多个列以逗号分隔
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.complex.algorithm-class-name= #复合分片算法类名称。该类需实现ComplexKeysShardingAlgorithm接口并提供无参数的构造器
-#
-#  #行表达式分片策略
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.inline.sharding-column= #分片列名称
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.inline.algorithm-expression= #分片算法行表达式，需符合groovy语法
-#
-#  #Hint分片策略
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.database-strategy.hint.algorithm-class-name= #Hint分片算法类名称。该类需实现HintShardingAlgorithm接口并提供无参数的构造器
-#
-#  #分表策略，同分库策略
-#  spring.shardingsphere.sharding.tables.<logic-table-name>.table-strategy.xxx= #省略
-#
-#  spring.shardingsphere.sharding.binding-tables[0]= #绑定表规则列表
-#  spring.shardingsphere.sharding.binding-tables[1]= #绑定表规则列表
-#  spring.shardingsphere.sharding.binding-tables[x]= #绑定表规则列表
-#
-#  spring.shardingsphere.sharding.broadcast-tables[0]= #广播表规则列表
-#  spring.shardingsphere.sharding.broadcast-tables[1]= #广播表规则列表
-#  spring.shardingsphere.sharding.broadcast-tables[x]= #广播表规则列表
-#
-#  spring.shardingsphere.sharding.default-data-source-name= #未配置分片规则的表将通过默认数据源定位
-#  spring.shardingsphere.sharding.default-database-strategy.xxx= #默认数据库分片策略，同分库策略
-#  spring.shardingsphere.sharding.default-table-strategy.xxx= #默认表分片策略，同分表策略
-#  spring.shardingsphere.sharding.default-key-generator.type= #默认自增列值生成器类型，缺省将使用org.apache.shardingsphere.core.keygen.generator.impl.SnowflakeKeyGenerator。可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
-#  spring.shardingsphere.sharding.default-key-generator.props.<property-name>= #自增列值生成器属性配置, 比如SNOWFLAKE算法的worker.id与max.tolerate.time.difference.milliseconds
-#
-#  spring.shardingsphere.sharding.master-slave-rules.<master-slave-data-source-name>.master-data-source-name= #详见读写分离部分
-#  spring.shardingsphere.sharding.master-slave-rules.<master-slave-data-source-name>.slave-data-source-names[0]= #详见读写分离部分
-#  spring.shardingsphere.sharding.master-slave-rules.<master-slave-data-source-name>.slave-data-source-names[1]= #详见读写分离部分
-#  spring.shardingsphere.sharding.master-slave-rules.<master-slave-data-source-name>.slave-data-source-names[x]= #详见读写分离部分
-#  spring.shardingsphere.sharding.master-slave-rules.<master-slave-data-source-name>.load-balance-algorithm-class-name= #详见读写分离部分
-#  spring.shardingsphere.sharding.master-slave-rules.<master-slave-data-source-name>.load-balance-algorithm-type= #详见读写分离部分
-
+#id生成器的因子
+clusters:
+  datacenterId: 3
+  machineId: 2

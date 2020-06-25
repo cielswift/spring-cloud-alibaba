@@ -18,8 +18,8 @@ public class ScaDict implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID",type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "ID",type = IdType.AUTO)
+    private Integer id;
 
     @TableField("NAME")
     private String name;
@@ -30,5 +30,6 @@ public class ScaDict implements Serializable {
     @TableField("DETAIL")
     private String detail;
 
-
+    @TableField("PARENT_ID")
+    private Integer parentId = 0;
 }

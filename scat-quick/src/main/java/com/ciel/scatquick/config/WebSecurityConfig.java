@@ -7,7 +7,8 @@ import com.ciel.scatquick.security.provider.IPProvider;
 import com.ciel.scatquick.security.provider.JwtLoginProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -27,11 +27,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      *不经过security的过滤器
+     * 一定要配置 /error 否则可能引起无限重定向
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/socket/**",
+        web.ignoring().antMatchers("/socket/**", "/error/**",
                 "/websocket/**", "/els/**", "/sharding/**", "/asyn/**");
+    }
+
+    /**
+     * spring security的角色继承
+     * ROLE_dba具备 ROLE_admin的所有权限，而 ROLE_admin则具备 ROLE_user的所有权限，继承与继承之间用一个空格隔开
+     */
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        String hierarchy = "ROLE_ADMIN > ROLE_MANAGER \n ROLE_ADMIN > ROLE_USER";
+        roleHierarchy.setHierarchy(hierarchy);
+        return roleHierarchy;
     }
 
     /**
@@ -59,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // 配置ip登录端点
     @Bean
     public LoginUrlAuthenticationEntryPoint loginUrlAuthenticationEntryPoint(){
-        return new LoginUrlAuthenticationEntryPoint("/ipAuth");
+        return new LoginUrlAuthenticationEntryPoint("/ipLogin");
     }
 
     /**
@@ -83,9 +96,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ipLogin").permitAll() //ip登录端点
                 .anyRequest().authenticated()  // 其他的需要登陆后才能访问
                 .and()//未登录
-                .httpBasic()//.authenticationEntryPoint(userAuthenticationEntryPointHandler)
+                .httpBasic()//.authenticationEntryPoint(userAuthenticationEntryPointHandler) //处理类
                 .and()//无权限
-                .exceptionHandling()//.accessDeniedHandler(userAuthAccessDeniedHandler)
+                .exceptionHandling()//.accessDeniedHandler(userAuthAccessDeniedHandler) //处理类
                 .and()
 
                 .formLogin().loginProcessingUrl("/login")

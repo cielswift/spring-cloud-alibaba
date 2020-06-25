@@ -2,13 +2,16 @@ package com.ciel.scatquick.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ciel.scaapi.crud.IScaDictService;
 import com.ciel.scaapi.crud.IScaGirlsService;
 import com.ciel.scaapi.crud.IScaRoleService;
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.FileUpload2Nginx;
+import com.ciel.scaapi.util.SysUtils;
 import com.ciel.scaentity.entity.ScaDict;
 import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaRole;
@@ -47,6 +50,22 @@ public class ShardingJDBCController {
 
     protected FileUpload2Nginx fileUpload2Nginx;
 
+    protected IScaUserService iScaUserService;
+
+
+    @GetMapping("/users")
+    public Result users(){
+        return Result.ok().data(iScaUserService.list());
+    }
+
+    @GetMapping("/girls/list")
+    public Result girls(){
+        QueryWrapper<ScaGirls> wrapper = SysUtils.autoCnd(ScaGirls.class);
+        IPage<ScaGirls> page = SysUtils.autoPage(ScaGirls.class);
+        IPage<ScaGirls> result = scaGirlsService.page(page, wrapper);
+        return Result.ok().pageData(result);
+    }
+
 
     @PostMapping("/upl")
     public Result upload(@RequestParam("file") MultipartFile file) throws IOException {
@@ -66,7 +85,7 @@ public class ShardingJDBCController {
 
         List<ScaGirls> list = scaGirlsService.list();
 
-        Set<Long> collect = list.stream().map(l -> l.getId()).collect(Collectors.toSet());
+        Set<Long> collect = list.stream().map(ScaGirls::getId).collect(Collectors.toSet());
 
         scaGirlsService.remove(new LambdaQueryWrapper<ScaGirls>().in(ScaGirls::getId,collect));
 
@@ -81,22 +100,18 @@ public class ShardingJDBCController {
     @GetMapping("/hello")
     public Result hello(){
 
-        List<ScaUser> list = scaUserService.list();
-
-        List<ScaRole> roles = scaRoleService.list();
-
         ScaDict scaDict = new ScaDict();
-        scaDict.setName("全国");
-        scaDict.setValue("COUNTRY");
-        scaDict.setDetail("全国范围");
-
+        scaDict.setName("范围");
+        scaDict.setValue("RANGE");
+        scaDict.setDetail("RANGE");
         scaDictService.save(scaDict);
 
-        for(int i = 0; i< 10 ; i++){
+        for(int i = 0; i< 20 ; i++){
             ScaGirls scaGirls = new ScaGirls();
-            scaGirls.setName("洛丽塔");
-            scaGirls.setPrice(new BigDecimal("55.49"));
-            scaGirls.setUserId(System.currentTimeMillis());
+            scaGirls.setName(String.format("夏%s%s",i,i*7));
+            scaGirls.setPrice(new BigDecimal(String.format("%.2f",Math.random()*100)));
+            scaGirls.setUserId(System.currentTimeMillis()-7777);
+            scaGirls.setBirthday(Faster.now());
             boolean save = scaGirlsService.save(scaGirls);
             System.out.println(save);
         }

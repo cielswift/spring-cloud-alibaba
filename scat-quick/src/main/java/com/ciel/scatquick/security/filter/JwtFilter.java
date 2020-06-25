@@ -19,6 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+
+/**
+ * 拦截token 并校验
+ */
 @Slf4j
 public class JwtFilter extends BasicAuthenticationFilter {
 
@@ -29,9 +33,8 @@ public class JwtFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        /**
-         *  获取请求头中JWT的Token
-         */
+
+        //获取请求头中JWT的Token
         String token = request.getHeader("Authentication");
 
         if (!StringUtils.isEmpty(token)) {
@@ -47,9 +50,8 @@ public class JwtFilter extends BasicAuthenticationFilter {
                         user.getIp());
 
                 LoginToken jwtToken = new LoginToken(cusUser,"",cusUser.getAuthorities());
-                /**
-                 * 放入security 上下文中
-                 */
+
+                //放入security 上下文中
                 SecurityContextHolder.getContext().setAuthentication(jwtToken);
 
             } catch (ExpiredJwtException e) {

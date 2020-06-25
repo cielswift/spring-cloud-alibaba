@@ -18,8 +18,9 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Data
+
 @RestController
+
 @AllArgsConstructor
 @Validated
 public class HiController {
@@ -31,7 +32,6 @@ public class HiController {
     protected IScaUserService scaUserService;
 
     protected RedisTemplate<String, Object> redisTemplate;
-
 
     /**
      * 获取验证码
@@ -47,7 +47,6 @@ public class HiController {
 
     @GetMapping("/qq")
     public Result qq(@NotNull String str) throws Exception {
-
         return Result.ok().data("");
     }
 
@@ -78,16 +77,14 @@ public class HiController {
         return Result.ok().data(byName);
     }
 
-
     @GetMapping("/hk")
     public Result hk(String name, Integer age){
         long str = System.currentTimeMillis();
-
         String cc = name +age;
-
         System.out.println(System.currentTimeMillis()-str);
         return Result.ok().data(cc);
     }
+
 
     @PostMapping("/hkk")
     public Result hkk(@RequestBody Map<String, String> map){

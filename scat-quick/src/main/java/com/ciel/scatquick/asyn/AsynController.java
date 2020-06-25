@@ -83,7 +83,7 @@ public class AsynController {
                 System.out.println("异步失败:"+ex);
 
                 try {
-                    Faster.respJson(Result.error().data(ex.getMessage()),response);
+                    Faster.respJson(Result.error("错误").data(ex.getMessage()),response);
                 } catch (IOException e) {
                     throw new RuntimeException("请查看日志:"+e.getMessage());
                 }

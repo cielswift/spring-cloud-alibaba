@@ -62,35 +62,36 @@ public class AfterGlobalExceptionReturnController implements ResponseBodyAdvice<
 //        binder.setFieldDefaultPrefix("bb.");
 //    }
 
+
     @ExceptionHandler(AlertException.class) //自定义异常
     @ResponseStatus(HttpStatus.BAD_GATEWAY) //状态码
     public Result alertException(AlertException e) {
-        return Result.error(502, "CUSTOM EXCEPTION->".concat(getMessage(e)));
-    }
-
-    @ExceptionHandler(AccessDeniedException.class) //权限不足异常
-    @ResponseStatus(HttpStatus.FORBIDDEN) //状态码
-    public Result accessException(AccessDeniedException e) {
-        return Result.error(403, "PERMISSIONS ERROR->".concat(getMessage(e)));
+        return Result.error(HttpStatus.BAD_GATEWAY.value(), "CUSTOM EXCEPTION->".concat(getMessage(e)));
     }
 
     @ExceptionHandler(Exception.class) //服务器未知异常
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result globalException(Exception e) {
         e.printStackTrace();
-        return Result.error(500, "SERVER UNKNOWN EXCEPTION->".concat(getMessage(e)));
+        return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "SERVER UNKNOWN EXCEPTION->".concat(getMessage(e)));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class) //权限不足异常
+    @ResponseStatus(HttpStatus.FORBIDDEN) //状态码
+    public Result accessException(AccessDeniedException e) {
+        return Result.error(HttpStatus.FORBIDDEN.value(), "PERMISSIONS ERROR->".concat(getMessage(e)));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class) //参数绑定异常
     @ResponseStatus(HttpStatus.BAD_REQUEST) //状态码
     public Result paramException(MissingServletRequestParameterException e) {
-        return Result.error(400, "PARAM BIND EXCEPTION->".concat(getMessage(e)));
+        return Result.error(HttpStatus.BAD_REQUEST.value(), "PARAM BIND EXCEPTION->".concat(getMessage(e)));
     }
 
     @ExceptionHandler(ConstraintViolationException.class) //参数校验异常
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result violation(ConstraintViolationException e) {
-        return Result.error(400, "PARAM VALID EXCEPTION->".concat(getMessage(e)));
+        return Result.error(HttpStatus.BAD_REQUEST.value(), "PARAM VALID EXCEPTION->".concat(getMessage(e)));
     }
 
     private String getMessage(Exception exception) {

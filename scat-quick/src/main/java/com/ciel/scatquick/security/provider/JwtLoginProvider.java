@@ -43,19 +43,17 @@ public class JwtLoginProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         // 查询用户是否存在
 
-        String sms = ((LoginToken) authentication).getSms();
-        Object smsRedis = redisTemplate.opsForValue().get("sms_".concat(userName));
-        if(!sms.equals(smsRedis)){
-            throw new BadCredentialsException("验证码不正确");
-        }
-
+//        String sms = ((LoginToken) authentication).getSms();
+//        Object smsRedis = redisTemplate.opsForValue().get("sms_".concat(userName));
+//        if(!sms.equals(smsRedis)){
+//            throw new BadCredentialsException("验证码不正确");
+//        }
 
         UserDetails userDetails = userDetailService.loadUserByUsername(userName);
 
         if (userDetails == null) {
             throw new UsernameNotFoundException("用户名不存在");
         }
-
         // 我们还要判断密码是否正确，这里我们的密码使用BCryptPasswordEncoder进行加密的
         if (!bCryptPasswordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("密码不正确");

@@ -1,6 +1,7 @@
 package com.ciel.scaapi.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ciel.scaentity.entity.ScaUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,12 +58,16 @@ public class SysUtils {
 
     /**
      * 根据查询字段自动生成Cnd;
-     *
-     * @param type 需要生成wrapper的类
-     * @return querywrapper
      */
     public static <T> QueryWrapper<T> autoCnd(Class<T> type) {
-        return CndUtils.autoCnd(type);
+        return CndPagUtils.autoCnd(type);
+    }
+
+    /**
+     * 分页对象
+     */
+    public static <T> IPage<T> autoPage(Class<T> type) {
+        return CndPagUtils.autoPage(type);
     }
 
     /**

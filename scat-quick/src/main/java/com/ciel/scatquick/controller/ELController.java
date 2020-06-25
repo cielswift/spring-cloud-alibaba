@@ -1,16 +1,6 @@
 package com.ciel.scatquick.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ciel.scaapi.crud.IScaDictService;
-import com.ciel.scaapi.crud.IScaGirlsService;
-import com.ciel.scaapi.crud.IScaRoleService;
-import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.retu.Result;
-import com.ciel.scaapi.util.SysUtils;
-import com.ciel.scaentity.entity.ScaDict;
-import com.ciel.scaentity.entity.ScaGirls;
-import com.ciel.scaentity.entity.ScaRole;
-import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.el.ElasticMapper;
 import com.ciel.scatquick.el.Human;
 import lombok.AllArgsConstructor;
@@ -30,8 +20,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

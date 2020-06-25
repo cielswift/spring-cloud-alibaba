@@ -26,8 +26,10 @@ public class BaseErrorController implements ErrorController {
                 return Result.error(code,"未认证");
             case 403:
                 return Result.error(code,"权限不足");
+            case 404:
+                return Result.error(code,"资源不存在");
             default:
-                return Result.error();
+                return Result.error("未知错误");
         }
     }
 

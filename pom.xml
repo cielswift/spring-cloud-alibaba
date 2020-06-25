@@ -28,7 +28,7 @@
     <artifactId>spring-cloud-alibaba</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-cloud-alibaba</name>
-    <description>Demo project for Spring Boot</description>
+    <description>SPRING CLOUD ALIBABA</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -63,7 +63,7 @@
         <dependency> <!--json工具-->
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.62</version>
+            <version>1.2.70</version>
         </dependency>
 
         <dependency> <!--io工具-->
@@ -76,6 +76,18 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
+        </dependency>
+
+        <dependency> <!--excel工具-->
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+        <dependency> <!--excel工具-->
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
         </dependency>
 
 
@@ -91,11 +103,6 @@
             <version>2.1.6</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.apache.poi</groupId>-->
-<!--            <artifactId>poi</artifactId>-->
-<!--            <version>4.1.2</version>-->
-<!--        </dependency>-->
 
         <dependency> <!--自动生成get,set-->
             <groupId>org.projectlombok</groupId>
@@ -131,7 +138,6 @@
 
     <dependencyManagement>
         <dependencies>
-
             <dependency> <!--spring cloud 版本-->
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

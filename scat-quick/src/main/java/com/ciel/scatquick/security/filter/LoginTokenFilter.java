@@ -2,6 +2,7 @@ package com.ciel.scatquick.security.filter;
 
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
+import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.security.jwt.JWTPayload;
 import com.ciel.scatquick.security.jwt.JWTUtils;
 import com.ciel.scatquick.security.realm.ScaCusUser;
@@ -17,8 +18,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
+/**
+ * 登录过滤器
+ */
 public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
 
     public LoginTokenFilter(AuthenticationManager authenticationManager) {
@@ -31,15 +36,14 @@ public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
 
         LoginToken jwtToken = new LoginToken(request.getParameter("username"),
                 request.getParameter("password"),
-                request.getParameter("sms"));
-
+                request.getParameter("code"));
         setDetails(request, jwtToken);
 
         return this.getAuthenticationManager().authenticate(jwtToken);
     }
 
     /**
-     *优先执行
+     *优先执行 成功后返回
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
@@ -54,15 +58,24 @@ public class LoginTokenFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = JWTUtils.createToken(payload);
 
-        Faster.respJson(Result.ok().data(token),response);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("token",token);
 
+        ScaUser user = new ScaUser();
+        user.setId(scaUser.getId());
+        user.setUsername(scaUser.getUsername());
+        map.put("user",user);
+
+        Faster.respJson(Result.ok().data(map),response);
     }
 
+    /**
+     * 失败后返回
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
 
-        Faster.respJson(Result.error("ERROR"),response);
-
+        Faster.respJson(Result.error("ERROR:"+failed.getMessage()),response);
     }
 }
