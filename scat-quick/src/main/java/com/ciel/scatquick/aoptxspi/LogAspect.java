@@ -83,7 +83,7 @@ public class LogAspect {
                 point.getArgs(), request.getMethod(), request.getRequestURI(), request.getRemoteAddr(),
                 result, info.get("id"), info.get("name"), System.currentTimeMillis() - str);
 
-        return result;
+        return methodReturn;
     }
 
 //    @Before("point()")  //之前执行

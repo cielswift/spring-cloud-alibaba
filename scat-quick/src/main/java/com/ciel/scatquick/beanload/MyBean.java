@@ -2,9 +2,9 @@ package com.ciel.scatquick.beanload;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.*;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +23,15 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
         MessageSourceAware,
         ApplicationEventPublisherAware, //发布事件
         ResourceLoaderAware {
+
+    /**
+     * Aware  //Aware接口也是为了能够感知到自身的一些属性。
+     * 比如实现了ApplicationContextAware接口的类，能够获取到ApplicationContext
+     * 实现BeanNameAware 可以获取 bean的名称
+     * 实现了BeanFactoryAware接口的类，能够获取到BeanFactory对象
+     *
+     * 参考 org.springframework.context.support.ApplicationContextAwareProcessor.invokeAwareInterfaces(..)方法
+     */
 
     /**
      *
@@ -58,6 +67,8 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
         System.out.println("销毁方法");
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void setBeanName(String s) {
         //依赖注入一旦结束，BeanNameAware.setBeanName()会被调用，它设置该 bean 在 Bean Factory 中的名称

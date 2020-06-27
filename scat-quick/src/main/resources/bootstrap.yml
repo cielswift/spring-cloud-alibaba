@@ -111,3 +111,7 @@ custom-mod:  #多文档模式,定义一些其他配置
 clusters:
   datacenterId: 3
   machineId: 2
+
+xiapeixinfgs:
+  name: xiapeixinfgs
+  age: 24

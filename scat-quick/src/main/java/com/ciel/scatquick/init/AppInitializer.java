@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * springApplication.addInitializers(new AppInitializer()); //需要添加初始化
  */
-@Order(2) //ApplicationContextInitializer 不需要加入ioc 也能调用
+@Order(2)
 public class AppInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override

@@ -52,6 +52,7 @@ import java.nio.charset.StandardCharsets;
 //@EnableAuthorizationServer
 public class SCAConsumerApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(SCAConsumerApplication.class, args);
     }

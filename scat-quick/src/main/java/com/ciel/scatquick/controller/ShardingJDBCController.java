@@ -17,6 +17,7 @@ import com.ciel.scaentity.entity.ScaDict;
 import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaRole;
 import com.ciel.scaentity.entity.ScaUser;
+import com.ciel.scatquick.aoptxspi.Logs;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
@@ -61,6 +62,7 @@ public class ShardingJDBCController {
     }
 
     @GetMapping("/girls/list")
+    @Logs
     public Result girls(){
 
         scaGirlsMapper.deleteAll(7L);

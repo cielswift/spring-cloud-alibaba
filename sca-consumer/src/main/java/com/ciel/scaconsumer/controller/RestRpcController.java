@@ -54,6 +54,9 @@ public class RestRpcController {
 
     @GetMapping("/rpcs")
     public Result rpcs(){
+
+        applicationContext.getEnvironment().getProperty("person.xiapeixin"); //获取配置
+
         List<String> xiapeixin = fuckMyLifeXiaPeiXin.format("xiapeixin");
 
         ScaGirls scaGirls = new ScaGirls();

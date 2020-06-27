@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-@EnableScheduling
+@EnableScheduling //开启定时任务
 @Configuration
 public class Scheding {
 

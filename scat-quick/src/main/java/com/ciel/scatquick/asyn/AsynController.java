@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -48,7 +49,6 @@ public class AsynController {
         // 会等待异步线程执行完毕后才进行下一行代码的执行
         return Result.ok().data(result.get());
     }
-
 
     /**
      * 代码中可以看出，在返回的结果中添加了两个回调，分别是异步处理成功的回调SuccessCallback接口的实现类对象

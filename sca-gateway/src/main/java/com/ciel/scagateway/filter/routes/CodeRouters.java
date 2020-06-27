@@ -28,7 +28,7 @@ public class CodeRouters {
      * @return
      */
     @Bean
-    public AbstractLoadBalancerRule loadBalancerRule(){
+    public RoundRobinRule loadBalancerRule(){
         return new RoundRobinRule();
     }
 
