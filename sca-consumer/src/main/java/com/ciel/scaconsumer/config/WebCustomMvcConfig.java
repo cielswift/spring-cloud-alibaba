@@ -35,9 +35,13 @@ public class WebCustomMvcConfig implements WebMvcConfigurer {
                 .exposedHeaders("Authentication"); //重要: 暴露响应头
     }
 
-    @Override  //注册拦截器
+    /**
+     * 注册拦截器
+     * @param registry
+     */
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new InterceptorMain(redisTemplate)).addPathPatterns("/**").excludePathPatterns("/error/**");
-        //拦截的地址和排除的地址
+        registry.addInterceptor(new InterceptorMain(redisTemplate))
+                .addPathPatterns("/**").excludePathPatterns("/error/**");
     }
 }

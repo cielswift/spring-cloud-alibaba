@@ -2,9 +2,9 @@ package com.ciel.scatquick.security.filter;
 
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
+import com.ciel.scaapi.util.JWTPayload;
+import com.ciel.scaapi.util.JWTUtils;
 import com.ciel.scaentity.entity.ScaUser;
-import com.ciel.scatquick.security.jwt.JWTPayload;
-import com.ciel.scatquick.security.jwt.JWTUtils;
 import com.ciel.scatquick.security.realm.ScaCusUser;
 import com.ciel.scatquick.security.token.LoginToken;
 import org.springframework.security.authentication.AuthenticationManager;

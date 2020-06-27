@@ -20,7 +20,6 @@
     </properties>
 
     <dependencies>
-
         <dependency> <!--web 方式启动-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -101,10 +100,10 @@
             <version>1.1.0.RELEASE</version>
         </dependency>
 
-        <!--        <dependency> &lt;!&ndash; 2pc (两阶段提交协议)seata 分布式事务 客户端&ndash;&gt;-->
-        <!--            <groupId>com.alibaba.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-alibaba-seata</artifactId>-->
-        <!--        </dependency>-->
+        <dependency> <!-- 2pc (两阶段提交协议)seata 分布式事务 客户端-->
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+        </dependency>
 
     </dependencies>
 

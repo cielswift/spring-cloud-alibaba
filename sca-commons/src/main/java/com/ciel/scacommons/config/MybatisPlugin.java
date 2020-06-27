@@ -1,17 +1,27 @@
 package com.ciel.scacommons.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
+import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.injector.AbstractMethod;
+import com.baomidou.mybatisplus.core.injector.AbstractSqlInjector;
+import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
+import com.baomidou.mybatisplus.core.injector.ISqlInjector;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
 import com.baomidou.mybatisplus.extension.parsers.DynamicTableNameParser;
 import com.baomidou.mybatisplus.extension.parsers.ITableNameHandler;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.ciel.scacommons.method.DeleteAll;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.update.Update;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +31,8 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * mybatis plus 全局拦截器
@@ -106,12 +118,9 @@ public class MybatisPlugin {
          * 动态表名SQL解析器
          */
         DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
-
         Map<String, ITableNameHandler> tableNameHandlerMap = new HashMap<>();
-
         // Map的key就是需要替换的原始表名, 其他表不会经过这个解析器;
         tableNameHandlerMap.put("sca_order",new ITableNameHandler(){
-
             @Override
             public String dynamicTableName(MetaObject metaObject, String sql, String tableName) {
                 // 自定义表名规则，或者从配置文件、request上下文中读取
@@ -121,7 +130,6 @@ public class MybatisPlugin {
                 return "sca_order_" + format;
             }
         });
-
 
         dynamicTableNameParser.setTableNameHandlerMap(tableNameHandlerMap);
 
@@ -162,7 +170,6 @@ public class MybatisPlugin {
             public Number nextId(Object entity) {
 //                //可以将当前传入的class全类名来作为bizKey,或者提取参数来生成bizKey进行分布式Id调用生成;
 //                String bizKey = entity.getClass().getName();
-
                 return snowFlake().nextId(false);
             }
 
@@ -176,52 +183,49 @@ public class MybatisPlugin {
         };
     }
 
-//    @Bean 另一种配置全局id方式
-//    public MybatisPlusPropertiesCustomizer plusPropertiesCustomizer() {
-//        return plusProperties -> plusProperties.getGlobalConfig().setIdentifierGenerator(identifierGenerator());
-//    }
-
     /**
      * sql 注入器
-     *
-     * @return
      */
-//    @Bean
-//    public ISqlInjector iSqlInjector() {
-//        return new AbstractSqlInjector() {
-//            @Override
-//            public List<AbstractMethod> getMethodList(Class<?> mapperClass) {
-//
-//                /**
-//                 * 这个地方还需要注入 SelectById 等Method,没有注入则无效;
-//                 */
-//                return Stream.of(new DeleteAll())
-//                        .collect(Collectors.toList());
-//            }
-//        };
-//    }
+    @Bean
+    public ISqlInjector iSqlInjector() {
+        return new DefaultSqlInjector() {
+            @Override
+            public List<AbstractMethod> getMethodList(Class<?> mapperClass) {
+
+                //先注入默认的 list selectById 等...
+                List<AbstractMethod> methodList = super.getMethodList(mapperClass);
+
+                /**
+                 * 注入自己的
+                 */
+                methodList.add(new DeleteAll());
+                return methodList;
+            }
+        };
+    }
 
     /**
-     * ==========================================================================================================================
-     *
-     * Sequence主键 ,主键生成策略必须使用INPUT
+     * mybatis plus 全局配置
+     * @return
+     */
+    //@Bean id生产器配置 填充配置注入即可 这里没有用到全局配置
+    public MybatisPlusPropertiesCustomizer plusPropertiesCustomizer() {
+        return (pro) -> {
+            pro.getGlobalConfig().setIdentifierGenerator(identifierGenerator()); //id生产器
+
+            pro.getGlobalConfig().setBanner(true); //显示banner;
+
+            pro.getGlobalConfig().setMetaObjectHandler(new MybatisPlusAuto()); //自动填充
+
+        };
+    }
+
+    /**
+     * Sequence自增主键 ,主键生成策略必须使用INPUT
      */
 //    @Bean
 //    public IKeyGenerator keyGenerator() {
 //        return new H2KeyGenerator();
 //    }
 
-//-------------------------------------------------------------------------------------------------------------
-//    /**
-//     * MyBatisPLus全局配置
-//     */
-//    @Bean
-//    public GlobalConfig globalConfig() {
-//        GlobalConfig globalConfig = new GlobalConfig();
-//        // 不显示 MyBatisPlus Banner
-//        globalConfig.setBanner(false);
-//        // 自动填充配置
-//        globalConfig.setMetaObjectHandler(new CommonMetaObjectHandler());
-//        return globalConfig;
-//    }
 }

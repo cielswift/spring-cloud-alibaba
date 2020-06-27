@@ -90,7 +90,6 @@
             <version>4.1.2</version>
         </dependency>
 
-
         <!--        <dependency> &lt;!&ndash;excel工具&ndash;&gt;-->
 <!--            <groupId>com.github.liaochong</groupId>-->
 <!--            <artifactId>myexcel</artifactId>-->
@@ -135,7 +134,7 @@
         </dependency>
     </dependencies>
 
-
+    <!-- dependencyManagement父类管理依赖版本 只是声明依赖 不引入jar包 -->
     <dependencyManagement>
         <dependencies>
             <dependency> <!--spring cloud 版本-->

@@ -1,5 +1,7 @@
 package com.ciel.scagateway.filter.controller;
 
+import com.ciel.scaapi.exception.AlertException;
+import com.ciel.scaapi.retu.Result;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -26,32 +28,35 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
+@CrossOrigin //允许跨域调用
+
 @AllArgsConstructor //在构造函数里注入属性参数
 @Slf4j //直接注入日志对象
-@CrossOrigin //允许跨域调用
 public class WayController {
 
-    //@Autowired
     private DiscoveryClient discoveryClient;
 
     private AutowireCapableBeanFactory beanFactory;
 
     private WebClient.Builder webb;
 
-
     @GetMapping("/mono")
-    public Mono<String> mono(){
+    public Mono<String> mono() throws AlertException {
 
-        webb.build().get().uri("http:192.5").retrieve().bodyToMono(String.class);
-
+        if(System.currentTimeMillis()%2==1){
+            throw new AlertException("fucks");
+        }
         /**
          * 首先是Mono.just()，直接由这个对象构造出一个Mono。
          * 然后Mono.fromRunnable(），用一个线程来构建一个Mono。
          */
-        return Mono.just("fuck").flatMap(x -> Mono.just(x.toUpperCase()))
-                .then(Mono.just("ff")).then(Mono.just("kk"));
-            //通过fromCallable创建
-       // Mono.fromCallable(() -> "callable run ").subscribe(System.out::println);
+        Mono<Object> mono = Mono.fromRunnable(() -> System.out.println("a"));
+
+        Mono.just("fuck").flatMap(x -> Mono.just(x.toUpperCase()))
+                .then(Mono.just("ff"));
+
+        return webb.build().get().uri("https://element.eleme.cn/#/zh-CN/component/image")
+                .retrieve().bodyToMono(String.class);
     }
 
     @PostMapping("/upload")
@@ -64,21 +69,19 @@ public class WayController {
     }
 
     @GetMapping("/downloadFile")
-    public Mono<Void> downloadFile(String dataId, ServerHttpResponse response){
+    public Mono<Void> downloadFile(String dataId, ServerHttpResponse response) throws UnsupportedEncodingException {
 
         File file = new File("C:/ciel/微信图片_20200302214455.png");
         if(!file.exists()) {
-            return ServerHttpResponseUtil.writeHtml(response,"<html><head><meta charset=\"utf-8\"/></head><body>文件不存在！</body></html>");
+
+            return ServerHttpResponseUtil.writeObjectJson(response, Result.error("文件不存在"));
+
         }else {
             ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
-            try {
-                response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=" +
-                                new String("oth.png".getBytes("UTF-8"),
-                                        "iso-8859-1"));//输出文件名乱码问题处理
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+
+            response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, //输出文件名乱码问题处理
+                "attachment; filename=" + new String("oth.png".getBytes("UTF-8"), "iso-8859-1"));
+
             response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
             return zeroCopyResponse.writeWith(file, 0, file.length());
         }

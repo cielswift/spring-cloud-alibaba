@@ -1,9 +1,15 @@
 package com.ciel.scaproducer1.serverimpl;
 
-import com.ciel.scaapi.crud.ApplicationServer;
-import com.ciel.scaapi.crud.UserServer;
+import com.ciel.scaapi.dubbo.ApplicationServer;
+import com.ciel.scaapi.dubbo.GirlsServer;
+import com.ciel.scaapi.dubbo.UserServer;
+import com.ciel.scaapi.util.Faster;
+import com.ciel.scaentity.entity.ScaApplication;
+import com.ciel.scaentity.entity.ScaGirls;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
+
+import java.math.BigDecimal;
 
 /**
  * 注意, 是dubbo的service,暴漏位dubbo接口;
@@ -20,10 +26,25 @@ public class ApplicationImpl implements ApplicationServer {
     @Reference
     protected UserServer userServer;
 
-    @Override
-    public String select(String name) {
+    @Reference
+    protected GirlsServer girlsServer;
 
-        return userServer.get(name.concat(">>经过了producer1"));
+    @Override
+    public ScaApplication select(ScaApplication name) {
+        name.setName(name.getName() + " PRODUCER1");
+        return name;
     }
 
+
+    @Override
+    public ScaGirls getGirls(ScaGirls girls) {
+        ScaGirls scaGirls = new ScaGirls();
+        scaGirls.setName("刘学文");
+        scaGirls.setPrice(new BigDecimal("20.55"));
+        scaGirls.setBirthday(Faster.now());
+
+        //dubbo 调用另一个 dubbo
+        ScaGirls scaGirls1 = girlsServer.getGirls(scaGirls);
+        return scaGirls1;
+    }
 }

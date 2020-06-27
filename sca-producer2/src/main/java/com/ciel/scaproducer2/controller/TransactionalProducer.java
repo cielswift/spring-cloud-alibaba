@@ -2,7 +2,6 @@ package com.ciel.scaproducer2.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.ciel.scaapi.crud.AAASe;
 import com.ciel.scaapi.crud.IScaOrderService;
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.exception.AlertException;
@@ -15,18 +14,17 @@ import com.ciel.scaproducer2.config.relm.CustomUser;
 import com.ciel.scaproducer2.config.vali.NotSex;
 import com.ciel.scaproducer2.config.vali.People;
 import com.ciel.scaproducer2.feign.TransactionConsumer;
-import org.dromara.hmily.core.concurrent.threadlocal.HmilyTransactionContextLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -133,7 +131,7 @@ public class TransactionalProducer implements PublicTransactional {
     public boolean confirm(BigDecimal price,Long sendUserId, Long receiveUserId, Integer code) throws AlertException {
 
         //获取全局事务id
-        String transId = HmilyTransactionContextLocal.getInstance().get().getTransId();
+        String transId = "1";  //HmilyTransactionContextLocal.getInstance().get().getTransId();
 
         Object confirmEx = redisTemplate.opsForValue().get("confirm_"+transId);
         if(null != confirmEx) {
@@ -175,31 +173,6 @@ public class TransactionalProducer implements PublicTransactional {
     }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    @Autowired
-    protected AAASe aaaSe;
-    //@Transactional
-    @GetMapping("/testtran")
-    public Object testtran(String code){
-
-        aaaSe.testCustomTransaction();
-
-    //    aaaSe.testTransaction();
-
-       // userService.testTransaction();
-
-//        ScaUser user = userService.getById(425752880537804800L);
-//        user.setImage(code);
-//
-//        userService.saveOrUpdate(user);
-//
-//        if("err".equals(code)){
-//           throw new RuntimeException("err--");
-//        }
-
-        return Result.ok("msg");
-    }
-
 
     @GetMapping("/te2")
     public Result te2(){

@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-06-14
  */
 @Mapper
-public interface ScaDictMapper extends BaseMapper<ScaDict> {
+public interface ScaDictMapper extends MyBaseMapper<ScaDict> {
 
 }

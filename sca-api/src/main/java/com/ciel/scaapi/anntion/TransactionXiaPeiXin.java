@@ -6,6 +6,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
+
+/**
+ * 自定义的事务 aop 注解
+ */
 public @interface TransactionXiaPeiXin {
 
     /**

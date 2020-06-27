@@ -1,9 +1,11 @@
 package com.ciel.scaproducer2.schedu;
 
-import com.ciel.scacommons.mapper.TableAT;
+import com.ciel.scacommons.mapper.TableCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +16,14 @@ import java.time.format.DateTimeFormatter;
 /**
  * 动态建表
  */
-@Component
+@Configuration
+@EnableScheduling  //开启定时任务
 public class DynamicTable {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicTable.class);
 
     @Autowired
-    protected TableAT tableAT;
+    protected TableCreate tableAT;
 
     @Scheduled(cron = "1 1 23 28 * ?")
     //@Scheduled(cron = "1 * * * * ?")

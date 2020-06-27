@@ -41,31 +41,22 @@ spring:
           driver-class-name: com.mysql.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           type: com.alibaba.druid.pool.DruidDataSource
-          druid:
-            initial-size: 16
-
   cloud:
     nacos:  #使用nacos注册中心
-      discovery:
+      discovery: #注册中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
-      config:
+      config: #配置中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-        file-extension: yaml  #指定读取的配置文件后缀, dataId 默认就是spring.application.name + yaml, 可以通过prefix修改
+        file-extension: yaml  #指定读取的配置文件后缀; dataId默认${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
-        prefix: producer #文件名 -- 如果没有配置则默认为 ${spring.appliction.name} (优先级高)
-        extension-configs:  #扩展配置,多个配置文件
-          - dataId: xiapeixin.yaml
+        prefix: application-dev  #文件名 ;如果没有配置则默认为 ${spring.appliction.name} (优先级高)
+        extension-configs:  #扩展配置其他多个配置文件
+          - dataId: other-dev.yaml
             group: DEFAULT_GROUP
             refresh: false
-          - dataId: xiapeixin2.yaml
-            group: DEFAULT_GROUP
-            refresh: false
-    alibaba:
-      seata:
-        tx-service-group: my_test_tx_group
 
   zipkin:  #链路追踪
     base-url: http://127.0.0.1:9411/
@@ -73,16 +64,24 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
-#分布式事务
+#分布式事务 client端
 seata:
-  tx-service-group: pro10 #名称不能相同
+  enabled: true #是否开启spring-boot自动装配
+  application-id: appId #默认seata-server，Server和Client端的值需一致
+  #tx-service-group: p10
   service:
-    grouplist: 127.0.0.1:20922
+    vgroupMapping: seataServer  #配置项值为TC集群名
   registry:
-    nacos:  #使用nacos注册中心
-      server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
-      cluster: seata-sca
+    nacos:
+      serverAddr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68
+    type: nacos
+  config:
+    file:
+      name: file.conf
+    type: file
+
+
 
 #rocketmq 事务
 rocketmq:
@@ -193,9 +192,6 @@ clusters:
   machineId: 1
 
 ---
-custom-mod:  #多文档模式,定义一些其他配置
-  name: producer10
-
-spring:
+spring:  #多文档模式,定义一些其他配置
   profiles:
     active: dev

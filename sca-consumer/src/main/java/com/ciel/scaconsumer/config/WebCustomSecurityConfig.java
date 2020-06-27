@@ -19,6 +19,4 @@ public class WebCustomSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/doc.html");
     }
 
-
-
 }

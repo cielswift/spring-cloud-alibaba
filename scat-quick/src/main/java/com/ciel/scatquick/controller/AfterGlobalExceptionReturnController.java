@@ -14,6 +14,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -69,38 +70,44 @@ public class AfterGlobalExceptionReturnController implements ResponseBodyAdvice<
         return Result.error(HttpStatus.BAD_GATEWAY.value(), "CUSTOM EXCEPTION->".concat(getMessage(e)));
     }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class) //请求方式错误
+    @ResponseStatus(HttpStatus.BAD_REQUEST) //状态码
+    public Result methodErr(HttpRequestMethodNotSupportedException e) {
+        return Result.error(HttpStatus.BAD_REQUEST.value(), "REQUEST METHOD ERROR->".concat(getMessage(e)));
+    }
+
     @ExceptionHandler(Exception.class) //服务器未知异常
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result globalException(Exception e) {
         e.printStackTrace();
-        return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "SERVER UNKNOWN EXCEPTION->".concat(getMessage(e)));
+        return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "SERVER UNKNOWN EXCEPTION:".concat(getMessage(e)));
     }
 
     @ExceptionHandler(AccessDeniedException.class) //权限不足异常
     @ResponseStatus(HttpStatus.FORBIDDEN) //状态码
     public Result accessException(AccessDeniedException e) {
-        return Result.error(HttpStatus.FORBIDDEN.value(), "PERMISSIONS ERROR->".concat(getMessage(e)));
+        return Result.error(HttpStatus.FORBIDDEN.value(), "PERMISSIONS ERROR:".concat(getMessage(e)));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class) //参数绑定异常
     @ResponseStatus(HttpStatus.BAD_REQUEST) //状态码
     public Result paramException(MissingServletRequestParameterException e) {
-        return Result.error(HttpStatus.BAD_REQUEST.value(), "PARAM BIND EXCEPTION->".concat(getMessage(e)));
+        return Result.error(HttpStatus.BAD_REQUEST.value(), "PARAM BIND EXCEPTION:".concat(getMessage(e)));
     }
 
     @ExceptionHandler(ConstraintViolationException.class) //参数校验异常
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result violation(ConstraintViolationException e) {
-        return Result.error(HttpStatus.BAD_REQUEST.value(), "PARAM VALID EXCEPTION->".concat(getMessage(e)));
+        return Result.error(HttpStatus.BAD_REQUEST.value(), "PARAM VALID EXCEPTION:".concat(getMessage(e)));
     }
 
     private String getMessage(Exception exception) {
         if (Faster.isNull(exception)) {
             return "EXCEPTION IS NULL";
         } else if (Faster.isNull(exception.getMessage())) {
-            return "NOT FIND EXCEPTION MESSAGE;EXCEPTION CLASS NAME->".concat(exception.getClass().getName());
+            return String.format("NOT FIND EXCEPTION MESSAGE;EXCEPTION CLASS -> %s",exception.getClass().getName());
         } else {
-            return exception.getMessage();
+            return String.format("MESSAGE -> %s",exception.getMessage());
         }
     }
 

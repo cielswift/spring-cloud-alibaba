@@ -15,6 +15,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class Knife4jConfig {
 
+    /**
+     * 接口文档
+     */
     // http://127.0.0.1:5011/producer20/doc.html#/home
     /**
      * 如果404 需要

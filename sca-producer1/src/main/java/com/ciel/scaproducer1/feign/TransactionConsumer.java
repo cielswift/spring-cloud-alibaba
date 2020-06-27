@@ -29,7 +29,7 @@ public interface TransactionConsumer extends PublicTransactional {
 
 
     @GetMapping(value = "/seata")
-    Result seata(@RequestParam("price") BigDecimal price, @RequestParam("sendUserId")Long sendUserId,
-                 @RequestParam("receiveUserId") Long receiveUserId);
+    Result seata(@RequestParam("price") BigDecimal price, @RequestParam("sendId")Long sendUserId,
+                 @RequestParam("receiveId") Long receiveUserId);
 
 }

@@ -69,7 +69,7 @@ public class WebCustomSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/fuck_you_mother/**");
+        web.ignoring().antMatchers("/seata/**");
     }
 
     /**

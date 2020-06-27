@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import org.apache.commons.codec.CharEncoding;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -163,11 +164,11 @@ public final class Faster {
     }
 
     public static boolean isNull(Object obj){
-        return obj == null;
+        return obj == null || StringUtils.isEmpty(obj);
     }
 
     public static boolean isNotNull(Object obj){
-        return obj != null;
+        return obj != null && !StringUtils.isEmpty(obj);
     }
     /**
      * 集合不为null ,且不为空
@@ -190,6 +191,7 @@ public final class Faster {
     public static void println(Object obj){
         System.out.println(obj);
     }
+
     private Faster(){}
 
 
@@ -197,7 +199,6 @@ public final class Faster {
      * 匹配_加任意一个字符
      */
     private static final Pattern UNDER_LINE_PATTERN = Pattern.compile("_(\\w)");
-
 
     /***
      * 下划线命名转为驼峰命名

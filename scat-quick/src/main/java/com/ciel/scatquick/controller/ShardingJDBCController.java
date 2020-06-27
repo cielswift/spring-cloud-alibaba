@@ -12,6 +12,7 @@ import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.FileUpload2Nginx;
 import com.ciel.scaapi.util.SysUtils;
+import com.ciel.scacommons.mapper.ScaGirlsMapper;
 import com.ciel.scaentity.entity.ScaDict;
 import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaRole;
@@ -52,6 +53,7 @@ public class ShardingJDBCController {
 
     protected IScaUserService iScaUserService;
 
+    protected ScaGirlsMapper scaGirlsMapper;
 
     @GetMapping("/users")
     public Result users(){
@@ -60,12 +62,14 @@ public class ShardingJDBCController {
 
     @GetMapping("/girls/list")
     public Result girls(){
+
+        scaGirlsMapper.deleteAll(7L);
+
         QueryWrapper<ScaGirls> wrapper = SysUtils.autoCnd(ScaGirls.class);
         IPage<ScaGirls> page = SysUtils.autoPage(ScaGirls.class);
         IPage<ScaGirls> result = scaGirlsService.page(page, wrapper);
         return Result.ok().pageData(result);
     }
-
 
     @PostMapping("/upl")
     public Result upload(@RequestParam("file") MultipartFile file) throws IOException {
@@ -73,11 +77,23 @@ public class ShardingJDBCController {
         return Result.ok().data(img);
     }
 
-
+    /**
+     *  本地事务:
+     *      完全支持非跨库事务，例如：仅分表，或分库但是路由的结果在单库中；
+     *      完全支持因逻辑异常导致的跨库事务。例如：同一事务中，跨两个库更新。更新完毕后，抛出空指针，则两个库的内容都能回滚
+     *      不支持因网络、硬件异常导致的跨库事务。例如：同一事务中，跨两个库更新，更新完毕后、未提交之前，第一个库宕机，则只有第二个库数据提交
+     *  XA两阶段事务:
+     *      支持数据分片后的跨库事务；两阶段提交保证操作的原子性和数据的强一致性；
+     *      服务宕机重启后，提交/回滚中的事务可自动恢复；支持同时使用 XA 和非 XA 的连接池;
+     *      服务宕机后，在其它机器上恢复提交/回滚中的数据。
+     *  SEATA 柔性事务:
+     *      支持数据分片后的跨库事务；支持RC隔离级别；通过undo快照进行事务回滚；支持服务宕机后的，自动恢复提交中的事务
+     *
+     */
     @GetMapping("/tran")
     @Transactional(rollbackFor = Exception.class)
-    // 支持TransactionType.LOCAL, TransactionType.XA, TransactionType.BASE
-    //Sharding 事务注解
+    //Sharding 事务注解 支持LOCAL,XA,BASE  并且引入相应jar包
+    //XAShardingTransactionManager xa 的事务管理器
     @ShardingTransactionType(TransactionType.XA)
     public Result tran(@RequestParam(value = "type",required = false,defaultValue = "1") Integer type,
                        @RequestParam(value = "date",required = false,defaultValue = "2020-05-24") Date date,
@@ -85,7 +101,8 @@ public class ShardingJDBCController {
 
         List<ScaGirls> list = scaGirlsService.list();
 
-        Set<Long> collect = list.stream().map(ScaGirls::getId).collect(Collectors.toSet());
+        Set<Long> collect = list.stream().filter(t -> t.getId() %3 == 0)
+                .map(ScaGirls::getId).collect(Collectors.toSet());
 
         scaGirlsService.remove(new LambdaQueryWrapper<ScaGirls>().in(ScaGirls::getId,collect));
 
@@ -100,18 +117,19 @@ public class ShardingJDBCController {
     @GetMapping("/hello")
     public Result hello(){
 
-        ScaDict scaDict = new ScaDict();
-        scaDict.setName("范围");
-        scaDict.setValue("RANGE");
-        scaDict.setDetail("RANGE");
-        scaDictService.save(scaDict);
+//        ScaDict scaDict = new ScaDict();
+//        scaDict.setName("范围");
+//        scaDict.setValue("RANGE");
+//        scaDict.setDetail("RANGE");
+//        scaDictService.save(scaDict);
 
         for(int i = 0; i< 20 ; i++){
             ScaGirls scaGirls = new ScaGirls();
             scaGirls.setName(String.format("夏%s%s",i,i*7));
             scaGirls.setPrice(new BigDecimal(String.format("%.2f",Math.random()*100)));
-            scaGirls.setUserId(System.currentTimeMillis()-7777);
+            scaGirls.setUserId(System.currentTimeMillis()-77777);
             scaGirls.setBirthday(Faster.now());
+            scaGirls.setImgs("http://127.0.0.1/image/2cd39f06e1b2c06977d751bbf75ebb1b.jpg");
             boolean save = scaGirlsService.save(scaGirls);
             System.out.println(save);
         }

@@ -14,7 +14,7 @@ public class ServerHttpResponseUtil {
     /**
      * JSON输出形式输出对象
      */
-    public static Mono<Void> writeObjectAsJson(ServerHttpResponse response, Object object){
+    public static Mono<Void> writeObjectJson(ServerHttpResponse response, Object object){
         return response.writeWith(Flux.create(sink -> {
  
             NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(new UnpooledByteBufAllocator(false));

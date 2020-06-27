@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -40,13 +41,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableFeignClients
 
 @EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE)
-
-/**
- * hmily 要扫描的包
- */
-@ComponentScan("org.dromara.hmily")
-
-@EnableScheduling  //开启定时任务
 public class SCAProducer2Application {
 
     public static void main(String[] args) {

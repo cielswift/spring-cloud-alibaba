@@ -3,7 +3,10 @@ package com.ciel.scaconsumer;
 import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import com.alibaba.cloud.sentinel.rest.SentinelClientHttpResponse;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.netflix.client.config.IClientConfig;
+import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.RoundRobinRule;
+import com.netflix.loadbalancer.Server;
 import feign.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +18,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.support.collections.RedisCollectionFactoryBean;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -25,7 +27,6 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication
-
 /**
  * 使用nacos作为注册中心
  */
@@ -63,8 +64,8 @@ public class SCAConsumerApplication {
      * HEADERS：除了BASIC中定义的信息之外，还有请求和响应的头信息；
      * FULL：除了HEADERS中定义的信息之外，还有请求和响应的正文及元数据。
      */
-    @Bean
-    Logger.Level level() {
+    @Bean("feignLevel")
+    public Logger.Level level() {
         return Logger.Level.FULL;
     }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,8 +84,9 @@ public class SCAConsumerApplication {
      */
     @Bean
     public RoundRobinRule roundRobinRule(){
-        return new RoundRobinRule();
+       return new RoundRobinRule();
     }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      *方法和参数同org.springframework.http.client.ClientHttpRequestInterceptor.intercept相同和;
@@ -114,7 +116,7 @@ public class SCAConsumerApplication {
     }
 
 
-    @Bean
+    @Bean("redisString")
     @Primary
     public RedisTemplate<String, String> redisString(RedisConnectionFactory factory){
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();

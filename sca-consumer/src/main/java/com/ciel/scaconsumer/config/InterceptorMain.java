@@ -22,7 +22,6 @@ public class InterceptorMain extends HandlerInterceptorAdapter {
                              Object handler) throws Exception {
 
         log.info(request.getRemoteHost().concat(":访问:").concat(request.getRequestURI()));
-        System.out.println(request.getRemoteHost().concat(":访问:").concat(request.getRequestURI()));
 
         redisTemplate.opsForValue().increment(request.getRemoteHost(),1);
         return true;
@@ -53,7 +52,6 @@ public class InterceptorMain extends HandlerInterceptorAdapter {
     public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response,
                                                Object handler) throws Exception {
         //这个方法会在Controller方法异步执行时开始执行，而postHandle方法则是需要等到Controller的异步执行完才能执行
-
         System.out.println("拦截了异步执行的方法");
 
     }

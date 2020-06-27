@@ -14,7 +14,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
- * 事务 aop
+ * 事务 自定义aop 实现
  */
 @Aspect
 @Component
@@ -55,16 +55,12 @@ public class TransactionAspect {
             transactionManager.commit(status);
             log.info("事务结束并提交");
 
-
             return rtValue;
         } catch (Throwable t) {
-
             transactionManager.rollback(status);
             log.info("事务异常--回滚");
             throw new Exception("事务异常--回滚:".concat(t.getMessage()));
-
         } finally {
-
             log.info("AOP 结束");
         }
     }

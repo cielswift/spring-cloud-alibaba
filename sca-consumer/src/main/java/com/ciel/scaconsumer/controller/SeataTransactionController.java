@@ -1,15 +1,13 @@
 package com.ciel.scaconsumer.controller;
 
 import com.ciel.scaapi.retu.Result;
-import com.ciel.scaconsumer.feignimpl.PublicTransactional10x;
+import com.ciel.scaconsumer.feignext.PublicTransactional10x;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @RestController

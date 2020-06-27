@@ -36,24 +36,25 @@ spring:
           url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           type: com.alibaba.druid.pool.DruidDataSource
   cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: false #启用ReactiveLoadBalancerClientFilter
     nacos:  #使用nacos注册中心
-      discovery:
+      discovery: #注册中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
-      config:
+      config: #配置中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-        file-extension: yaml  #指定读取的配置文件后缀, dataId 默认就是spring.application.name + yaml, 可以通过prefix修改
+        file-extension: yaml  #指定读取的配置文件后缀; dataId默认${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
-        prefix: gateway #文件名 -- 如果没有配置则默认为 ${spring.appliction.name} (优先级高)
-        extension-configs:  #扩展配置,多个配置文件
-          - dataId: xiapeixin.yaml
+        prefix: application-dev  #文件名 ;如果没有配置则默认为 ${spring.appliction.name} (优先级高)
+        refresh-enabled: true #刷新配置文件
+        extension-configs: #其他配置
+          - dataId: other-dev.yaml
             group: DEFAULT_GROUP
-            refresh: false
-          - dataId: xiapeixin2.yaml
-            group: DEFAULT_GROUP
-            refresh: false
+            refresh: true
 
     gateway:  #路由规则
       discovery:
@@ -62,7 +63,7 @@ spring:
           lower-case-service-id: true #微服务名称小写
 #      routes:
 #        - id: consumer #id 任意
-#          uri: lb://consumer
+#          uri: lb://consumer #如果是以lb开头，则会开启负载均衡
 #          predicates:
 #            - Path=/con/** #请求路径带有这个,那么映射到上面uri的服务上
 #            #- Before=2019-05-13T17:20:10.789-07:00[Asia/Shanghai] #并且要在这个时间之前
@@ -134,9 +135,6 @@ clusters:
   machineId: 1
 
 ---
-custom-mod:  #多文档模式,定义一些其他配置
-  name: gateway
-
 newconfig:
   rad: ${random.uuid}
   ca: ${random.int}
@@ -145,6 +143,6 @@ whitegirl:
   name: ${random.uuid}
   age: ${random.int}
 
-spring:
+spring: #多文档模式,定义一些其他配置
   profiles:
     active: dev

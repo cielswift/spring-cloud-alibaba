@@ -2,16 +2,20 @@ package com.ciel.scaconsumer.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.ciel.scaapi.crud.ApplicationServer;
+import com.ciel.scaapi.dubbo.ApplicationServer;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
-import com.ciel.scaconsumer.feignimpl.FuckMyLifeXiaPeiXin;
-import com.ciel.scaconsumer.feignimpl.PublicTransactional10x;
-import com.ciel.scaconsumer.feignimpl.PublicTransactional20x;
+import com.ciel.scaapi.util.Faster;
+import com.ciel.scaconsumer.feignext.FuckMyLifeXiaPeiXin;
+import com.ciel.scaconsumer.feignext.PublicTransactional10x;
+import com.ciel.scaconsumer.feignext.PublicTransactional20x;
+import com.ciel.scaentity.entity.ScaApplication;
+import com.ciel.scaentity.entity.ScaGirls;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.util.StringUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,7 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RefreshScope //更新配置文件
+/**
+ * 刷新配置文件
+ */
+@RefreshScope
+
 @RestController
 public class RestRpcController {
     /**
@@ -30,33 +38,57 @@ public class RestRpcController {
     protected ApplicationServer applicationServer;
 
     @Autowired
-    protected PublicTransactional20x publicTransactional20x;
-
-    @GetMapping("/iw")
-    public Result iw() {
-        return Result.ok("iw").data("iw");
-    }
-
-    @GetMapping("/iw/iw")
-    public Result iw2() throws AlertException {
-        if((System.currentTimeMillis() & 3) == 0){
-            throw new AlertException(" & 3 异常");
-        }
-        List<String> aa = fuckMyLifeXiaPeiXin.fml("aa");
-        return Result.ok("iw/iw").data("iw/iw");
-    }
-
-    @GetMapping("/sec/{y}")
-    public Result sec(@PathVariable("y") String y){
-       return publicTransactional20x.sec(y);
-    }
-
-
-    @Autowired
     protected RestTemplate restTemplate;
 
     @Autowired
     protected FuckMyLifeXiaPeiXin fuckMyLifeXiaPeiXin;
+    /**
+     * feign协议
+     */
+    @Autowired
+    protected PublicTransactional20x publicTransactional20x;
+
+    @Autowired
+    protected ApplicationContext applicationContext;
+
+
+    @GetMapping("/rpcs")
+    public Result rpcs(){
+        List<String> xiapeixin = fuckMyLifeXiaPeiXin.format("xiapeixin");
+
+        ScaGirls scaGirls = new ScaGirls();
+        scaGirls.setName("liuxuewen");
+        scaGirls.setBirthday(Faster.now());
+        scaGirls.setPrice(new BigDecimal("25.5"));
+
+        String posts = fuckMyLifeXiaPeiXin.posts(scaGirls, 2L);
+
+        String puts = fuckMyLifeXiaPeiXin.puts(scaGirls, 3L);
+
+        String xiazhi = fuckMyLifeXiaPeiXin.delete(1L, "xiazhi");
+
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("get",xiapeixin);
+        map.put("post",posts);
+        map.put("put",puts);
+        map.put("del",xiazhi);
+
+
+        ScaApplication scaApplication = new ScaApplication();
+        scaApplication.setName("app");
+        scaApplication.setCreateDate(Faster.now());
+
+
+        ScaApplication select = applicationServer.select(scaApplication);
+
+        map.put("dubbo",select);
+
+        return Result.ok().data(map);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Sentinel降级
@@ -69,7 +101,10 @@ public class RestRpcController {
         /**
          * dubbo调用
          */
-        String select = applicationServer.select(name);
+        ScaApplication scaApplication = new ScaApplication();
+        scaApplication.setName("app");
+        scaApplication.setCreateDate(Faster.now());
+        ScaApplication select = applicationServer.select(scaApplication);
 
         /**
          * restTemplate 调用
@@ -84,7 +119,7 @@ public class RestRpcController {
         /**
          * feign调用
          */
-        List<String> xiapeixin = fuckMyLifeXiaPeiXin.fml("xiapeixin");
+        List<String> xiapeixin = fuckMyLifeXiaPeiXin.format("xiapeixin");
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("1",select);

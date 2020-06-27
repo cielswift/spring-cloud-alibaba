@@ -2,14 +2,17 @@ package com.ciel.scatquick.quartz;
 
 import com.ciel.scatquick.beanload.AppEventPush;
 import com.ciel.scatquick.beanload.AppEvn;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.ResourceUtils;
 
@@ -19,6 +22,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -92,6 +96,19 @@ public class Scheding {
     }
 
 
+    @Autowired
+    protected RedisTemplate<String, Object> redisTemplate;
+
+    @Scheduled(cron = "1/35 * * * * ?" )
+    public void scha(){
+        poolExecutor.submit(() -> {
+            System.out.println(Thread.currentThread().getName());
+            redisTemplate.opsForValue()
+                    .set(String.valueOf(System.currentTimeMillis()),"CIEL-SWIFT",6,TimeUnit.HOURS);
+
+        });
+    }
+
 
     @Autowired
     protected AppEventPush appEventPush;
@@ -119,14 +136,17 @@ public class Scheding {
      */
     @PostConstruct
     public void init() {
-        this.poolExecutor = new ThreadPoolExecutor(64, 64,
-                5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(1024));
+
+        this.poolExecutor = new ThreadPoolExecutor(32, 64,
+                2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(1024)
+                ,new ThreadFactoryBuilder().setNameFormat("THREAD-POOL-%d").build());
+
 
         taskExecutor = new ThreadPoolTaskExecutor();
         // 核心线程数
         taskExecutor.setCorePoolSize(64);
         // 最大线程数
-        taskExecutor.setMaxPoolSize(64);
+        taskExecutor.setMaxPoolSize(128);
         // 线程队列最大线程数
         taskExecutor.setQueueCapacity(1024);
         // 初始化线程池

@@ -34,32 +34,22 @@ spring:
           username: root
           password: ciel
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3307/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://127.0.0.1:3309/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           type: com.alibaba.druid.pool.DruidDataSource
-        slave1:
-          username: root
-          password: ciel
-          driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:1672/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-          type: com.alibaba.druid.pool.DruidDataSource
-
   cloud:
     nacos:  #使用nacos注册中心
-      discovery:
+      discovery: #注册中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
-      config:
+      config: #配置中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-        file-extension: yaml  #指定读取的配置文件后缀, dataId 默认就是spring.application.name + yaml, 可以通过prefix修改
+        file-extension: yaml  #指定读取的配置文件后缀; dataId默认${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
-        prefix: producer #文件名 -- 如果没有配置则默认为 ${spring.appliction.name} (优先级高)
-        extension-configs:  #扩展配置,多个配置文件
-          - dataId: xiapeixin.yaml
-            group: DEFAULT_GROUP
-            refresh: false
-          - dataId: xiapeixin2.yaml
+        prefix: application-dev  #文件名 ;如果没有配置则默认为 ${spring.appliction.name} (优先级高)
+        extension-configs:  #扩展配置其他多个配置文件
+          - dataId: other-dev.yaml
             group: DEFAULT_GROUP
             refresh: false
 
@@ -69,16 +59,38 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
-#2pc 分布式事务
+#分布式事务
+#seata:
+#  tx-service-group: pro202 #名称不能相同
+#  applicationId: seata-server
+#  service:
+#    grouplist: 127.0.0.1:19201
+#  config:
+#    nacos:
+#      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+#      server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+#  registry:
+#    nacos:  #使用nacos注册中心
+#      server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+#      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
+#      cluster: seata-server
+
+# seata配置
 seata:
-  tx-service-group: pro30
+  #registry:
+  #  type: nacos
+  #  nacos:
+  #    server-addr: localhost
+  #config:
+  #  type: nacos
+  #  nacos:
+  #    server-addr: localhost
+  tx-service-group: blade-seata-pro30-group
   service:
-    grouplist: 127.0.0.1:29222
-  registry:
-    nacos:  #使用nacos注册中心
-      server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
-      cluster: seata-sca
+    grouplist: 127.0.0.1:19201
+    disable-global-transaction: false
+  client:
+    rm-report-success-enable: false
 
 #rocketmq 事务
 rocketmq:
@@ -191,9 +203,6 @@ ffc: #FactoryBean演示
   info: 2019-11-20 15:23:20
 
 ---
-custom-mod:  #多文档模式,定义一些其他配置
-  name: producer30
-
-spring:
+spring: #多文档模式,定义一些其他配置
   profiles:
     active: dev

@@ -35,6 +35,8 @@ public class ThreadPoolAndAtomClass {
                         ,new ThreadPoolExecutor.DiscardOldestPolicy()  //队列满了和第一个线程竞争 失败丢弃任务 没有异常
                  );
 
+        //execute会直接抛出任务执行时的异常，submit会吃掉异常，可通过Future的get方法将任务执行时的异常重新抛出
+
         // shutdown()方法关闭线程池的时候，它会等待正在执行的任务先完成，然后再关闭。
         //shutdownNow()会立刻停止正在执行的任务，
         //awaitTermination()则会等待指定的时间让线程池关闭。
