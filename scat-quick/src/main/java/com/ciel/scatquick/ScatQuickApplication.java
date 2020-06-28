@@ -188,9 +188,7 @@ public class ScatQuickApplication implements CommandLineRunner {
         // @Configurable(preConstruction = true) //这个注解的作用是：告诉Spring在构造函数运行之前将依赖注入到对象中
         //这就就算当前这个对象是new出来的, 内部的字段也能使用@Autowired自动注入了; 需要aspectj 和启动aspectjAOP;
 
-
-        //动态注册bean--------------------------------------------------------------------------------
-
+        //-----------动态注册bean--------------------------------------------------------------------------------
         // 获取bean工厂并转换为DefaultListableBeanFactory
         DefaultListableBeanFactory defaultListableBeanFactory =
                 (DefaultListableBeanFactory) configurableApplicationContext.getBeanFactory();
@@ -206,7 +204,7 @@ public class ScatQuickApplication implements CommandLineRunner {
         //删除bean.
         //defaultListableBeanFactory.removeBeanDefinition("xiapexinfjs");
 
-        //动态注册bean--------------------------------------------------------------------------------
+        //---------动态注册bean--------------------------------------------------------------------------------
 
         //设置git 提交的名字
         // git config --global user.name "你的名字"

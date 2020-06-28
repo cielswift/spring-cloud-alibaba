@@ -1,8 +1,7 @@
-package com.ciel.scaapi.converters;
+package com.ciel.scatquick.beanload.converters;
 
 import com.ciel.scaapi.util.Faster;
 import org.springframework.format.Formatter;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -20,7 +19,6 @@ import java.util.Locale;
  */
 @Component
 public class ZustomFormatter implements Formatter<Date> {
-
 
     @Override
     public Date parse(String text, Locale locale) throws ParseException {

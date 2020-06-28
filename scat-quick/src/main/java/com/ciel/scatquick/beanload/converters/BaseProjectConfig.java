@@ -1,20 +1,15 @@
-package com.ciel.scaapi.converters;
+package com.ciel.scatquick.beanload.converters;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.format.Formatter;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 
-import javax.management.MXBean;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,12 +46,19 @@ public class BaseProjectConfig {
 
 /**----------------------------------------------------------------------------------------------------------*/
 
+    /**
+     * 提供判断类型之间是否可以转换，以及转换方法
+     */
     @Autowired
-    protected ConversionService conversionService; //提供判断类型之间是否可以转换，以及转换方法
+    protected ConversionService conversionService;
 
     protected void demo(){
 
         LocalDateTime convert = conversionService.convert("2019-11-20 15:23:20", LocalDateTime.class);
+
+        boolean canConvert = conversionService.canConvert(String.class, LocalDateTime.class);
+
+        String s = conversionService.convert(LocalDateTime.now(), String.class);
     }
 
 }

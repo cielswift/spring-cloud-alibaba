@@ -4,6 +4,7 @@ import com.ciel.scatquick.beanload.AppEventPush;
 import com.ciel.scatquick.beanload.AppEvn;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -119,18 +120,32 @@ public class SchedulingTaskConfig {
         });
     }
 
+    /**
+     * 事件
+     */
+
     @Autowired
     protected AppEventPush appEventPush;
 
-    @Scheduled(cron = "1 5 * * * ?")
+    @Autowired
+    protected ApplicationContext applicationContext;
+    /**
+     * 发布事件
+     */
+    @Scheduled(cron = "1/20 * * * * ?")
     public void tes(){
-        appEventPush.sendEmail("aaaa");
+
+        applicationContext.publishEvent(new AppEvn(applicationContext,"app发布事件"));
+
+        appEventPush.sendEmail("japan tokyo");
     }
 
-
-    @EventListener  //代替事件监听器,不用写ApplicationListener
+    /**
+     * 代替事件监听器,不用写ApplicationListener
+     */
+    @EventListener
     public void listenHello(AppEvn event) {
-        System.out.println(event.getName());
+        System.out.println(String.format("@EventListener 收到事件: 名称%s ,源%s ",event.getName(),event.getSource().getClass().getName()));
     }
 
 

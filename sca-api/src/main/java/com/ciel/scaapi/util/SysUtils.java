@@ -6,6 +6,7 @@ import com.ciel.scaentity.entity.ScaUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -66,7 +67,7 @@ public class SysUtils {
     /**
      * 分页对象
      */
-    public static <T> IPage<T> autoPage(Class<T> type) {
+    public static <T> IPage<T> autoPage(Class<T> type) throws MissingServletRequestParameterException {
         return CndPagUtils.autoPage(type);
     }
 

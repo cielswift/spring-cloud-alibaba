@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -158,7 +159,6 @@ public class CndPagUtils {
                             // 不支持的前缀符号。
                             logger.debug("不支持的前缀");
                     }
-
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
                 }
@@ -168,9 +168,15 @@ public class CndPagUtils {
         return queryWrapper;
     }
 
-    public static <T> IPage<T> autoPage(Class<T> type){
+    public static <T> IPage<T> autoPage(Class<T> type) throws MissingServletRequestParameterException {
         HttpServletRequest request = SysUtils.getRequest();
         Page<T> page = new Page<>();
+        if(Faster.isNull(request.getParameter("current"))){
+            throw new MissingServletRequestParameterException("current","integer");
+        }
+        if(Faster.isNull(request.getParameter("size"))){
+            throw new MissingServletRequestParameterException("size","integer");
+        }
         page.setCurrent(Long.parseLong(request.getParameter("current")));
         page.setSize(Long.parseLong(request.getParameter("size")));
         return page;

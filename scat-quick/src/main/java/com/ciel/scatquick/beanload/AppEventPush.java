@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * 事件发布器
+ */
 @Component
 public class AppEventPush implements ApplicationEventPublisherAware {
 

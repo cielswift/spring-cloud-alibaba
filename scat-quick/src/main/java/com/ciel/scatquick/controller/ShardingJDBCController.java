@@ -25,6 +25,7 @@ import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,7 +68,7 @@ public class ShardingJDBCController {
 
     @GetMapping("/girls/list")
     @Logs
-    public Result girls(){
+    public Result girls() throws MissingServletRequestParameterException {
 
         scaGirlsMapper.deleteAll(7L);
 

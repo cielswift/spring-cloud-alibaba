@@ -1,4 +1,4 @@
-package com.ciel.scaapi.converters;
+package com.ciel.scatquick.beanload.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;

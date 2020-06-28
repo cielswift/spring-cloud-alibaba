@@ -1,4 +1,4 @@
-package com.ciel.scaapi.converters;
+package com.ciel.scatquick.beanload;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +9,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * FactorBean 获取bean
+ * 通过工厂获取bean
  */
+
 @Component("customFactorBean")
 public class ACustomFactorBean implements FactoryBean<LocalDateTime> {
 
@@ -19,7 +20,6 @@ public class ACustomFactorBean implements FactoryBean<LocalDateTime> {
 
     @Override
     public LocalDateTime getObject() throws Exception {
-
         return LocalDateTime.parse(info, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
@@ -34,17 +34,15 @@ public class ACustomFactorBean implements FactoryBean<LocalDateTime> {
     }
 
 
-
     protected AutowireCapableBeanFactory beanFactory;
-
-
     /**
      * BEAN (FactoryBean)工厂获取bean
      * @return
      */
     public void get(){
-
+        //获取bean
         Object o1 = beanFactory.getBean("customFactorBean"); // LocalDateTime
+        //获取工厂
         Object o2 = beanFactory.getBean("&customFactorBean"); //ACustomFactorBean
 
     }
