@@ -224,8 +224,7 @@ public class ScatQuickApplication implements CommandLineRunner {
         System.out.println(resource);
         System.out.println(resource1);
 
-        InputStream resourceAsStream =
-                ScatQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
+        InputStream resourceAsStream = ScatQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
 
         byte[] temp = new byte[1024 * 1024];
         resourceAsStream.read(temp);

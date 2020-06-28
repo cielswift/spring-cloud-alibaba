@@ -3,8 +3,6 @@ package com.ciel.scatquick.beanload;
 import com.xia.bean.Xiapeixinfks;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -23,6 +21,7 @@ public class BeanRegistry implements BeanDefinitionRegistryPostProcessor {
 
     /**
      * 先执行postProcessBeanDefinitionRegistry方法
+     *     在bean 保存加载 但是没有初始化
      * 在执行postProcessBeanFactory方法
      */
     @Override
@@ -47,9 +46,10 @@ public class BeanRegistry implements BeanDefinitionRegistryPostProcessor {
         //设置是否可以被其他对象自动注入
         definition.setAutowireCandidate(true);
 
-        // 给属性赋值 无效
+        // 给属性赋值
         MutablePropertyValues mpv = new MutablePropertyValues();
-        mpv.add("xiapeixinfas", filed);
+        mpv.add("name", "xiapeixinfks");
+        mpv.add("age", 24);
         definition.setPropertyValues(mpv);
 
         registry.registerBeanDefinition("xiapeixinfks", definition);
