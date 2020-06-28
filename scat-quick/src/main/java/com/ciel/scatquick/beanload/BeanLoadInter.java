@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 全局bean加载的拦截方法
  */
 @Component
-public class BeanLoadInter  implements BeanPostProcessor {
+public class BeanLoadInter  implements BeanPostProcessor  {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {

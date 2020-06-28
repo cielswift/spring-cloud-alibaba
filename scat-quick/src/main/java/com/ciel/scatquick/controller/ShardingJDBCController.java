@@ -18,10 +18,12 @@ import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaRole;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.aoptxspi.Logs;
+import com.xia.auto.AutoBean;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
@@ -49,6 +51,8 @@ public class ShardingJDBCController {
     protected IScaDictService scaDictService;
 
     protected WebApplicationContext webApplicationContext;
+
+    protected AutowireCapableBeanFactory autowireCapableBeanFactory;
 
     protected FileUpload2Nginx fileUpload2Nginx;
 

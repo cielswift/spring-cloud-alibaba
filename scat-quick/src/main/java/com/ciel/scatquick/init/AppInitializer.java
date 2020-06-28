@@ -28,6 +28,7 @@ public class AppInitializer implements ApplicationContextInitializer<Configurabl
         Map<String, Object> map = new HashMap<>();
         map.put("demo", 1);
 
+        //动态添加配置
         MapPropertySource mapPropertySource = new MapPropertySource("demoInitializer", map);
         environment.getPropertySources().addLast(mapPropertySource);
 

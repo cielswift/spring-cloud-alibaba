@@ -1,9 +1,8 @@
 package com.ciel.scatquick;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
-import com.ciel.scatquick.anntion.RepAction;
 import com.ciel.scatquick.aoptxspi.SpiInterface;
-import com.ciel.scatquick.beanload.boot.TypeFilterCustom;
+import com.ciel.scatquick.beanload.AppListener;
 import com.ciel.scatquick.init.AppInitializer;
 import com.ciel.scatquick.proxy.CglibProxyFactory;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -14,10 +13,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.xia.bean.XiapeixinFcs;
+import com.xia.bean.XiapexinFjs;
 import com.xia.config.*;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -78,7 +80,8 @@ import java.util.regex.Pattern;
 /**
  * 导入其他 bean 或 配置 类
  */
-@Import({XiapeixinFcs.class, ImportSelectTest.class, ImportBeanDefinitionRegistrarTest.class, ConfigurationTest.class})
+@Import({XiapeixinFcs.class, ImportSelectTest.class, ImportBeanDefinitionRegistrarTest.class,
+        ConfigurationTest.class,ContionalConfig.class})
 
 /**
  * 导入其他配置类
@@ -90,6 +93,10 @@ import java.util.regex.Pattern;
  */
 @ConfigurationPropertiesScan("com.xia.bean")
 
+/**
+ * 导入其他配置文件 Proper格式
+ */
+@PropertySource(value = {"classpath:./sources/xiapeixin.properties"})
 /**
  * 自定义自动装配
  */
@@ -118,7 +125,10 @@ public class ScatQuickApplication implements CommandLineRunner {
     public static void main(String[] args) {
 
         SpringApplication springApplication = new SpringApplication(ScatQuickApplication.class);
+
         springApplication.addInitializers(new AppInitializer()); //添加初始化
+        springApplication.addListeners(new AppListener());
+
         springApplication.run(args);
 
         // ConfigurableApplicationContext app = SpringApplication.run(ScatQuickApplication.class, args);
@@ -162,6 +172,9 @@ public class ScatQuickApplication implements CommandLineRunner {
     @Autowired
     protected AutowireCapableBeanFactory beanFactory;
 
+    @Autowired
+    protected ConfigurableApplicationContext configurableApplicationContext;
+
     /**
      * 初始化任务
      */
@@ -170,11 +183,30 @@ public class ScatQuickApplication implements CommandLineRunner {
 
         System.out.println("INIT ORDER 1");
 
-        //beanFactory.autowireBean(new ScaGirls());  //给未被ioc管理的对象注入属性
+        //beanFactory.autowireBean(new ScaGirls());  //给未被ioc管理的对象注入属性 属性必须带@Autowrite注解
 
         // @Configurable(preConstruction = true) //这个注解的作用是：告诉Spring在构造函数运行之前将依赖注入到对象中
         //这就就算当前这个对象是new出来的, 内部的字段也能使用@Autowired自动注入了; 需要aspectj 和启动aspectjAOP;
 
+
+        //动态注册bean--------------------------------------------------------------------------------
+
+        // 获取bean工厂并转换为DefaultListableBeanFactory
+        DefaultListableBeanFactory defaultListableBeanFactory =
+                (DefaultListableBeanFactory) configurableApplicationContext.getBeanFactory();
+
+        // 通过BeanDefinitionBuilder创建bean定义
+        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(XiapexinFjs.class);
+
+        // 设置属性userService,此属性引用已经定义的bean:userService,这里userService已经被spring容器管理了.
+        beanDefinitionBuilder.addPropertyReference("xiapeixinfas", "xiapeixinfas");
+        // 注册bean
+        defaultListableBeanFactory.registerBeanDefinition("xiapexinfjs", beanDefinitionBuilder.getRawBeanDefinition());
+
+        //删除bean.
+        //defaultListableBeanFactory.removeBeanDefinition("xiapexinfjs");
+
+        //动态注册bean--------------------------------------------------------------------------------
 
         //设置git 提交的名字
         // git config --global user.name "你的名字"

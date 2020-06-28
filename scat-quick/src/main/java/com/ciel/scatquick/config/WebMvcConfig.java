@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -42,6 +46,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         converters.add(responseBodyConverter());
     }
 
+
     /**
      * 统一输出风格
      * <p>
@@ -54,14 +59,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 ObjectMapper objectMapper = new ObjectMapper();
                 //驼峰
                 objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+
                 //null值字段不返回
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 //null值字段不返回
                 objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
-                //允许对象忽略json中不存在的属性
-                objectMapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
-                //时区
+
+                //反序列化的时候如果多了其他属性,不抛出异常
+                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+                //如果是空对象的时候,不抛异常
+                objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+                //时间格式化
                 objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
                 MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
                 converter.setObjectMapper(objectMapper);
                 converters.set(i, converter);

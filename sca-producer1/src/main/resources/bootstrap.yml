@@ -64,25 +64,6 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
-#分布式事务 client端
-seata:
-  enabled: true #是否开启spring-boot自动装配
-  application-id: appId #默认seata-server，Server和Client端的值需一致
-  #tx-service-group: p10
-  service:
-    vgroupMapping: seataServer  #配置项值为TC集群名
-  registry:
-    nacos:
-      serverAddr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68
-    type: nacos
-  config:
-    file:
-      name: file.conf
-    type: file
-
-
-
 #rocketmq 事务
 rocketmq:
   producer:
@@ -195,3 +176,25 @@ clusters:
 spring:  #多文档模式,定义一些其他配置
   profiles:
     active: dev
+  #seata 事务分组配置
+#  cloud:
+#    alibaba:
+#      seata:
+#        tx-service-group: my_test_tx_group #事务分组配置
+#分布式事务 client端
+seata:
+  enabled: true #是否开启spring-boot自动装配
+  application-id: appId #默认seata-server，Server和Client端的值需一致
+  tx-service-group: my_test_tx_group
+  service:
+    vgroupMapping: producer10  #配置项值为TC集群名
+  registry:
+    nacos:
+      serverAddr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
+      namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68
+      cluster: seataServer
+    type: nacos
+  config:
+    file:
+      name: file.conf
+    type: file

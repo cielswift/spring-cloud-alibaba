@@ -1,7 +1,7 @@
 package com.ciel.scaproducer1.config.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.ciel.scaapi.util.JwtUtils;
+import com.ciel.scaapi.util.JWTUtils;
 import com.ciel.scaproducer1.config.relm.CustomUser;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
+import javax.print.DocFlavor;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,7 @@ public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
         if (!StringUtils.isEmpty(token)) {
             try {
 
-                HashMap<String, Object> map = JSON.parseObject(JwtUtils.parseToken(token), HashMap.class);
+                HashMap<String, Object> map = JSON.parseObject(JWTUtils.parseToken(token, String.class), HashMap.class);
 
                 List<String> authorites = (List<String>)map.get("authorites");
 

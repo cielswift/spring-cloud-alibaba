@@ -7,8 +7,10 @@ import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scaproducer1.feign.TransactionConsumer;
 import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
+import io.seata.spring.boot.autoconfigure.properties.SeataProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,9 @@ import java.math.BigDecimal;
 public class SeataTransactionController {
     protected IScaUserService userService;
     protected TransactionConsumer transactionConsumer;
+
+    protected ApplicationContext applicationContext;
+
 
     /**
      * 全局事务
