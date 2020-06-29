@@ -13,6 +13,8 @@ import javax.annotation.PreDestroy;
 
 /**
  * spring 的 bean 加载流程
+ *
+ * 参考 org.springframework.context.support.AbstractApplicationContext.refresh()  registerBeanPostProcessors
  */
 @Component
 public class MyBean implements InitializingBean, DisposableBean, //加载 //销毁

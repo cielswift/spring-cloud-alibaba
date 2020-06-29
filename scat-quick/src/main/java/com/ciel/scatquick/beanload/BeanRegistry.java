@@ -1,31 +1,40 @@
 package com.ciel.scatquick.beanload;
 
 import com.xia.bean.Xiapeixinfks;
-import com.xia.config.EnableXiapeixnTest;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.annotation.AnnotationBeanNameGenerator;
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * 是 BeanFactoryPostProcessor 的实现类
- * <p>
  * 可以动态注册bean
  */
 @Configuration
-public class BeanRegistry implements BeanDefinitionRegistryPostProcessor {
+public class BeanRegistry implements BeanDefinitionRegistryPostProcessor , PriorityOrdered, Ordered {
 
    protected volatile Object filed;
 
     /**
+     *   (先执行实现) PriorityOrdered
+     *   (后执行)Ordered ,
+     *   最后执行没有实现顺序接口的;
+     *
+     *  参考 org.springframework.context.support.AbstractApplicationContext.refresh()  invokeBeanFactoryPostProcessors
+     * @return
+     */
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+
+    /**
      * 先执行postProcessBeanDefinitionRegistry方法
-     *     在bean 保存加载 但是没有初始化
      * 在执行postProcessBeanFactory方法
      */
     @Override

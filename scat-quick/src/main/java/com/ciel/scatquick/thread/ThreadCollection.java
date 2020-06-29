@@ -13,8 +13,6 @@ public class ThreadCollection {
 
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
-
-
         //线程安全的集合
         Map<String, String> map = new HashMap<>();
 

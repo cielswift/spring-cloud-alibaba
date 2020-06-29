@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
@@ -61,13 +62,14 @@ public class SchedulingTaskConfig {
      * 　（9）#:用于确定每个月第几个星期几，只能出现在DayofMonth域。例如在4#2，表示某月的第二个星期三。
      */
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    //, 枚举; -区间 ; 0/4 从0秒启动,每4秒执行一次 ;  1 1 1 LW * ? 每个月最后一个工作日
+    // (星期写法)1-7,1周日,7 周六 ; 4#2 第二个星期4; 7L每个月最后一个周六
+    //, 枚举; -区间 ; 0/4 从0秒启动,每4秒执行一次 ;  1 1 1 LW * ? 每个月最后一个工作日
+    // (星期写法)1-7,1周日,7 周六 ; 4#2 第二个星期4; 7L每个月最后一个周六
 
-    //, 枚举; -区间 ; 0/4 从0秒启动,每4秒执行一次 ;  1 1 1 LW * ? 每个月最后一个工作日
-    // (星期写法)1-7,1周日,7 周六 ; 4#2 第二个星期4; 7L每个月最后一个周六
-    //, 枚举; -区间 ; 0/4 从0秒启动,每4秒执行一次 ;  1 1 1 LW * ? 每个月最后一个工作日
-    // (星期写法)1-7,1周日,7 周六 ; 4#2 第二个星期4; 7L每个月最后一个周六
+    @Autowired
+    protected JavaMailSender javaMailSender;
+
     @Scheduled(cron = "1 * * 14,15 * 1-7" )
     public void run2() throws FileNotFoundException, MessagingException {
 
@@ -75,7 +77,6 @@ public class SchedulingTaskConfig {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setSubject("测试邮件主题");
         simpleMailMessage.setText("测试邮件内容");
-
         simpleMailMessage.setTo("1018866480@qq.com");
         //simpleMailMessage.setCc(); //抄送
         simpleMailMessage.setFrom("15966504931@163.com"); //自己, 设置邮件发送者
@@ -90,7 +91,6 @@ public class SchedulingTaskConfig {
         mimeMessageHelper.setText("<h6 style='color:red'>内容</h6>",true);
         mimeMessageHelper.setTo("1018866480@qq.com");
         mimeMessageHelper.setFrom("15966504931@163.com"); //自己, 设置邮件发送者
-
         mimeMessageHelper.addAttachment("code.yml",ResourceUtils.getFile("classpath:bootstrap.yml"));
         javaMailSender.send(mimeMessage);
     }
@@ -129,6 +129,7 @@ public class SchedulingTaskConfig {
 
     @Autowired
     protected ApplicationContext applicationContext;
+
     /**
      * 发布事件
      */

@@ -26,7 +26,6 @@ public class AppEventPush implements ApplicationEventPublisherAware {
 
         AppEvn event = new AppEvn(this, address);
         publisher.publishEvent(event);
-        System.out.println(event);
 
     }
 

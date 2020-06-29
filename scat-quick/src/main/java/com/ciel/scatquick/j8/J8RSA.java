@@ -27,7 +27,7 @@ public class J8RSA {
 //　　     总结：公钥加密、私钥解密、私钥签名、公钥验签。
 
         //加密字符串
-        String message = "xiapeixin";
+        String message = "夏培鑫是你爹";
 
         //System.out.println("随机生成的公钥为:" + keyMap.get(0));
         // System.out.println("随机生成的私钥为:" + keyMap.get(1));

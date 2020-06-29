@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * 全局bean加载的拦截方法
+ *
+ *  参考 org.springframework.context.support.AbstractApplicationContext.refresh()  preInstantiateSingletons
+ *   getBean -> doGetBean -> createBean
+ *  尝试给bean 创建代理bean
+ *  org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#createBean(..) resolveBeforeInstantiation
  */
 @Component
 public class BeanLoadInter  implements BeanPostProcessor  {

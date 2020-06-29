@@ -1,6 +1,7 @@
 package com.ciel.scatquick;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
+import com.ciel.scatquick.algorithm.LockMid;
 import com.ciel.scatquick.aoptxspi.SpiInterface;
 import com.ciel.scatquick.beanload.AppListener;
 import com.ciel.scatquick.init.AppInitializer;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.xia.bean.XiapeixinFcs;
 import com.xia.bean.XiapexinFjs;
 import com.xia.config.*;
+import org.apache.commons.io.IOUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -31,6 +33,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -39,9 +42,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.ServiceLoader;
 import java.util.regex.Matcher;
@@ -127,7 +132,7 @@ public class ScatQuickApplication implements CommandLineRunner {
         SpringApplication springApplication = new SpringApplication(ScatQuickApplication.class);
 
         springApplication.addInitializers(new AppInitializer()); //添加初始化
-        springApplication.addListeners(new AppListener());
+        springApplication.addListeners(new AppListener()); //添加事件监听器
 
         springApplication.run(args);
 
@@ -222,46 +227,41 @@ public class ScatQuickApplication implements CommandLineRunner {
         System.out.println(resource);
         System.out.println(resource1);
 
-        InputStream resourceAsStream = ScatQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
+        //直接获取inputstream
+        InputStream resourceAsStream =
+                ScatQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
+        IOUtils.readLines(resourceAsStream,Charset.forName("utf-8")).forEach(System.err::println);
 
-        byte[] temp = new byte[1024 * 1024];
-        resourceAsStream.read(temp);
-        System.out.println(new String(temp));
-
-        URL resource2 = ScatQuickApplication.class.getClassLoader().getResource("./");
         //在使用 ClassLoader().getResource 获取路径时，不能以 "/" 开头，且路径总是从 classpath 根路径开始；
+        URL resource2 = ScatQuickApplication.class.getClassLoader().getResource("./");
         System.out.println(resource2);
+
+        //获取类路径下文件 //打jar 包报错 这是因为打包后Spring试图访问文件系统路径，但无法访问JAR中的路径。
+       // File cfgFile = ResourceUtils.getFile("classpath:./logback-spring.xml");
+
         //获取类路径下文件
-        File cfgFile = ResourceUtils.getFile("classpath:bootstrap.yml");
+        ClassPathResource classPathResource = new ClassPathResource("./logback-spring.xml");
+        InputStream inputStream = classPathResource.getInputStream();
+        IOUtils.readLines(inputStream, Charset.forName("utf-8")).forEach(System.out::println);
+
         //获取配置文件的配置信息;
-        //    @Autowired
+        // @Autowired
         ConfigurableApplicationContext context;
         //context.getEnvironment().getProperty("org.dromara.hmily.serializer")
 
         /**
          * 获取方法参数名称
          */
-        Method[] methods = CglibProxyFactory.class.getMethods();
+        Method[] methods = LockMid.class.getMethods();
         for (Method me : methods) {
+
+            //获取方法参数名称
             String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(me);
             System.out.println("METHOD_NAME:" + me.getName());
-
             if (parameterNames != null) {
                 Arrays.stream(parameterNames).forEach(System.out::print);
             }
         }
 
-//----------------------------------------------------------------------------------------------------------
-
-        //正则表达式
-        String reg = "\\d{2}\\w";
-        String str = "29c";
-        System.out.println(str.matches(reg));
-        Pattern pa = Pattern.compile(reg);
-        Matcher matcher = pa.matcher(str);
-
-        if (matcher.find()) {
-            //System.out.println(matcher.group(0));
-        }
     }
 }

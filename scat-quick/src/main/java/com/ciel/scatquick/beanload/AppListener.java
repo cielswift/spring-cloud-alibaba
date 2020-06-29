@@ -18,28 +18,24 @@ import java.util.Map;
  * ApplicationListener：事件监听器接口，定义通用方法onApplicationEvent：
  * ApplicationEventMulticaster：事件广播器接口，用于事件监听器的注册和事件的广播
  * ApplicationEventPublisher：事件发布者，调用ApplicationEventMulticaster中的multicastEvent方法
- *     触发广播器持有的监听器集合执行onApplicationEvent方法，从而完成事件发布
- *
- *     只要发布 AppEvn 事件就会触发
+ * 触发广播器持有的监听器集合执行onApplicationEvent方法，从而完成事件发布
+ * <p>
+ * 只要发布 AppEvn 事件就会触发
  */
 public class AppListener implements ApplicationListener<AppEvn> {
 
     @Override
     public void onApplicationEvent(AppEvn appEvn) {
 
-        System.out.println(String.format("class 收到事件: 名称%s ,源 %s ",appEvn.getName(),appEvn.getSource().getClass().getName()));
+        System.out.println(String.format("class 收到事件: 名称%s ,源 %s ", appEvn.getName(), appEvn.getSource().getClass().getName()));
 
-
+        /**
+         * 扫描包下的class
+         */
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        final String RESOURCE_PATTERN = "/**/*.class";
-        // 扫描的包名
-        final String BASE_PACKAGE = "com.xxx";
-        Map<String,Class<?>> classCache = new HashMap<>();
-
         try {
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
-                    + ClassUtils.convertClassNameToResourcePath(BASE_PACKAGE)
-                    + RESOURCE_PATTERN;
+                    + ClassUtils.convertClassNameToResourcePath("com.ciel") + "/**/*.class";
 
             Resource[] resources = resourcePatternResolver.getResources(pattern);
 
@@ -47,12 +43,13 @@ public class AppListener implements ApplicationListener<AppEvn> {
 
             for (Resource resource : resources) {
                 if (resource.isReadable()) {
+
                     MetadataReader reader = readerFactory.getMetadataReader(resource);
                     //扫描到的class
                     String className = reader.getClassMetadata().getClassName();
                     Class<?> clazz = Class.forName(className);
 
-                    System.out.println(String.format(">>>%s<<<",className));
+                    System.out.println(String.format(">>%s<<", clazz.getName()));
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

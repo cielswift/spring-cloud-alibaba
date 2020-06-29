@@ -3,9 +3,9 @@ package com.ciel.scatquick.controller;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
-import com.sun.beans.editors.IntegerEditor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.UUIDEditor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,14 +17,16 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * 全局异常处理 @RestControllerAdvice  全局返回处理 ResponseBodyAdvice 全局参数预处理@InitBinder
@@ -47,12 +49,9 @@ public class AfterGlobalExceptionReturnController implements ResponseBodyAdvice<
             System.out.println("===PARAM ADVANCE ACTION===");
         }
         if ("type".equals(binder.getObjectName())) {
-            binder.registerCustomEditor(Integer.class, new IntegerEditor(){
-                @Override
-                public void setAsText(String text) throws IllegalArgumentException {
-                    super.setAsText(text);
-                }
-            });
+
+            binder.registerCustomEditor(Integer.class,new UUIDEditor());
+
             System.out.println("===PARAM ADVANCE ACTION===");
         }
     }
