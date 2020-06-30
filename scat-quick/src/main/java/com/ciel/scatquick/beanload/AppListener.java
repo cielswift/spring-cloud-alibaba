@@ -53,7 +53,7 @@ public class AppListener implements ApplicationListener<AppEvn> {
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("读取class失败");
+            System.err.println("==READ CLASS DEFAULT==");
         }
     }
 }

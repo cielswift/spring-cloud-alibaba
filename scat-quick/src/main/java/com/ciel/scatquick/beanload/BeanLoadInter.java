@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 全局bean加载的拦截方法
  *
  *  参考 org.springframework.context.support.AbstractApplicationContext.refresh()  preInstantiateSingletons
- *   getBean -> doGetBean -> createBean
+ *   getBean -> doGetBean -> createBean  已创建的bean 缓存到singletonObject (Map中)
  *  尝试给bean 创建代理bean
  *  org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#createBean(..) resolveBeforeInstantiation
  */

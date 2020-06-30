@@ -1,11 +1,10 @@
 package com.ciel.scacommons.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.ciel.scaapi.util.Faster;
 import com.ciel.scaentity.entity.ScaUser;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class MybatisPlusAuto implements MetaObjectHandler {
@@ -20,9 +19,9 @@ public class MybatisPlusAuto implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("createDate", LocalDateTime.now(), metaObject); //mp自动填充
+        this.setFieldValByName("createDate", Faster.now(), metaObject); //mp自动填充
         this.setFieldValByName("deleted", 0, metaObject);
-        this.setFieldValByName("updateDate", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("updateDate", Faster.now(), metaObject);
 
         if(metaObject.getOriginalObject().getClass().equals(ScaUser.class)){
             this.setFieldValByName("version", 1, metaObject);
@@ -40,7 +39,7 @@ public class MybatisPlusAuto implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
 
-        this.setFieldValByName("updateDate", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("updateDate", Faster.now(), metaObject);
 
         /**
          *

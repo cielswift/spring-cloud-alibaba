@@ -18,8 +18,14 @@ import javax.annotation.PreDestroy;
  */
 @Component
 public class MyBean implements InitializingBean, DisposableBean, //加载 //销毁
-        BeanNameAware , //bean Name
-        BeanClassLoaderAware, //加载器
+
+        //实现该接口后，当所有单例 bean 都初始化完成以后， 容器会回调该接口的方法 afterSingletonsInstantiated。
+        //主要应用场合就是在所有单例 bean 创建完成之后，可以在该回调中做一些事情
+        SmartInitializingSingleton,
+
+        //带Aware 都是感知器
+        BeanNameAware , //bean Name 感知
+        BeanClassLoaderAware, //bean加载 感知
         BeanFactoryAware, //factor
         ApplicationContextAware,
         MessageSourceAware,
@@ -69,6 +75,11 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
         System.out.println("销毁方法");
     }
 
+    @Override
+    public void afterSingletonsInstantiated() {
+        System.out.println("bean 加载完成 后续处理");
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
@@ -108,4 +119,5 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
     public void setResourceLoader(ResourceLoader resourceLoader) {
         //获取资源加载器，这样获取外部资源文件
     }
+
 }

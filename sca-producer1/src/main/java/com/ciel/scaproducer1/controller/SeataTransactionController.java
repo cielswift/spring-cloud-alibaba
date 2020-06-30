@@ -47,11 +47,11 @@ public class SeataTransactionController {
         System.out.println("事务id" + xid);
 
         ScaUser user = userService.getById(sendUserId);
-        if (price.compareTo(user.getPrice()) == -1) {
+        if (price.compareTo(user.getPrice()) == 1) {
             return Result.error("余额不足");
         }
 
-        user.setPrice(user.getPrice().multiply(price));
+        user.setPrice(user.getPrice().subtract(price));
 
         if (userService.updateById(user)) { //更新余额
 

@@ -26,7 +26,7 @@ public class SeataTransactionController {
     @GetMapping("/seata")
     public Result seata(@RequestParam("price") BigDecimal price,
                         @RequestParam("sendId") Long sendUserId,
-                        @RequestParam("receive") Long receiveUserId) throws AlertException {
+                        @RequestParam("receiveId") Long receiveUserId) throws AlertException {
 
         String xid = RootContext.getXID();//分支事务id
 

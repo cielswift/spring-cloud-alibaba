@@ -59,7 +59,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 ObjectMapper objectMapper = new ObjectMapper();
                 //驼峰
                 objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
-
                 //null值字段不返回
                 objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 //null值字段不返回
