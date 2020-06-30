@@ -51,6 +51,7 @@ public class SeataTransactionController {
             return Result.error("余额不足");
         }
 
+
         user.setPrice(user.getPrice().subtract(price));
 
         if (userService.updateById(user)) { //更新余额

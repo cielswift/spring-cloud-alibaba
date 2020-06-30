@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ManyRqBodyController {
 
+    /**
+     *{
+     *     "username": "xiapeixin",
+     *     "price": "22.54"
+     * }
+     */
     @PostMapping("/bodyz")
     public Result bodyz(@MultiRequestBody ScaUser scaUser, @MultiRequestBody ScaGirls scaGirls){
 
