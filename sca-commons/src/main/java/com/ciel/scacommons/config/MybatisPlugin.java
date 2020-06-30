@@ -1,7 +1,9 @@
 package com.ciel.scacommons.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
@@ -211,11 +213,24 @@ public class MybatisPlugin {
     //@Bean id生产器配置 填充配置注入即可 这里没有用到全局配置
     public MybatisPlusPropertiesCustomizer plusPropertiesCustomizer() {
         return (pro) -> {
-            pro.getGlobalConfig().setIdentifierGenerator(identifierGenerator()); //id生产器
 
-            pro.getGlobalConfig().setBanner(true); //显示banner;
+            //全局配置
+            GlobalConfig globalConfig = pro.getGlobalConfig();
 
-            pro.getGlobalConfig().setMetaObjectHandler(new MybatisPlusAuto()); //自动填充
+            globalConfig.setIdentifierGenerator(identifierGenerator()); //id生产器
+
+            globalConfig.setBanner(true); //显示banner;
+
+            globalConfig.setMetaObjectHandler(new MybatisPlusAuto()); //自动填充
+
+            GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
+            dbConfig.setLogicDeleteValue("1");
+            dbConfig.setLogicNotDeleteValue("0");
+            dbConfig.setInsertStrategy(FieldStrategy.NOT_NULL);
+            dbConfig.setUpdateStrategy(FieldStrategy.NOT_NULL);
+
+            
+            globalConfig.setDbConfig(dbConfig);
 
         };
     }
