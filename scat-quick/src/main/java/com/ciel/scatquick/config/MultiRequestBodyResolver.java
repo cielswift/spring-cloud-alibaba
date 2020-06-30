@@ -3,6 +3,7 @@ package com.ciel.scatquick.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.ciel.scaentity.entity.ScaUser;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -18,20 +19,19 @@ import java.util.Set;
 /**
  * 多RequestBody解析器
  */
-public class MultiRequestBodyArgumentResolver implements HandlerMethodArgumentResolver {
+public class MultiRequestBodyResolver implements HandlerMethodArgumentResolver {
 
     private static final String JSONBODY_ATTRIBUTE = "JSON_REQUEST_BODY";
 
     /**
      * 设置支持的方法参数类型
-     *
-     * @param parameter 方法参数
-     * @return 支持的类型
+     * 支持带@MultiRequestBody注解的参数
      */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        // 支持带@MultiRequestBody注解的参数
-        return parameter.hasParameterAnnotation(MultiRequestBody.class);
+        return parameter.hasParameterAnnotation(MultiRequestBody.class); //判断参数的注解
+
+       // return parameter.getParameterType().isAssignableFrom(ScaUser.class); //判断参数的类型
     }
 
     /**
@@ -45,6 +45,7 @@ public class MultiRequestBodyArgumentResolver implements HandlerMethodArgumentRe
         String jsonBody = getRequestBody(webRequest);
 
         JSONObject jsonObject = JSON.parseObject(jsonBody);
+
         // 根据@MultiRequestBody注解value作为json解析的key
         MultiRequestBody parameterAnnotation = parameter.getParameterAnnotation(MultiRequestBody.class);
         //注解的value是JSON的key

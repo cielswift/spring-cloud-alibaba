@@ -42,8 +42,7 @@ public class TransactionalProducer implements PublicTransactional {
     protected TransactionConsumer transactionConsumer;
 
     @PreAuthorize("hasAnyRole('MANAGER') and hasAnyAuthority('CHANGE')")
-    @PutMapping(value = "/sec/{yy}",
-            produces = {"application/toString","application/json","application/xml"})
+    @PutMapping(value = "/sec/{yy}")
     public Result sec(@PathVariable("yy") @NotSex String y){
 
         //需要在类上增加@Validated 注解
