@@ -8,8 +8,7 @@ public class ThreadBase {
         new Thread(new Produce(g)).start();
         new Thread(new Consume(g)).start();
         new Thread(new Consume(g)).start();
-
-
+        
     }
 
     public static class Goods {
