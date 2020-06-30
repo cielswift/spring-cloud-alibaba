@@ -2,4 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ciel.scacommons.mapper.ScaUserMapper">
 
+    <resultMap id="scaUser" type="com.ciel.scaentity.entity.ScaUser">
+        <id column="id" property="id"/>
+
+        <association property="app" column="app" select="com.ciel.mapper.AppCrud.appsByUserId" fetchType="lazy">
+
+        </association>
+
+        <collection property="apps" column="id" select="com.ciel.mapper.AppCrud.appsByUserId" fetchType="lazy">
+
+        </collection>
+    </resultMap>
+
+
+    <select id="myPage">
+        SELECT * FROM  sca_user  ${ew.customSqlSegment}
+    </select>
+
+    <update id="myChange">
+        UPDATE sca_user SET ${ew.sqlSet} ${ew.customSqlSegment}
+    </update>
+
+    <select id="myList">
+        SELECT ${ew.sqlSelect}  FROM  sca_user  ${ew.customSqlSegment}
+    </select>
+
 </mapper>

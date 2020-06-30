@@ -39,6 +39,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -48,6 +49,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.ServiceLoader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

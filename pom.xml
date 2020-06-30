@@ -91,17 +91,16 @@
         </dependency>
 
         <!--        <dependency> &lt;!&ndash;excel工具&ndash;&gt;-->
-<!--            <groupId>com.github.liaochong</groupId>-->
-<!--            <artifactId>myexcel</artifactId>-->
-<!--            <version>3.4.2</version>-->
-<!--        </dependency>-->
+        <!--            <groupId>com.github.liaochong</groupId>-->
+        <!--            <artifactId>myexcel</artifactId>-->
+        <!--            <version>3.4.2</version>-->
+        <!--        </dependency>-->
 
         <dependency> <!--excel工具-->
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>2.1.6</version>
         </dependency>
-
 
         <dependency> <!--自动生成get,set-->
             <groupId>org.projectlombok</groupId>
@@ -132,7 +131,22 @@
             <artifactId>cglib</artifactId>
             <version>3.3.0</version>
         </dependency>
+
+        <dependency> <!--二维码-->
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
+        <dependency> <!--二维码-->
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
     </dependencies>
+
+
 
     <!-- dependencyManagement父类管理依赖版本 只是声明依赖 不引入jar包 -->
     <dependencyManagement>

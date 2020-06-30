@@ -12,7 +12,6 @@ public class ThreadCountD {
         //减法计数器
         CountDownLatch countDownLatch = new CountDownLatch(2); //计数器次数
 
-
         new Thread(new ThreadA(countDownLatch)).start();
         new Thread(new ThreadB(countDownLatch)).start();
         new Thread(new ThreadC(countDownLatch)).start();

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+//@CrossOrigin(value = "*") //允许这个controller所有跨域
 public class ManyRqBodyController {
 
     /**

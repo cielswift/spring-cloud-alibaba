@@ -33,10 +33,14 @@ import java.util.Map;
 public class RestRpcController {
     /**
      * 注入service,基于dubbo协议;
+     *   check是否检查 ;timeout 超时时间
+     *   url = "127.0.0.1:20880"跳过注册中调用
+     *   loadbalance  *负载均衡策略，合法值包括：随机，轮循，最少活跃; random, roundrobin, leastactive
      */
-    @Reference
+    @Reference(check = false,timeout = 3000,loadbalance = "roundrobin")
     protected ApplicationServer applicationServer;
 
+    
     @Autowired
     protected RestTemplate restTemplate;
 

@@ -70,6 +70,11 @@
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
+        <dependency> <!--kafka-->
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <dependency> <!--security相关-->
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
@@ -169,6 +174,12 @@
         <!--            <artifactId>sharding-transaction-base-seata-at</artifactId>-->
         <!--            <version>4.1.0</version>-->
         <!--        </dependency>-->
+
+        <dependency> <!--支付宝-->
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.10.38.ALL</version>
+        </dependency>
 
     </dependencies>
 
