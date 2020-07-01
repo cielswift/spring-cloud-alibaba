@@ -77,7 +77,8 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
 
     @Override
     public void afterSingletonsInstantiated() {
-        System.out.println("bean 加载完成 后续处理");
+
+        System.err.println("===================bean 加载完成 后续处理=======================");
     }
 
 
