@@ -55,7 +55,6 @@ public class RestRpcController {
     @Autowired
     protected ApplicationContext applicationContext;
 
-
     @GetMapping("/rpcs")
     public Result rpcs(){
 
@@ -81,11 +80,9 @@ public class RestRpcController {
         map.put("put",puts);
         map.put("del",xiazhi);
 
-
         ScaApplication scaApplication = new ScaApplication();
         scaApplication.setName("app");
         scaApplication.setCreateDate(Faster.now());
-
 
         ScaApplication select = applicationServer.select(scaApplication);
 
@@ -168,7 +165,7 @@ public class RestRpcController {
 
 
     /*
-    #####################################################################################################
+    #############################################################################
      */
 
     @Autowired
@@ -185,7 +182,8 @@ public class RestRpcController {
         boolean isOk =
                 false;
         try {
-            isOk = transactional10x.hmilyTransaction(money, 425752943532056576L,425752880537804800L,1);
+            isOk = transactional10x.hmilyTransaction(money, 425752943532056576L,
+                    425752880537804800L,1);
         } catch (AlertException e) {
 
            throw new AlertException("调用异常");

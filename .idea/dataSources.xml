@@ -13,5 +13,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://127.0.0.1:1671/spring_alibaba</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="mysql-local-1672" uuid="2df843c5-ccc8-47bd-8055-e1e82ea07ff1">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1:1672/spring_alibaba</jdbc-url>
+    </data-source>
   </component>
 </project>

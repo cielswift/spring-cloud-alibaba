@@ -7,98 +7,132 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ThreadBaseLock {
     public static void main(String[] args) {
 
-        Goodss gs = new Goodss();
+        Foods fs = new Foods("德国烤香肠");
 
-        new Thread(new Produces(gs)).start();
-        new Thread(new Produces(gs)).start();
-        new Thread(new Consumes(gs)).start();
-        new Thread(new Consumes(gs)).start();
+        new Thread(() -> {
+            while (true){
+                fs.produce();
+            }
+        },"PRODUCER1").start();
+
+        new Thread(() -> {
+            while (true){
+                fs.produce();
+            }
+        },"PRODUCER2").start();
+
+
+        new Thread(() -> {
+            while (true){
+                fs.ship();
+            }
+        },"SHIP1").start();
+
+        new Thread(() -> {
+            while (true){
+                fs.ship();
+            }
+        },"SHIP2").start();
+
+
+        new Thread(() -> {
+            while (true){
+                fs.consumer();
+            }
+        },"CONSUMER1").start();
+
+        new Thread(() -> {
+            while (true){
+                fs.consumer();
+            }
+        },"CONSUMER2").start();
 
     }
 
-    public static class Goodss {
+    public static class Foods {
         private String name;
         private int number;
-        private boolean flag;
 
-        public int addNumber() {
-            return number++;
+        private int flag;
+
+        public Foods(String name){
+            this.name=name;
         }
 
-        private Lock loc = new ReentrantLock(); // 创建了一个对象锁;
 
-        private Condition conP = loc.newCondition(); // 根据锁,来获取一个具有,等待,唤醒功能的这样一个对象;
-        private Condition conC = loc.newCondition(); // 或者这样说;返回一个绑定到lock实例的对象;
-        //一个锁上可以有多个Condition对象;
+        private Lock loc = new ReentrantLock(true); // 创建了一个对象锁; 公平锁
 
-        public void produce(String name) throws Exception {
+        //根据锁,来获取一个具有,等待,唤醒功能的这样一个对象
+        //或者这样说;返回一个绑定到lock实例的对象
+        //一个锁上可以有多个Condition对象
 
-            loc.lock(); // (显式,手动的)获取锁;synchronized是隐式的锁;这个显式;
+        private Condition pro = loc.newCondition(); //生产
+        private Condition ship = loc.newCondition(); //运输
+        private Condition con = loc.newCondition(); //消费
+
+        public void produce()  {
+
+            // (显式,手动的)获取锁;synchronized是隐式的锁;这个显式;
+            loc.lock();
+
             try {
-                while (flag) {
-                    conP.await(); // 让生产线程等待;让以这个对象为锁的线程等待,并且它只能被以这个对象为锁的线程唤醒; (等待唤醒必须是同一个锁);
-                }                        //和生产线程代码呆在一起;
-                this.name = name;
-                this.addNumber();
-                System.out.println(Thread.currentThread().getName() + "生产者===" + this.name + "===" + this.number);
-                this.flag = true;
-                conC.signal();       //唤醒消费者线程(唤醒对方)
-
-            } finally  //如果程序出现异常,就会跳到对应的catch块,那也就不会释放锁了,所以写在finally里;(因为lock需要手动释放锁);
-            {
-                loc.unlock(); // (显式,手动的)释放锁;synchronized是隐式的锁;这个显式;
-            }
-        }
-
-        public void consume() throws Exception {
-            loc.lock(); // (显式)获取锁
-            try {
-                while (!flag) {
-                    conC.await(); //让消费线程等待;让以这个对象为锁的线程等待,并且它只能被以这个对象为锁的线程唤醒; (等待唤醒必须是同一个锁);
+                while (flag != 0) {
+                    pro.await();   //生产者等待 ,必须是0才能生产
                 }
-                System.out.println(Thread.currentThread().getName() + "消费者---" + this.name + "---" + this.number);
-                this.flag = false;
-                conP.signal(); // 唤醒生产者线程(唤醒对方)
+
+                number++;
+                System.out.println(Thread.currentThread().getName() + this.name + "===" + this.number);
+
+                this.flag = 1; //生产完成 运输状态
+
+                ship.signal();     //唤醒运输
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             } finally {
-                loc.unlock(); // (显式)释放锁
+                //如果程序出现异常,就会跳到对应的catch块,那也就不会释放锁了,所以写在finally里;(因为lock需要手动释放锁);
+                // (显式,手动的)释放锁;synchronized是隐式的锁;这个显式;
+                loc.unlock();
             }
-
-        }
-    }
-
-    public static class Produces implements Runnable {
-        private Goodss g;
-
-        public Produces(Goodss g) {
-            this.g = g;
         }
 
-        @Override
-        public void run() {
+        public void ship()  {
+            loc.lock();
             try {
-                while (true) {
-                    g.produce("茶叶蛋");
+                while (flag !=1) {
+                    ship.await();
                 }
-            } catch (Exception e) {
+                System.out.println(Thread.currentThread().getName() + this.name + "---" + this.number);
+
+                this.flag = 2; //运输完成 消费状态
+
+                con.signal();  //唤醒消费
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                loc.unlock();
             }
-        }
-    }
 
-    public static class Consumes implements Runnable {
-        private Goodss g;
-
-        public Consumes(Goodss g) {
-            this.g = g;
         }
 
-        @Override
-        public void run() {
+        public void consumer()  {
+            loc.lock();
             try {
-                while (true) {
-                    g.consume();
+                while (flag !=2) {
+                    con.await();
                 }
-            } catch (Exception e) {
+                System.out.println(Thread.currentThread().getName() + this.name + "---" + this.number);
+
+                this.flag = 0; //消费完成 生产状态
+
+                pro.signal();  //唤醒生产
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                loc.unlock();
             }
+
         }
     }
 
