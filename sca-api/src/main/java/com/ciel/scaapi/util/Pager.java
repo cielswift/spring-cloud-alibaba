@@ -6,11 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * page对象
  */
-public class Pager<T> extends Page<T> {
+@Getter
+@Setter
+public class Pager  implements Serializable {
+    public static final long serialVersionUID = 1L;
     /**
      * 当前页
      */
@@ -30,7 +34,7 @@ public class Pager<T> extends Page<T> {
      */
     private long pages;
 
-    public Pager(IPage<Object> page){
+    public Pager(IPage<?> page){
         this.current = page.getCurrent();
         this.size = page.getSize();
         this.total = page.getTotal();
@@ -40,47 +44,4 @@ public class Pager<T> extends Page<T> {
     public Pager(){
     }
 
-    @Override
-    public long getCurrent() {
-        return current;
-    }
-
-    @Override
-    public Page<T> setCurrent(long current) {
-        this.current = current;
-        return this;
-    }
-
-    @Override
-    public long getSize() {
-        return size;
-    }
-
-    @Override
-    public Page<T> setSize(long size) {
-        this.size = size;
-        return this;
-    }
-
-    @Override
-    public long getTotal() {
-        return total;
-    }
-
-    @Override
-    public Page<T> setTotal(long total) {
-        this.total = total;
-        return this;
-    }
-
-    @Override
-    public long getPages() {
-        return pages;
-    }
-
-    @Override
-    public IPage<T> setPages(long pages) {
-        this.pages = pages;
-        return this;
-    }
 }

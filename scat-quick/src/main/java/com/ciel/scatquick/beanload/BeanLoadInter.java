@@ -54,7 +54,7 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /**
+    /**2
      * 如果此方法返回一个非null对象，则Bean创建过程 会短路。唯一的后续处理是postProcessAfterInitialization
      *
      * 返回 null 继续进行默认实例化
@@ -84,7 +84,7 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    /**
+    /**1
      * bean的类型；如果不可预测，则返回{@code null}
      */
     @Override
@@ -92,12 +92,12 @@ public class BeanLoadInter  implements BeanPostProcessor,
         return beanClass;
     }
 
-    /**
+    /**3
      * 返回候选构造函数，如果未指定，则为{@code null
      */
     @Override
     public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, String beanName) throws BeansException {
-        return beanClass.getConstructors();
+        return null;
     }
 
     @Override

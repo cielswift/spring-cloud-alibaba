@@ -5,6 +5,7 @@ import com.ciel.scatquick.security.realm.ScaCusUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.core.Ordered;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,8 +19,17 @@ import java.util.Map;
 @Aspect //当前是一个切面类
 @Component
 
+//@Order(1)
 @Slf4j
-public class LogAspect {
+public class LogAspect implements Ordered {
+
+    /**
+     * 控制aop执行属顺序
+     */
+    @Override
+    public int getOrder() {
+        return  Ordered.HIGHEST_PRECEDENCE+1;
+    }
 
     /**
      *  切入点表达式 :

@@ -141,38 +141,8 @@ public class ScatQuickApplication implements CommandLineRunner {
         // ConfigurableApplicationContext app = SpringApplication.run(ScatQuickApplication.class, args);
     }
 
-    /**
-     * redis
-     */
-    @Bean
-    @Lazy
-    @Primary
-    public RedisTemplate<String, Object> redisString(RedisConnectionFactory factory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(factory);
-        // redisTemplate.setDefaultSerializer(RedisSerializer.string());
-        redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(RedisSerializer.json());
-
-        //下面代码解决LocalDateTime序列化与反序列化不一致问题
-        Jackson2JsonRedisSerializer<Object> j2jrs = new Jackson2JsonRedisSerializer<>(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        // 解决jackson2无法反序列化LocalDateTime的问题
-        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        om.registerModule(new JavaTimeModule());
-        om.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
-        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
-        j2jrs.setObjectMapper(om);
-        // 序列化 value 时使用此序列化方法
-        redisTemplate.setValueSerializer(j2jrs);
-        redisTemplate.setHashValueSerializer(j2jrs);
-        return redisTemplate;
-    }
-
     @Autowired
     protected ApplicationContext applicationContext;
-
     /**
      * spring的上下文对象,可以直接获取bean
      */

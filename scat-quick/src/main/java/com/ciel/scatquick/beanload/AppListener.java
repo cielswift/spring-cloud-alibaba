@@ -1,5 +1,6 @@
 package com.ciel.scatquick.beanload;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -22,6 +23,7 @@ import java.util.Map;
  * <p>
  * 只要发布 AppEvn 事件就会触发
  */
+@Slf4j
 public class AppListener implements ApplicationListener<AppEvn> {
 
     @Override
@@ -49,11 +51,12 @@ public class AppListener implements ApplicationListener<AppEvn> {
                     String className = reader.getClassMetadata().getClassName();
                     Class<?> clazz = Class.forName(className);
 
-                    System.out.println(String.format(">>%s<<", clazz.getName()));
+                    log.info("HIT THIS CLASS : {}",clazz.getName());
+
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("==READ CLASS DEFAULT==");
+            log.error("READ CLASS DEFAULT",e);
         }
     }
 }

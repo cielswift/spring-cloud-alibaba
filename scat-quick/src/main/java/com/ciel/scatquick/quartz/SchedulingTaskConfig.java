@@ -105,7 +105,7 @@ public class SchedulingTaskConfig {
     @Autowired
     protected ThreadPoolTaskExecutor taskExecutor;
 
-    @Scheduled(cron = "1/35 * * * * ?" )
+    @Scheduled(cron = "1/35 * * * 10 ?" )
     public void redisWrite(){
 
         threadPoolExecutor.submit(() -> {
@@ -133,7 +133,7 @@ public class SchedulingTaskConfig {
     /**
      * 发布事件
      */
-    @Scheduled(cron = "1/20 * * * * ?")
+    @Scheduled(cron = "1/20 * * * 10 ?")
     public void tes(){
 
         applicationContext.publishEvent(new AppEvn(applicationContext,"app发布事件"));

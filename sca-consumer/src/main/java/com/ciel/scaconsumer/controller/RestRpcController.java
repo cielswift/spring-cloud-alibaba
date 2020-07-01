@@ -40,7 +40,7 @@ public class RestRpcController {
     @Reference(check = false,timeout = 3000,loadbalance = "roundrobin")
     protected ApplicationServer applicationServer;
 
-    
+
     @Autowired
     protected RestTemplate restTemplate;
 

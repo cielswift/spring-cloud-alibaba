@@ -24,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sharding")
+
+@CacheConfig(cacheNames = "scagirls",cacheManager = "cacheManagerJSON")
 @Slf4j
 @AllArgsConstructor
 public class ShardingJDBCController {
@@ -66,8 +70,10 @@ public class ShardingJDBCController {
         return Result.ok().data(iScaUserService.list());
     }
 
+
     @GetMapping("/girls/list")
     @Logs
+    @Cacheable(value = "scagirls",keyGenerator = "autoGenMy")
     public Result girls() throws MissingServletRequestParameterException {
 
         scaGirlsMapper.deleteAll(7L);
