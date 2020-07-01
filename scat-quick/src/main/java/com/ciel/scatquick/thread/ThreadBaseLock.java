@@ -10,42 +10,42 @@ public class ThreadBaseLock {
         Foods fs = new Foods("德国烤香肠");
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 fs.produce();
             }
-        },"PRODUCER1").start();
+        }, "PRODUCER1").start();
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 fs.produce();
             }
-        },"PRODUCER2").start();
+        }, "PRODUCER2").start();
 
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 fs.ship();
             }
-        },"SHIP1").start();
+        }, "SHIP1").start();
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 fs.ship();
             }
-        },"SHIP2").start();
+        }, "SHIP2").start();
 
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 fs.consumer();
             }
-        },"CONSUMER1").start();
+        }, "CONSUMER1").start();
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 fs.consumer();
             }
-        },"CONSUMER2").start();
+        }, "CONSUMER2").start();
 
     }
 
@@ -55,8 +55,8 @@ public class ThreadBaseLock {
 
         private int flag;
 
-        public Foods(String name){
-            this.name=name;
+        public Foods(String name) {
+            this.name = name;
         }
 
 
@@ -70,7 +70,7 @@ public class ThreadBaseLock {
         private Condition ship = loc.newCondition(); //运输
         private Condition con = loc.newCondition(); //消费
 
-        public void produce()  {
+        public void produce() {
 
             // (显式,手动的)获取锁;synchronized是隐式的锁;这个显式;
             loc.lock();
@@ -96,10 +96,10 @@ public class ThreadBaseLock {
             }
         }
 
-        public void ship()  {
+        public void ship() {
             loc.lock();
             try {
-                while (flag !=1) {
+                while (flag != 1) {
                     ship.await();
                 }
                 System.out.println(Thread.currentThread().getName() + this.name + "---" + this.number);
@@ -115,10 +115,10 @@ public class ThreadBaseLock {
 
         }
 
-        public void consumer()  {
+        public void consumer() {
             loc.lock();
             try {
-                while (flag !=2) {
+                while (flag != 2) {
                     con.await();
                 }
                 System.out.println(Thread.currentThread().getName() + this.name + "---" + this.number);

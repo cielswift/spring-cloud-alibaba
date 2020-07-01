@@ -14,12 +14,11 @@ import java.util.concurrent.TimeUnit;
 public class ThreadPoolConfig {
     /**
      * jdk 原生线程池
-     * @return
      */
     @Bean
     public ThreadPoolExecutor threadPoolExecutor(){
 
-        return new ThreadPoolExecutor(32,64,2, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(64,64,2, TimeUnit.SECONDS,
                 new LinkedBlockingDeque<Runnable>(1024),
                 new ThreadFactoryBuilder().setNameFormat("CIEL-JDK-POOL-%d").build());
     }
