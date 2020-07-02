@@ -9,43 +9,15 @@ public class ThreadBaseLock {
 
         Foods fs = new Foods("德国烤香肠");
 
-        new Thread(() -> {
-            while (true) {
-                fs.produce();
-            }
-        }, "PRODUCER1").start();
+        new Thread(() -> { while (true) { fs.produce(); } }, "PRODUCER1").start();
+        new Thread(() -> { while (true) { fs.produce(); } }, "PRODUCER2").start();
 
-        new Thread(() -> {
-            while (true) {
-                fs.produce();
-            }
-        }, "PRODUCER2").start();
+        new Thread(() -> {while (true) { fs.ship(); } }, "SHIP1").start();
+        new Thread(() -> { while (true) { fs.ship(); } }, "SHIP2").start();
 
+        new Thread(() -> { while (true) { fs.consumer(); } }, "CONSUMER1").start();
+        new Thread(() -> { while (true) { fs.consumer(); } }, "CONSUMER2").start();
 
-        new Thread(() -> {
-            while (true) {
-                fs.ship();
-            }
-        }, "SHIP1").start();
-
-        new Thread(() -> {
-            while (true) {
-                fs.ship();
-            }
-        }, "SHIP2").start();
-
-
-        new Thread(() -> {
-            while (true) {
-                fs.consumer();
-            }
-        }, "CONSUMER1").start();
-
-        new Thread(() -> {
-            while (true) {
-                fs.consumer();
-            }
-        }, "CONSUMER2").start();
 
     }
 

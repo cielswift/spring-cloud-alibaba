@@ -97,11 +97,13 @@ public class RestRpcController {
     /**
      * Sentinel降级
      * value 自定义资源名
+     *  blockHandler :降级方法 ; 如果使用其他类里的函数,使用blockHandlerClass 指定类, 但是方法必须是 static; (控制台热点规则)
+     *  fallback :异常方法; (同上配合fallbackClass指定类)
+     *                  可以使用 exceptionsToIgnore指定要忽略的异常; exceptionsToTrace 来指定要跟踪的异常(默认所有异常);
      */
-    @SentinelResource(value = "d1", blockHandler = "d2", fallback = "d3")
-    @GetMapping("/d1")
-    public Result d1(String name) {
-
+    @SentinelResource(value = "resource", blockHandler = "block", fallback = "fall")
+    @GetMapping("/resource")
+    public Result d1(@RequestParam("name") String name) {
         /**
          * dubbo调用
          */
@@ -119,7 +121,6 @@ public class RestRpcController {
         }catch (Exception e){
             return Result.error("restTemplate 调用失败;");
         }
-
         /**
          * feign调用
          */
@@ -143,24 +144,18 @@ public class RestRpcController {
      * 热点参数限流异常：ParamFlowException
      *
      * 熔断降级,参数类型需要和原方法匹配,最后加上BlockException;
-     * 如果使用其他类里的函数,使用blockHandlerClass 指定类, 但是方法必须是 static;
      */
-    public Result d2(String name, BlockException be) {
-        String msg = null;
-        if(null != be){
-            msg = be.getClass().getName();
-        }
+    public Result block(String name, BlockException be) {
+        String msg = be != null && be.getMessage() != null ? be.getMessage() : "null--";
         return Result.error("熔断降级").data(msg);
     }
 
     /**
-     * 异常降级,抛出异常时调用,默认所有异常; 也有 fallbackClass
-     * 可以使用 exceptionsToIgnore指定要忽略的异常;
-     * <p>
-     * exceptionsToTrace 来指定要跟踪的异常(默认所有异常);
+     * 异常降级,抛出异常时调用,默认所有异常;
      */
-    public Result d3(String name, Throwable te) {
-        return Result.error("异常降级").data(te.getClass().getName());
+    public Result fall(String name, Throwable te) {
+        String msg = te != null && te.getMessage() != null ? te.getMessage() : "null--";
+        return Result.error("异常降级").data(msg);
     }
 
 
