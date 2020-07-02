@@ -34,6 +34,12 @@ import java.util.Map;
 
 @Component
 
+/**
+ * WebExceptionHandler是Spring-WebFlux的异常处理器顶层接口，
+ * 因此追溯到子类可以追踪到DefaultErrorWebExceptionHandler是Spring Cloud Gateway的全局异常处理器，
+ * 配置类是ErrorWebFluxAutoConfiguration
+ */
+
 @Getter
 @Setter
 public class JsonExceptionHandler implements ErrorWebExceptionHandler {
