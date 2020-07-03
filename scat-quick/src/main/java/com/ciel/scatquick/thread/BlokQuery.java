@@ -7,11 +7,11 @@ public class BlokQuery {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //阻塞队列
-        BlockingQueue blockingQueue = new SynchronousQueue<Runnable>(); //同步队列 只有1个元素
+        BlockingQueue<Runnable> blockingQueue = new SynchronousQueue<Runnable>(); //同步队列 只有1个元素
 
-        BlockingQueue blockingQueue1 = new ArrayBlockingQueue<>(1); //非阻塞队列
+        BlockingQueue<String> blockingQueue1 = new ArrayBlockingQueue<>(1); //非阻塞队列
 
-        BlockingQueue blockingQueue3 = new LinkedBlockingQueue<>(1<<4);
+        BlockingQueue<Runnable> blockingQueue3 = new LinkedBlockingQueue<>(1<<4);
 
         BlockingQueue blockingQueue2 = new DelayQueue(); //双端队列
 

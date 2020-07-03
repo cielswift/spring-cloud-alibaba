@@ -38,6 +38,8 @@ public interface MyBaseMapper<T> extends BaseMapper<T> {
     public static <T> String getOneImp(@Param("cls")Class<T> cls){
         TableName annotation = cls.getAnnotation(TableName.class);
         return String.format("SELECT * FROM %s limit 0, 1",annotation.value());
+
+        //else //return "SELECT * FROM %s  WHERE ID = #{cls.id} LIMIT 0,1";
     }
 
 

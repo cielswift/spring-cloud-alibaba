@@ -10,8 +10,9 @@ public class TryReentrantLock {
 
     public static void main(String[] args) throws InterruptedException {
 
+        Lock lock = new ReentrantLock(); //可重入锁
+        //  Lock lock = new ReentrantLock(); //可重入 ,公平锁
 
-        Lock lock = new ReentrantLock(); //可重入锁 //new ReentrantLock(true); //公平锁
         Condition condition = lock.newCondition(); //等待和唤醒的对象
 
         List<Integer> list = new ArrayList<>();
@@ -33,14 +34,8 @@ public class TryReentrantLock {
 
                     lock.unlock();
                 }
-
             }).start();
         }
-
-//        while (true) {
-//            System.out.println(list.get(0));
-//            Thread.sleep(1000);
-//        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
