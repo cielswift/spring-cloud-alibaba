@@ -95,9 +95,25 @@
             <version>1.1.0.RELEASE</version>
         </dependency>
 
-        <dependency> <!-- 2pc (两阶段提交协议)seata 分布式事务 客户端-->
+<!--        <dependency> &lt;!&ndash; seata 分布式事务 客户端&ndash;&gt;-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>-->
+<!--        </dependency>-->
+
+        <dependency> <!--seata 分布式事务-->
             <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+            <artifactId>spring-cloud-alibaba-seata</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.seata</groupId>
+                    <artifactId>seata-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
         </dependency>
 
 <!--        <dependency> &lt;!&ndash;tcc 协议 hmily分布式事务(不需要服务端)&ndash;&gt;-->

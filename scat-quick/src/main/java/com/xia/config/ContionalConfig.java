@@ -1,11 +1,13 @@
 package com.xia.config;
 
+import com.ciel.scatquick.ScatQuickApplication;
 import com.xia.bean.XiapeixinFas;
 import com.xia.bean.XiapeixinFbs;
 import com.xia.bean.XiapeixinFis;
 import com.xia.contional.WindowsSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -33,6 +35,7 @@ import java.util.List;
  * 使@ConfigurationProperties 注解的类生效,而不用使用 @Component 或 @Configuration
  */
 @EnableConfigurationProperties(XiapeixinFis.class)
+
 public class ContionalConfig {
 
     /**

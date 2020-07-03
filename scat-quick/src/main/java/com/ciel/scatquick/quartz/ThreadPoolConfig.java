@@ -15,13 +15,15 @@ public class ThreadPoolConfig {
     /**
      * jdk 原生线程池
      */
-    @Bean
+    @Bean("jdkThreadPoolExecutor")
     public ThreadPoolExecutor threadPoolExecutor(){
 
         return new ThreadPoolExecutor(64,64,2, TimeUnit.SECONDS,
                 new LinkedBlockingDeque<Runnable>(1024),
-                new ThreadFactoryBuilder().setNameFormat("CIEL-JDK-POOL-%d").build());
+                new ThreadFactoryBuilder().setNameFormat("CIEL-JDK-POOL-%d").build(),
+                new ThreadPoolExecutor.DiscardOldestPolicy());
     }
+
     /**
      * spring线程池
      */

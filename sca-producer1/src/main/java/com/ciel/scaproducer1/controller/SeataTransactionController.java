@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
 
 /**
  * seate 控制分布式事务
@@ -32,7 +38,6 @@ public class SeataTransactionController {
 
     protected ApplicationContext applicationContext;
 
-
     /**
      * 全局事务
      */
@@ -41,18 +46,20 @@ public class SeataTransactionController {
     @GetMapping("/seata")
     public Result seata(@RequestParam("price") BigDecimal price,
                         @RequestParam("sendId") Long sendUserId,
-                        @RequestParam("receive") Long receiveUserId) throws AlertException {
+                        @RequestParam("receive") Long receiveUserId) throws AlertException, InterruptedException, SQLException {
 
         String xid = RootContext.getXID();//分支事务id
         System.out.println("事务id" + xid);
 
         ScaUser user = userService.getById(sendUserId);
+
         if (price.compareTo(user.getPrice()) == 1) {
+            log.info("LAST MONEY IN NOT ");
             return Result.error("余额不足");
         }
 
+        ScaUser scaUser = user.setPrice(user.getPrice().subtract(price));
 
-        user.setPrice(user.getPrice().subtract(price));
 
         if (userService.updateById(user)) { //更新余额
 
@@ -63,11 +70,12 @@ public class SeataTransactionController {
             }
         }
 
-        if (price.compareTo(BigDecimal.TEN) == 0) {
+        if (price.compareTo(BigDecimal.TEN)  == 0) {
             throw new AlertException("10元主动异常 ,测试其他平台全局事务是否回滚");
         }
 
         return Result.ok("交易完成");
     }
+
 
 }

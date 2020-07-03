@@ -33,7 +33,6 @@ public class ThreadCollection {
         CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
         CopyOnWriteArraySet<String> set = new CopyOnWriteArraySet<>();
 
-
         while (true) {
             System.out.println("===========================");
             System.out.println("ConcurrentHashMap:" + cus.size());
@@ -44,22 +43,16 @@ public class ThreadCollection {
             System.out.println("===========================");
             Thread.sleep(1000);
         }
-
     }
 
     public static class Jobs implements Runnable {
-
         private Map<String, String> map;
-
         public Jobs(Map<String, String> map) {
             this.map = map;
         }
-
         @Override
         public void run() {
-
             for (int i = 0; i < 50000; i++) {
-
                 map.put(Thread.currentThread().getName() + i, "20");
             }
         }

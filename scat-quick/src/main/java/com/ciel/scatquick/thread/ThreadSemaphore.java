@@ -8,6 +8,10 @@ import java.util.concurrent.Semaphore;
 public class ThreadSemaphore {
 
     public static void main(String[] args) {
+
+
+
+
         Semaphore semaphore = new Semaphore(3); //控制线程并发数量 ,1个线程相当于同步代码
 
         Num num = new Num();
