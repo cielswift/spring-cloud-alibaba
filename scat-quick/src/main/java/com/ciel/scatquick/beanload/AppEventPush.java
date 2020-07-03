@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 事件发布器
+ * ApplicationEventPublisherAware 时间发布感知
  */
 @Component
 public class AppEventPush implements ApplicationEventPublisherAware {

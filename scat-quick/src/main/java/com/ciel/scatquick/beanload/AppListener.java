@@ -16,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ApplicationListener：事件监听器接口，定义通用方法onApplicationEvent：
- * ApplicationEventMulticaster：事件广播器接口，用于事件监听器的注册和事件的广播
- * ApplicationEventPublisher：事件发布者，调用ApplicationEventMulticaster中的multicastEvent方法
- * 触发广播器持有的监听器集合执行onApplicationEvent方法，从而完成事件发布
- * <p>
+ *  ApplicationListener：事件监听器接口，定义通用方法onApplicationEvent： 订阅事件
+ *  ApplicationEventMulticaster：事件广播器接口，用于事件监听器的注册和事件的广播
+ *  ApplicationEventPublisher：事件发布者，调用ApplicationEventMulticaster中的multicastEvent方法
+ *  触发广播器持有的监听器集合执行onApplicationEvent方法，从而完成事件发布
+ *
  * 只要发布 AppEvn 事件就会触发
  */
 @Slf4j

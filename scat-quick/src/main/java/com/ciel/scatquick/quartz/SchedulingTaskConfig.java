@@ -5,6 +5,7 @@ import com.ciel.scatquick.beanload.AppEvn;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ApplicationEventMulticaster;
@@ -121,7 +122,7 @@ public class SchedulingTaskConfig {
     }
 
     /**
-     * 事件
+     * 事件发布器 自定义
      */
 
     @Autowired
@@ -131,11 +132,18 @@ public class SchedulingTaskConfig {
     protected ApplicationContext applicationContext;
 
     /**
+     * 事件发布器 spring
+     */
+    @Autowired
+    protected ApplicationEventPublisher applicationEventPublisher;
+
+    /**
      * 发布事件
      */
     @Scheduled(cron = "1/20 * * * 10 ?")
     public void tes(){
 
+        //applicationEventPublisher.publishEvent();
         applicationContext.publishEvent(new AppEvn(applicationContext,"app发布事件"));
 
         appEventPush.sendEmail("japan tokyo");

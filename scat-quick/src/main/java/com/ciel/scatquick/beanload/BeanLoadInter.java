@@ -92,7 +92,7 @@ public class BeanLoadInter  implements BeanPostProcessor,
         return beanClass;
     }
 
-    /**3
+    /**
      * 返回候选构造函数，如果未指定，则为{@code null
      */
     @Override

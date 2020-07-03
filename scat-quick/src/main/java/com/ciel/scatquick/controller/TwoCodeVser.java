@@ -8,6 +8,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.joda.time.DateTime;
 import org.springframework.util.StringUtils;
@@ -25,6 +26,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,6 +104,8 @@ public class TwoCodeVser {
         System.out.println("解析结果:" + result.toString());
         System.out.println("二维码格式:" + result.getBarcodeFormat());
         System.out.println("二维码文本内容:" + result.getText());
+
+
 
 
         JSONObject jsonObject = new JSONObject();
