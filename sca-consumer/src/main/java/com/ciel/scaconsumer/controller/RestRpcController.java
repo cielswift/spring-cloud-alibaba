@@ -95,7 +95,7 @@ public class RestRpcController {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Sentinel降级
+     * Sentinel降级  (控制台热点规则) 可以配置例外情况 参数例外项
      * value 自定义资源名
      *  blockHandler :降级方法 ; 如果使用其他类里的函数,使用blockHandlerClass 指定类, 但是方法必须是 static; (控制台热点规则)
      *  fallback :异常方法; (同上配合fallbackClass指定类)

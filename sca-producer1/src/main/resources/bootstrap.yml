@@ -21,17 +21,19 @@ spring:
       primary: master  #设置默认的数据源或者数据源组,默认值即为master ; 两套配置的主库和从库相反
       druid: #druid 全局配置
         filters: stat #Druid内置提供一个StatFilter，用于统计监控信息
-        initial-size: 16
-        min-idle: 16
-        max-active: 32
-        time-between-eviction-runs-millis: 5000
+        initial-size: 16 #初始化大小
+        min-idle: 16 #最小
+        max-active: 32 #最大
+        time-between-eviction-runs-millis: 5000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
         validation-query: SELECT 1 FROM dual
+        max-wait:  6000  #配置获取连接等待超时的时间
+        min-evictable-idle-time-millis: 30000 # 配置一个连接在池中最小生存时间
       datasource:
         master:
           username: root
           password: ciel
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           type: com.alibaba.druid.pool.DruidDataSource
           druid:
             initial-size: 16 #单独配置
@@ -39,7 +41,7 @@ spring:
           username: root
           password: ciel
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/spring_alibaba1?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           type: com.alibaba.druid.pool.DruidDataSource
   cloud:
     nacos:  #使用nacos注册中心
@@ -181,14 +183,15 @@ spring:  #多文档模式,定义一些其他配置
 seata:
   enabled: true
   application-id: pro10
-  tx-service-group: my_test_tx_group　
+  #下面不能有空格 会报错
+  tx-service-group: my_test_tx_group
   enable-auto-data-source-proxy: true
   config:
     type: nacos
     nacos:
       namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68
       serverAddr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
-      group: DEFAULT_GROUP
+      group: SEATA_GROUP
   registry:
     type: nacos
     nacos:

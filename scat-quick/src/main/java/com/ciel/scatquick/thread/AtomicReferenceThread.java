@@ -18,7 +18,7 @@ public class AtomicReferenceThread {
         int stamp = stampedReference.getStamp(); //获得版本号
 
         //旧值 新值 版本号 下一个版本号
-        stampedReference.compareAndSet(10,11,stamp,stamp+=1);
+        stampedReference.compareAndSet(10,11,stamp, ++stamp);
 
         System.out.println(stampedReference.getStamp()); //版本号
         System.out.println(stampedReference.getReference()); //值
@@ -32,7 +32,7 @@ public class AtomicReferenceThread {
      */
     public static void lock(AtomicReference<Thread> cas) {
         while (!cas.compareAndSet(null, Thread.currentThread())) {
-            System.out.println("was get");
+            System.out.println("not get  try aging");
         }
     }
 
