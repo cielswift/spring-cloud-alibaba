@@ -48,7 +48,7 @@ public class SeataTransactionController {
                         @RequestParam("sendId") Long sendUserId,
                         @RequestParam("receive") Long receiveUserId) throws AlertException, InterruptedException, SQLException {
 
-        String xid = RootContext.getXID();//分支事务id
+        String xid = RootContext.getXID();//全局事务id
         System.out.println("事务id" + xid);
 
         ScaUser user = userService.getById(sendUserId);

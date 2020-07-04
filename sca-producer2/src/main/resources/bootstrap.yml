@@ -130,6 +130,7 @@ dubbo: #dubbo配置
     version: 1.0
     timeout: 600000  #10分钟
     retries: 0 #禁止重试 为了debug
+    loadbalance: roundrobin #负载均衡策略，合法值包括：随机，轮循，最少活跃; random, roundrobin, leastactive
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml

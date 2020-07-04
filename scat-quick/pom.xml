@@ -20,7 +20,6 @@
     </properties>
 
     <dependencies>
-
         <dependency> <!--web 方式启动-->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -167,6 +166,29 @@
             <artifactId>sharding-transaction-xa-core</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <dependency> <!--seata 分布式事务-->
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-seata</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.seata</groupId>
+                    <artifactId>seata-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <dependency> <!--sharding 整合seata-->
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-transaction-base-seata-at</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
 
         <!-- 使用BASE事务时，需要引入此模块 -->
         <!--        <dependency>-->

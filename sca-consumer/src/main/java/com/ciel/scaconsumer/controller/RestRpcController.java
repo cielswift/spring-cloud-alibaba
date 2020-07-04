@@ -100,8 +100,10 @@ public class RestRpcController {
      *  blockHandler :降级方法 ; 如果使用其他类里的函数,使用blockHandlerClass 指定类, 但是方法必须是 static; (控制台热点规则)
      *  fallback :异常方法; (同上配合fallbackClass指定类)
      *                  可以使用 exceptionsToIgnore指定要忽略的异常; exceptionsToTrace 来指定要跟踪的异常(默认所有异常);
+     *  defaultFallback: 默认的 fallback 函数名称，可选项，通常用于通用的 fallback 逻辑,
+     *                  其他类需要可以指定 fallbackClass 为对应的类的 Class
      */
-    @SentinelResource(value = "resource", blockHandler = "block", fallback = "fall")
+    @SentinelResource(value = "resource", blockHandler = "block", fallback = "fall",defaultFallback ="def" )
     @GetMapping("/resource")
     public Result d1(@RequestParam("name") String name) {
         /**
@@ -143,7 +145,7 @@ public class RestRpcController {
      * 系统保护异常：SystemBlockException
      * 热点参数限流异常：ParamFlowException
      *
-     * 熔断降级,参数类型需要和原方法匹配,最后加上BlockException;
+     * 熔断降级,参数类型需要和原方法匹配,最后加上BlockException; 返回类型需要与原方法相匹配
      */
     public Result block(String name, BlockException be) {
         String msg = be != null && be.getMessage() != null ? be.getMessage() : "null--";
@@ -158,6 +160,14 @@ public class RestRpcController {
         return Result.error("异常降级").data(msg);
     }
 
+    /**
+     * 若同时配置了 fallback 和 defaultFallback，则只有 fallback 会生效
+     * 方法参数列表需要为空，或者可以额外多一个 Throwable 类型的参数用于接收对应的异常
+     */
+    public Result def(Throwable te){
+        String msg = te != null && te.getMessage() != null ? te.getMessage() : "null--";
+        return Result.error("默认异常降级方法").data(msg);
+    }
 
     /*
     #############################################################################
