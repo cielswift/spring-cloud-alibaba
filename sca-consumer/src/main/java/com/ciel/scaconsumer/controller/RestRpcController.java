@@ -6,6 +6,7 @@ import com.ciel.scaapi.dubbo.ApplicationServer;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
+import com.ciel.scaconsumer.brex.BlockAndException;
 import com.ciel.scaconsumer.feignext.FuckMyLifeXiaPeiXin;
 import com.ciel.scaconsumer.feignext.PublicTransactional10x;
 import com.ciel.scaconsumer.feignext.PublicTransactional20x;
@@ -103,7 +104,9 @@ public class RestRpcController {
      *  defaultFallback: 默认的 fallback 函数名称，可选项，通常用于通用的 fallback 逻辑,
      *                  其他类需要可以指定 fallbackClass 为对应的类的 Class
      */
-    @SentinelResource(value = "resource", blockHandler = "block", fallback = "fall",defaultFallback ="def" )
+   // @SentinelResource(value = "resource", blockHandler = "block", fallback = "fall",defaultFallback ="def" )
+    @SentinelResource(value = "resource", blockHandlerClass = BlockAndException.class,blockHandler = "block",
+            fallbackClass = BlockAndException.class  , fallback = "exception", defaultFallback ="def" )
     @GetMapping("/resource")
     public Result d1(@RequestParam("name") String name) {
         /**

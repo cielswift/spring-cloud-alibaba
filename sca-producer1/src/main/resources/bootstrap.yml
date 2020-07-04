@@ -161,7 +161,6 @@ ribbon:
   ReadTimeout: 600000
   ConnectTimeout: 600000
 
-
 management:
   endpoints:
     web:
