@@ -1,4 +1,4 @@
-package com.ciel.scaproducer2.mq;
+package com.ciel.scaproducer2.mq.rocket;
 
 import com.ciel.scaentity.entity.ScaGirls;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;

@@ -1,4 +1,4 @@
-package com.ciel.scatquick.kafka.nativekafka;
+package com.ciel.scaproducer1.mq.kafka.nativekafka;
 
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;

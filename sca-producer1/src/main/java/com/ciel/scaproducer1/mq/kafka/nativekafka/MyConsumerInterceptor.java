@@ -1,4 +1,4 @@
-package com.ciel.scatquick.kafka.nativekafka;
+package com.ciel.scaproducer1.mq.kafka.nativekafka;
 
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecords;

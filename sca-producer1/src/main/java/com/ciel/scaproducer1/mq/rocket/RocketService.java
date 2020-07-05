@@ -1,8 +1,9 @@
-package com.ciel.scaproducer1.mq;
+package com.ciel.scaproducer1.mq.rocket;
 
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaentity.entity.ScaGirls;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -13,11 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 
 @Service
+@Slf4j
 public class RocketService {
 
-    @Autowired
-    protected IScaUserService userService;
-
+    /**
+     * rocket mq 发送器
+     */
     @Autowired
     protected RocketMQTemplate rocketMQTemplate;
 
@@ -38,7 +40,7 @@ public class RocketService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean rocketSend(ScaGirls scaGirls, String msg) throws AlertException {
+    public boolean rocketSend(ScaGirls scaGirls) throws AlertException {
 
         rocketMQTemplate.asyncSend("ciel-top-name",scaGirls,sendCallback,5000);
 

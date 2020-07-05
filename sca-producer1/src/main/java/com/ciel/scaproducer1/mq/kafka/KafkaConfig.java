@@ -1,8 +1,7 @@
-package com.ciel.scatquick.kafka;
+package com.ciel.scaproducer1.mq.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -19,7 +18,6 @@ public class KafkaConfig {
     /**
      * kafka 手动配置
      */
-
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>>
     kafkaListenerContainerFactory(ConsumerFactory<String, String> consumerFactory) {

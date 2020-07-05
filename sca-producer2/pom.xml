@@ -122,6 +122,11 @@
             <version>2.1.0</version>
         </dependency>
 
+        <dependency> <!--kafka-->
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
 <!--        <dependency> &lt;!&ndash;tcc 协议 hmily分布式事务(不需要服务端)&ndash;&gt;-->
 <!--            <groupId>org.dromara</groupId>-->
 <!--            <artifactId>hmily-spring-boot-starter-springcloud</artifactId>-->

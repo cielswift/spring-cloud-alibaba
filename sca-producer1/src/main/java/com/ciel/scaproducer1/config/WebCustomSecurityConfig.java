@@ -68,7 +68,7 @@ public class WebCustomSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/get/**"
-                ,"/post/**","/put/**","/del/**","/seata/**","/rocket/**");
+                ,"/post/**","/put/**","/del/**","/seata/**","/mq/**");
     }
 
     /**
