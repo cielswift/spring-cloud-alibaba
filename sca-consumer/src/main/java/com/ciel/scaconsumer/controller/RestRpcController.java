@@ -1,6 +1,7 @@
 package com.ciel.scaconsumer.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.ciel.scaapi.dubbo.ApplicationServer;
 import com.ciel.scaapi.exception.AlertException;
@@ -14,6 +15,7 @@ import com.ciel.scaentity.entity.ScaApplication;
 import com.ciel.scaentity.entity.ScaGirls;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
@@ -43,7 +45,12 @@ public class RestRpcController {
 
 
     @Autowired
-    protected RestTemplate restTemplate;
+    @Qualifier("restTemplateIp")
+    protected RestTemplate restTemplateIp;
+
+    @Autowired
+    @Qualifier("restTemplateServer")
+    protected RestTemplate restTemplateServer;
 
     @Autowired
     protected FuckMyLifeXiaPeiXin fuckMyLifeXiaPeiXin;
@@ -112,17 +119,21 @@ public class RestRpcController {
         /**
          * dubbo调用
          */
+
+        ContextUtil.getContext().getName(); //Sentinel 上下文
+
         ScaApplication scaApplication = new ScaApplication();
         scaApplication.setName("app");
         scaApplication.setCreateDate(Faster.now());
         ScaApplication select = applicationServer.select(scaApplication);
+
 
         /**
          * restTemplate 调用
          */
         String object = null;
         try{
-             object = restTemplate.getForObject("https://cielswift.github.io/", String.class);
+             object = restTemplateIp.getForObject("https://cielswift.github.io/", String.class);
         }catch (Exception e){
             return Result.error("restTemplate 调用失败;");
         }

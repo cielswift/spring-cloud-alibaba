@@ -28,7 +28,7 @@ public class SysUtils {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        if(Faster.isNotNull(authentication)){
+        if(!Faster.isNull(authentication)){
             return authentication.getPrincipal();
         }
         return null;

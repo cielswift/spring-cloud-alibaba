@@ -84,7 +84,7 @@ public class LogAspect implements Ordered {
         Object methodReturn = point.proceed();
 
         String result = "null";
-        if(Faster.isNotNull(methodReturn)){
+        if(!Faster.isNull(methodReturn)){
             result = methodReturn.toString();
         }
 

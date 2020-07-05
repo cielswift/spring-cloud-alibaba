@@ -11,6 +11,7 @@ import feign.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -95,13 +96,26 @@ public class SCAConsumerApplication {
      */
     @SentinelRestTemplate(blockHandler = "r2", blockHandlerClass = SCAConsumerApplication.class,
                           fallback = "r3",fallbackClass = SCAConsumerApplication.class )
-    @Bean
+    @Bean("restTemplateIp")
     //@LoadBalanced //不能访问ip加端口,因为这个一个负载均衡器; 加上这个restTemplate 只能使用服务名访问;
-    public RestTemplate restTemplate(){
+    @Primary
+    public RestTemplate restTemplateIp(){
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }
+
+
+    @SentinelRestTemplate(blockHandler = "r2", blockHandlerClass = SCAConsumerApplication.class,
+            fallback = "r3",fallbackClass = SCAConsumerApplication.class )
+    @Bean("restTemplateServer")
+    @LoadBalanced //根据服务名称 进行负载均衡
+    public RestTemplate restTemplateServer(){
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        return restTemplate;
+    }
+
 
 
     public static SentinelClientHttpResponse r2(HttpRequest request, byte[] body,
@@ -115,6 +129,7 @@ public class SCAConsumerApplication {
         System.err.println("rest 错误了::" + ex.getClass().getCanonicalName());
         return new SentinelClientHttpResponse("rest 错误了:: ");
     }
+
 
 
     @Bean("redisString")

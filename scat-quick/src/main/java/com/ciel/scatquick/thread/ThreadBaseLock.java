@@ -31,7 +31,6 @@ public class ThreadBaseLock {
             this.name = name;
         }
 
-
         private Lock loc = new ReentrantLock(true); // 创建了一个对象锁; 公平锁
 
         //根据锁,来获取一个具有,等待,唤醒功能的这样一个对象

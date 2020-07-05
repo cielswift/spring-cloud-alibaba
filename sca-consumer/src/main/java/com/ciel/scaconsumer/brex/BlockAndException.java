@@ -14,7 +14,7 @@ import java.util.Map;
 @Slf4j
 public final class BlockAndException {
     private BlockAndException(){}
-    public static final  Map<String, String> EXCEPTION_NAME  = new HashMap<>();
+    public static final  Map<String, String> EXCEPTION_NAME  = new HashMap<>(1<<3);
 
     static{
         EXCEPTION_NAME.put("com.alibaba.csp.sentinel.slots.block.flow.FlowException","流控异常(SENTINEL触发)");

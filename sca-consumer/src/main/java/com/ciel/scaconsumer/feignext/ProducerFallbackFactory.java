@@ -1,5 +1,6 @@
 package com.ciel.scaconsumer.feignext;
 
+import com.ciel.scaapi.util.Faster;
 import com.ciel.scaentity.entity.ScaGirls;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,7 @@ public class ProducerFallbackFactory implements FallbackFactory<FuckMyLifeXiaPei
         return new FuckMyLifeXiaPeiXin() {
             @Override
             public List<String> format(String name) {
-
-                LinkedList<String> strings = new LinkedList<>();
-                strings.add("get 异常");
-                return strings;
+                return Faster.toList("get 异常");
             }
 
             @Override
