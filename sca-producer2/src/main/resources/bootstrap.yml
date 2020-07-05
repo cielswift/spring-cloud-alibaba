@@ -64,11 +64,14 @@ spring:
     sampler:
       probability: 1 #percentage是采样比例
 
+
 #rocketmq 事务
 rocketmq:
-  producer:
-    group: transcation_2 #生产组
-  name-server: 127.0.0.1:9876
+  consumer:
+    listeners:
+      consumer_1:
+        ciel-top-name: true
+  name-server: 127.0.0.1:15020
 
 #tcc 分布式事务
 org:

@@ -20,9 +20,8 @@ public class AfterExceptionController implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result error(Exception e) {
-
         return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                String.format("SERVER ERROR: %s",e.getMessage()));
+                String.format("全局异常: %s %s",e.getClass().getName(),e.getMessage()));
     }
 
     @Override

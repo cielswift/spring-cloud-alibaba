@@ -70,7 +70,7 @@ spring:
 rocketmq:
   producer:
     group: transcation_1 #生产组
-  name-server: 127.0.0.1:9876
+  name-server: 127.0.0.1:15020
 
 #org:
 #  dromara:

@@ -59,7 +59,7 @@ spring:
           nacos: #从nacos 获取配置
             server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
             namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
-            dataId: sentinel-dev.json #文件名
+            dataId: sentinel-dev #文件名
             groupId: DEFAULT_GROUP
             data-type: json
             rule-type: flow
