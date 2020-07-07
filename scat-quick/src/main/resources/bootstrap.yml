@@ -44,10 +44,10 @@ spring:
   jackson:  #json 序列化策略
     property-naming-strategy: LOWER_CAMEL_CASE  #LOWER_CAMEL_CASE	userName	默认策略;KEBAB_CASE	user-name ;LOWER_CASE	username;SNAKE_CASE	user_name;UPPER_CAMEL_CASE	UserName
   redis:
-    database: 10
-    password: ciel
-    host: 127.0.0.1
-    port: 6510
+    database: 2
+    #password: root #ciel
+    host: 106.12.213.120
+    port: 6379 #
   mail:
     username: 15966504931@163.com #邮箱账户
     password: cielswift202 #授权码
@@ -83,7 +83,9 @@ spring:
   #整合el
   elasticsearch:
     rest:
-      uris: http://127.0.0.1:19390
+      uris:
+        - http://106.12.213.120:9200
+        #- http://127.0.0.1:19390
 
 #文件上传下载
 upload:

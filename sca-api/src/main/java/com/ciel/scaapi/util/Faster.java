@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +53,9 @@ public final class Faster {
         return FORMAT_STR.format(date);
     }
 
+    /**
+      转date
+     */
     public synchronized static Date parse(String date) throws ParseException {
         return FORMAT_STR.parse(date);
     }
@@ -78,7 +82,8 @@ public final class Faster {
      * 生产随机编号
      */
     public synchronized static String random(int len,String prefix){
-        Double rm = (Math.random() + System.currentTimeMillis())  * 0.75;
+        Double rm = (Math.random() + System.currentTimeMillis() +
+                ThreadLocalRandom.current().nextInt(62))  * 0.75;
         String replace = String.valueOf(rm).replaceAll("\\d\\.",prefix);
         int bw = len - replace.length();
         return bw<=0 ? replace.substring(0,len) : supplement(replace,bw);
@@ -137,7 +142,6 @@ public final class Faster {
         os.close();
         inputStream.close();
     }
-
 
     //求百分比 保留几位小数
     public static Double getPercentage(Number tag, Number all, int decimal) {
@@ -239,7 +243,6 @@ public final class Faster {
     }
 
     private Faster() { }
-
 
     /**
      * 匹配_加任意一个字符

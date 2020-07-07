@@ -1,6 +1,7 @@
 package com.ciel.scatquick.controller;
 
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scacommons.config.SnowFlake;
 import com.ciel.scatquick.el.ElasticMapper;
 import com.ciel.scatquick.el.Human;
 import lombok.AllArgsConstructor;
@@ -17,15 +18,13 @@ import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.sql.ResultSet;
+import java.util.*;
 
 @RestController
+@RequestMapping("/els")
 @Slf4j
 @AllArgsConstructor
 public class ELController {
@@ -36,41 +35,27 @@ public class ELController {
 
     protected RedisTemplate<String, Object> redisTemplate;
 
-    @GetMapping("/els")
-    public Result els() {
+    protected SnowFlake snowFlake;
 
-        //boolean cielswift = elRestTemplate.createIndex("cielswift"); //构建索引
-        //elasticsearchTemplate.deleteIndex()  //删除索引
+    @GetMapping("/index")
+    public Result index() {
+//        boolean cielswift = elRestTemplate.createIndex("cielswift"); //构建索引
+        //      elasticsearchTemplate.deleteIndex()  //删除索引
 
-        //boolean b = elasticsearchTemplate.putMapping(Human.class); //构建索引和type
+        boolean exists = elasticsearchTemplate.indexExists(Human.class);
+        if (exists) {
+            elasticsearchTemplate.deleteIndex(Human.class);
+        } else {
+            elasticsearchTemplate.putMapping(Human.class); //构建索引和type
+        }
+        return Result.ok().data(exists);
+    }
 
-        //使用queryStringQuery完成单字符串查询
-
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.queryStringQuery("夏培鑫"))
-                .withQuery(QueryBuilders.matchQuery("content", "生命漫长也短暂"))
-                //matchPhraseQuery //短语查询
-                //termQuery 严格查询 适合id
-                //multiMatchQuery 多个字段匹配某字符串
-
-                //之前的查询中，当我们输入“我天”时，ES会把分词后所有包含“我”和“天”的都查询出来，
-                //如果我们希望必须是包含了两个字的才能被查询出来，那么我们就需要设置一下Operator
-                .withQuery(QueryBuilders.matchQuery("content", "在心碎中认清遗憾")
-                        .operator(Operator.AND))
-
-                .withPageable(PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "id"))) //从0开始
-
-                //.withSort(SortBuilders.fieldSort("id").order(SortOrder.ASC));
-                .build();
-        //查询list
-        List<Human> humans = elasticsearchTemplate.queryForList(searchQuery, Human.class);
-
-        AggregatedPage<Human> humans1 = elasticsearchTemplate.queryForPage(searchQuery, Human.class);
-
-        Map<String, Object> mapping = elasticsearchTemplate.getMapping(Human.class);
-
+    @GetMapping("/add")
+    public Result add(){
+        long nextId = snowFlake.nextId(false);
         Human human = new Human();
-        human.setId(System.currentTimeMillis() + new Random().nextInt(80));
+        human.setId(nextId);
         human.setName("夏培鑫");
         human.setAge(24);
         human.setBirthday(new Date());
@@ -90,14 +75,54 @@ public class ELController {
                 "不要神的光环 只要你的平凡 此心此生无憾 生命的火已点燃");
         elasticMapper.save(human); //修改也是这个,id区分
 
-        redisTemplate.opsForValue().set(String.valueOf(System.currentTimeMillis()),human);
-
         // elasticMapper.deleteById(1590463896756L);
         // elasticsearchTemplate.delete(Human.class,String.valueOf(1590463896756L));
         // elasticMapper.saveAll(List<Human>...)
         Iterable<Human> all = elasticMapper.findAll(Sort.by("id").ascending());//正序
+        return Result.ok().data(all);
+    }
 
-///////////////////////////////////////////////////////////////////////////////////////
+    @GetMapping("/list/{page}/{size}")
+    public Result list(@PathVariable(value = "page",required = false) Integer page
+            ,@PathVariable(value = "size",required = false) Integer size){
+
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                //使用queryStringQuery完成单字符串查询
+                .withQuery(QueryBuilders.queryStringQuery("夏培鑫"))
+
+                //matchPhraseQuery //短语查询
+                .withQuery(QueryBuilders.matchQuery("content", "生命漫长也短暂"))
+
+                //termQuery 严格查询 适合id
+                //.withQuery(QueryBuilders.termQuery("id",9357135511429121L))
+
+                //multiMatchQuery 多个字段匹配某字符串
+                //.withQuery(QueryBuilders.multiMatchQuery("生命漫长", "content","name"))
+
+                //之前的查询中，当我们输入“我天”时，ES会把分词后所有包含“我”和“天”的都查询出来，
+                //如果我们希望必须是包含了两个字的才能被查询出来，那么我们就需要设置一下Operator
+                .withQuery(QueryBuilders.matchQuery("content", "在心碎中认清遗憾").operator(Operator.AND))
+
+                //分页从0开始
+                .withPageable(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")))
+
+                //.withSort(SortBuilders.fieldSort("id").order(SortOrder.ASC));
+                .build();
+        //查询list
+        List<Human> list = elasticsearchTemplate.queryForList(searchQuery, Human.class);
+        AggregatedPage<Human> pages = elasticsearchTemplate.queryForPage(searchQuery, Human.class);
+        Map<String, Object> mapping = elasticsearchTemplate.getMapping(Human.class);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("list",list);
+        map.put("page",pages);
+        map.put("mapping",mapping);
+
+        return Result.ok().data(map);
+    }
+
+    @GetMapping("/els")
+    public Result els() {
 
 //        must代表返回的文档必须满足must子句的条件，会参与计算分值；
 //        filter代表返回的文档必须满足filter子句的条件，但不会参与计算分值；
@@ -122,6 +147,7 @@ public class ELController {
 
         Aggregation brands = aggPage.getAggregation("count_uid");
 
+        return Result.ok().data(null);
 
         // 3.2、获取桶
 //        List<StringTerms.Bucket> buckets = brands.getBuckets();
@@ -157,7 +183,5 @@ public class ELController {
 //        NestedBuilder nb= AggregationBuilders.nested("negsted_path").path("quests");
 //（12）反转嵌套
 //        AggregationBuilders.reverseNested("res_negsted").path("kps ");
-
-        return Result.ok().data(humans);
     }
 }

@@ -26,6 +26,7 @@ import net.sf.jsqlparser.statement.update.Update;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,14 +48,9 @@ public class MybatisPlugin {
      *
      * @return
      */
-    @Value("${clusters.datacenterId}")
-    private Integer datacenterId;
-
-    @Value("${clusters.machineId}")
-    private Integer machineId;
-
     @Bean
-    public SnowFlake snowFlake() {
+    public SnowFlake snowFlake(@Value("${clusters.datacenterId}")Integer datacenterId ,
+                               @Value("${clusters.machineId}")Integer machineId) {
         return new SnowFlake(datacenterId, machineId);
     }
 
@@ -162,7 +158,7 @@ public class MybatisPlugin {
      * @return
      */
     @Bean
-    public IdentifierGenerator identifierGenerator() {
+    public IdentifierGenerator identifierGenerator(@Autowired  SnowFlake snowFlake) {
         return new IdentifierGenerator() {
 
             /**
@@ -172,7 +168,7 @@ public class MybatisPlugin {
             public Number nextId(Object entity) {
 //                //可以将当前传入的class全类名来作为bizKey,或者提取参数来生成bizKey进行分布式Id调用生成;
 //                String bizKey = entity.getClass().getName();
-                return snowFlake().nextId(false);
+                return snowFlake.nextId(false);
             }
 
             /**
@@ -217,7 +213,8 @@ public class MybatisPlugin {
             //全局配置
             GlobalConfig globalConfig = pro.getGlobalConfig();
 
-            globalConfig.setIdentifierGenerator(identifierGenerator()); //id生产器
+           // @Autowired  SnowFlake snowFlake
+            //globalConfig.setIdentifierGenerator(identifierGenerator()); //id生产器
 
             globalConfig.setBanner(true); //显示banner;
 
