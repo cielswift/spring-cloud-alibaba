@@ -1,5 +1,7 @@
 package com.ciel.scatquick.quartz;
 
+import com.alibaba.fastjson.JSON;
+import com.ciel.scaapi.retu.Result;
 import com.ciel.scatquick.beanload.AppEventPush;
 import com.ciel.scatquick.beanload.AppEvn;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -20,6 +22,7 @@ import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -137,10 +140,12 @@ public class SchedulingTaskConfig {
     @Autowired
     protected ApplicationEventPublisher applicationEventPublisher;
 
+
+
     /**
      * 发布事件
      */
-    @Scheduled(cron = "1/20 * * * 10 ?")
+    @Scheduled(cron = "1/30 * * * 10 ?")
     public void tes(){
 
         //applicationEventPublisher.publishEvent();
@@ -158,5 +163,23 @@ public class SchedulingTaskConfig {
     }
 
 
+    @Autowired
+    protected RestTemplate restTemplate;
+
+    @Scheduled(cron = "1/1 * * * 9 ?")
+    public void rest() throws InterruptedException, ExecutionException, TimeoutException {
+
+        Result result = threadPoolExecutor.submit(() -> {
+
+            String ali = restTemplate.getForObject("http://120.27.69.29:3000/", String.class);
+
+            String baid = restTemplate.getForObject("http://106.12.213.120:3000/", String.class);
+
+            return Result.ok().data(ali + baid);
+        }).get(1, TimeUnit.SECONDS);
+
+
+        System.out.println(JSON.toJSONString(result));
+    }
 
 }

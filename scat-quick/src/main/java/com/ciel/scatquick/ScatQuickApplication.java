@@ -38,9 +38,11 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +50,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.ServiceLoader;
@@ -186,6 +189,8 @@ public class ScatQuickApplication implements CommandLineRunner {
         //设置git 提交的名字
         // git config --global user.name "你的名字"
 
+        //nohup node vendors/server/app.js  >/dev/null 2>&1 &
+
         //spi机制
         ServiceLoader<SpiInterface> serviceLoader = ServiceLoader.load(SpiInterface.class);
         serviceLoader.forEach(t -> {
@@ -235,5 +240,12 @@ public class ScatQuickApplication implements CommandLineRunner {
             }
         }
 
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().set(0,new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        return restTemplate;
     }
 }

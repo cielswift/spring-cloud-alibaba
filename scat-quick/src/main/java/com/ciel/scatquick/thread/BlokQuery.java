@@ -45,7 +45,6 @@ public class BlokQuery {
         blockingQueue1.element(); //产看队首元素 没有会异常
         blockingQueue1.peek();  //产看队首元素 没有返回null
 
-
        // blockingQueue1.add(""); //添加 满了异常
      //   blockingQueue1.remove(""); //移除 空了异常
 

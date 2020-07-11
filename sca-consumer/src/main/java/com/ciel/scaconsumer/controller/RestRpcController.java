@@ -17,6 +17,7 @@ import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,9 @@ public class RestRpcController {
     @Autowired
     @Qualifier("restTemplateServer")
     protected RestTemplate restTemplateServer;
+
+    @Autowired
+    private LoadBalancerClient balancerClient; //ribbon 负载均衡器
 
     @Autowired
     protected FuckMyLifeXiaPeiXin fuckMyLifeXiaPeiXin;

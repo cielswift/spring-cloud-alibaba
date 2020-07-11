@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,9 +47,9 @@ public class MybatisPlugin {
     /**
      * 注入数据中心和机器序列
      *
-     * @return
      */
     @Bean
+    @Primary
     public SnowFlake snowFlake(@Value("${clusters.datacenterId}")Integer datacenterId ,
                                @Value("${clusters.machineId}")Integer machineId) {
         return new SnowFlake(datacenterId, machineId);

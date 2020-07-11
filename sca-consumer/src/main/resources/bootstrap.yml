@@ -20,7 +20,7 @@ server:
 
 spring:
   application:
-    name: consumer
+    name: consumer #注册到nacos后会作为服务名称,多个相同的服务名称为一个集群
   aop:
     proxy-target-class: true #使用cglib代理
   main:
@@ -38,6 +38,10 @@ spring:
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
         namespace: a998603d-3546-4ddc-9099-2ed82a6f3a68 #开发环境
         group: DEFAULT_GROUP #组
+        cluster-name: consumer #集群名称; 要末不指定, 要末集群下实例的集群名称相同
+        metadata: #指定元数据
+          myName: xiapeixin
+          youMother: fuck
       config: #配置中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
         file-extension: yaml  #指定读取的配置文件后缀; dataId默认${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}

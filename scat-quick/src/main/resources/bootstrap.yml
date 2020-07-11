@@ -87,13 +87,6 @@ spring:
         - http://106.12.213.120:9200
         #- http://127.0.0.1:19390
 
-#文件上传下载
-upload:
-  fileSaveUri: C:/ciel/nginx-1.17.7/public/file/
-  imgSaveUri: C:/ciel/nginx-1.17.7/public/image/
-  fileAccUri: http://127.0.0.1/file/
-  imgAccUri: http://127.0.0.1/image/
-
 #日志
 logging:
   config: classpath:logback-spring.xml
@@ -106,13 +99,17 @@ spring:
   profiles:
     active: dev #首先定义模式  dev模式
 
-custom-mod:  #多文档模式,定义一些其他配置
-  name: quick
-
 #id生成器的因子
 clusters:
   datacenterId: 3
   machineId: 2
+
+#文件上传下载
+upload:
+  fileSaveUri: C:/ciel/nginx-1.17.7/public/file/
+  imgSaveUri: C:/ciel/nginx-1.17.7/public/image/
+  fileAccUri: http://127.0.0.1/file/
+  imgAccUri: http://127.0.0.1/image/
 
 xiapeixinfgs:
   name: xiapeixinfgs

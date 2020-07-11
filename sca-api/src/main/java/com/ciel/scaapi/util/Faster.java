@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -98,6 +99,22 @@ public final class Faster {
     }
 
     /**
+     * 转为json
+     * @param objects
+     * @return
+     */
+    public static String toJson(Objects objects){
+        return JSON.toJSONString(objects);
+    }
+
+    /**
+     * json 转对象
+     */
+    public static <T> T parseJson(String json,Class<T> tClass){
+        return JSON.parseObject(json,tClass);
+    }
+
+    /**
      * 获取classpath下文件
      */
     public static File classPathFile(String path) throws IOException {
@@ -123,7 +140,6 @@ public final class Faster {
      * 文件下载
      */
     public static void download(File file, HttpServletResponse response) throws IOException {
-
         response.setCharacterEncoding(CharEncoding.UTF_8);
         response.addHeader("Content-Disposition", "attachment;filename=" +
                 URLEncoder.encode(file.getName(), CharEncoding.UTF_8).replace("+", "%20"));
@@ -133,7 +149,6 @@ public final class Faster {
         OutputStream os = response.getOutputStream();
 
         //IOUtils.copy(inputStream,os,1024*100);
-
         //循环写入输出流
         byte[] bytes = new byte[1024 * 100]; //100kb
         for (int len = inputStream.read(bytes); (len != -1); len = inputStream.read(bytes)) {
@@ -142,6 +157,17 @@ public final class Faster {
         os.close();
         inputStream.close();
     }
+
+    /**
+     * 响应二进制文件
+     */
+    public static void binary(InputStream inputStream,HttpServletResponse response) throws IOException {
+        ServletOutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(inputStream,outputStream,1024*100);
+        inputStream.close();
+        outputStream.close();
+    }
+
 
     //求百分比 保留几位小数
     public static Double getPercentage(Number tag, Number all, int decimal) {

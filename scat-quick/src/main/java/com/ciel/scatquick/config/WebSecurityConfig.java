@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/socket/**", "/error/**",
-                "/websocket/**", "/els/**", "/sharding/**", "/asyn/**","/bodyz/**");
+                "/websocket/**", "/els/**", "/sharding/**", "/asyn/**","/bodyz/**","/tco/**");
     }
 
     /**

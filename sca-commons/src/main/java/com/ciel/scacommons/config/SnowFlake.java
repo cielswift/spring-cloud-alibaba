@@ -1,16 +1,14 @@
 package com.ciel.scacommons.config;
 
-import java.util.TreeSet;
-
 /**
  * Twitter的分布式自增ID雪花算法snowflake
  **/
-public class SnowFlake {
+public  final class SnowFlake {
 
     /**
      * 起始的时间戳
      */
-    private final static long START_STMP = 1591878584417L;
+    private final static long START_STMP = System.currentTimeMillis();
 
     /**
      * 每一部分占用的位数
@@ -53,16 +51,14 @@ public class SnowFlake {
      * 产生下一个ID
      *
      * @param ifEvenNum 是否偶数 true 时间不连续全是偶数  时间连续 奇数偶数 false 时间不连续 奇偶都有  所以一般建议用false
-     * @return
      */
     public synchronized long nextId(boolean ifEvenNum) {
-        long currStmp = getNewstmp();
+        long currStmp = getNewSte();
         if (currStmp < lastStmp) {
             throw new RuntimeException("Clock moved backwards.  Refusing to generate id");
         }
-        /**
-         * 时间不连续出来全是偶数
-         */
+
+        //时间不连续出来全是偶数
         if (ifEvenNum) {
             if (currStmp == lastStmp) {
                 //相同毫秒内，序列号自增
@@ -89,42 +85,15 @@ public class SnowFlake {
     }
 
     private long getNextMill() {
-        long mill = getNewstmp();
+        long mill = getNewSte();
         while (mill <= lastStmp) {
-            mill = getNewstmp();
+            mill = getNewSte();
         }
         return mill;
     }
 
-    private long getNewstmp() {
+    private long getNewSte() {
         return System.currentTimeMillis();
-    }
-
-    public static void main(String[] args) {
-        /**
-         * 分布式数据中心id
-         * 机器id
-         */
-        SnowFlake snowFlake = new SnowFlake(5, 6);
-
-        TreeSet<Long> treeSet = new TreeSet<>();
-
-        for (int i = 0; i < 100000; i++) {
-            /**
-             * 时间连续 奇数偶数都有
-             */
-            long nextId = snowFlake.nextId(false);
-
-            treeSet.add(nextId);
-            System.out.println(nextId);
-
-            /**
-             * 时间不连续 原版 获取的id全是偶数
-             */
-            // long snowFlakeId = snowFlake.nextId(false);
-            //System.out.println(snowFlakeId);
-        }
-        System.out.println(treeSet.size());
     }
 
 }

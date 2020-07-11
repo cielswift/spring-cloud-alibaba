@@ -1,10 +1,13 @@
 package com.ciel.scatquick.aoptxspi;
 
 import com.ciel.scaapi.util.Faster;
+import com.ciel.scaapi.util.SysUtils;
 import com.ciel.scatquick.security.realm.ScaCusUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.Ordered;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,13 +70,13 @@ public class LogAspect implements Ordered {
 
         long str = System.currentTimeMillis();
 
-        HttpServletRequest request =
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = SysUtils.getRequest();
 
         Map<String, Serializable> info = new HashMap<>();
 
         try{
-            ScaCusUser  scaCusUser = (ScaCusUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            ScaCusUser  scaCusUser = (ScaCusUser) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal();
             info.put("name",scaCusUser.getUsername());
             info.put("id",scaCusUser.getId());
         }catch (Exception e){
@@ -88,9 +92,20 @@ public class LogAspect implements Ordered {
             result = methodReturn.toString();
         }
 
-        log.info("请求参数:{},请求方式:{},请求URL:{},请求IP:{}," +
+        Signature sig = point.getSignature();
+        MethodSignature msig = null;
+        if (!(sig instanceof MethodSignature)) {
+            throw new IllegalArgumentException("Logs注解只能用于方法");
+        }
+        msig = (MethodSignature) sig;
+        Object target = point.getTarget();
+        Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+
+        Logs annotation = currentMethod.getAnnotation(Logs.class);
+
+        log.info("{} -> 请求参数:{},请求方式:{},请求URL:{},请求IP:{}," +
                         "响应数据:{} ,当前用户:ID:{},当前用户:姓名:{}, 执行时间:{}ms",
-                point.getArgs(), request.getMethod(), request.getRequestURI(), request.getRemoteAddr(),
+                annotation.prefix(), point.getArgs(), request.getMethod(), request.getRequestURI(), request.getRemoteAddr(),
                 result, info.get("id"), info.get("name"), System.currentTimeMillis() - str);
 
         return methodReturn;
