@@ -45,6 +45,8 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     /**
      * 该bean将已经用属性值填充
+     *
+     * 后置处理 比如返回一个代理对象
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {

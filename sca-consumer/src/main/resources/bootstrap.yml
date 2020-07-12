@@ -56,7 +56,7 @@ spring:
 
     sentinel: #限流
       transport:
-        dashboard: 127.0.0.1:16820
+        dashboard: 127.0.0.1:16820 #控制台地址
         port: 8729 #端口配置会在应用对应的机器上启动一个 Http Server，该 Server 会与 Sentinel 控制台做交互。比如 Sentinel 控制台添加了一个限流规则，会把规则数据 push 给这个 Http Server 接收，Http Server 再将规则注册到 Sentinel 中。若端口冲突会自动向下探测可用的端口。
       datasource: #添加Nacos数据源配置
         c1:

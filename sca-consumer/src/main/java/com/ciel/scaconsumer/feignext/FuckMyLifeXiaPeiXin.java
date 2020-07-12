@@ -15,6 +15,8 @@ import java.util.List;
  * fallbackFactory: 异常处理工厂
  * configuration : 配置类
  * path: 被调用者的context-path 项目根路径
+ *
+ * 可以用 name = "${spring.application.name}" 从配置文件读取
  */
 @FeignClient(contextId = "producer10",name = "producer10",
         fallbackFactory = ProducerFallbackFactory.class,

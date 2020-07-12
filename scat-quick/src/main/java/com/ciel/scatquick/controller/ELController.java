@@ -19,8 +19,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.ResultSet;
 import java.util.*;
 
 @RestController
@@ -91,7 +89,7 @@ public class ELController {
                 .withQuery(QueryBuilders.queryStringQuery("夏培鑫"))
 
                 //matchPhraseQuery //短语查询
-                .withQuery(QueryBuilders.matchQuery("content", "生命漫长也短暂"))
+               // .withQuery(QueryBuilders.matchQuery("content", "生命漫长也短暂"))
 
                 //termQuery 严格查询 适合id
                 //.withQuery(QueryBuilders.termQuery("id",9357135511429121L))

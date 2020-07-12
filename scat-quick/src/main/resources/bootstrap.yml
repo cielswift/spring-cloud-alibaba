@@ -46,7 +46,7 @@ spring:
   redis:
     database: 2
     #password: root #ciel
-    host: 106.12.213.120
+    host: 120.27.69.29
     port: 6379 #
   mail:
     username: 15966504931@163.com #邮箱账户
@@ -84,7 +84,7 @@ spring:
   elasticsearch:
     rest:
       uris:
-        - http://106.12.213.120:9200
+        - http://120.27.69.29:9200
         #- http://127.0.0.1:19390
 
 #日志
