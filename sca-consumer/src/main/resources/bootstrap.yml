@@ -108,11 +108,16 @@ feign:
   sentinel: #开启对于sentinel的支持
     enabled: true
   client:  #feign超时
+    default-config: default #默认配置名称
     config:
-      default:
+      default: #全局默认配置
         connectTimeout: 600000
         readTimeout: 600000
-        loggerLevel: basic
+        loggerLevel: FULL
+      producer10:  #调用的微服务的名称
+        connectTimeout: 600000
+        readTimeout: 600000
+        loggerLevel: FULL
   compression:
     request:
       enabled: true #是否对请求进行GZIP压缩
@@ -138,7 +143,8 @@ management:
 logging: #日志
   config: classpath:logback-spring.xml
   level:
-    com.ciel.scaconsumer.controller: debug #配合feign 日志级别
+    com.ciel.scaconsumer.controller: debug #配合feign 这里只有debug feign才会打印日志
+    com.ciel.scaconsumer.feignext: debug #配合feign 这里只有debug feign才会打印日志
 
 ---
 spring: #多文档模式,定义一些其他配置

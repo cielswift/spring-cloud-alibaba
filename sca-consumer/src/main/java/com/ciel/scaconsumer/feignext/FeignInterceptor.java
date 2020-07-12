@@ -1,8 +1,10 @@
 package com.ciel.scaconsumer.feignext;
 
 import com.ciel.scaapi.util.SysUtils;
+import feign.Logger;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
  * 一般通过@FeignClient的configuration = FeignInterceptor.class 单独设置
  *
  */
-
 //@Component
 public class FeignInterceptor implements RequestInterceptor {
 

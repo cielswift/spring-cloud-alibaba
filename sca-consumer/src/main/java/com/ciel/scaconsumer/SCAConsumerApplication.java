@@ -3,6 +3,7 @@ package com.ciel.scaconsumer;
 import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import com.alibaba.cloud.sentinel.rest.SentinelClientHttpResponse;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.ciel.scaconsumer.feignext.FeignGlobalConfig;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.RoundRobinRule;
@@ -12,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -44,8 +46,9 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 开启feign调用
+ * defaultConfiguration 默认配置
  */
-@EnableFeignClients
+@EnableFeignClients(defaultConfiguration = FeignGlobalConfig.class)
 
 /**
  * oauth2授权服务器
@@ -58,20 +61,7 @@ public class SCAConsumerApplication {
         SpringApplication.run(SCAConsumerApplication.class, args);
     }
 
-    /**
-     * feign 日志打印级别
-     *
-     * NONE：默认的，不显示任何日志；
-     * BASIC：仅记录请求方法、URL、响应状态码及执行时间；
-     * HEADERS：除了BASIC中定义的信息之外，还有请求和响应的头信息；
-     * FULL：除了HEADERS中定义的信息之外，还有请求和响应的正文及元数据。
-     */
-    @Bean("feignLevel")
-    public Logger.Level level() {
-        return Logger.Level.FULL;
-    }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     /**
      * 负载均衡策略

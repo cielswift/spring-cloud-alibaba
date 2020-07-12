@@ -2,7 +2,6 @@ package com.ciel.scaconsumer.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.retu.Result;
-import com.ciel.scaapi.util.Faster;
 import com.ciel.scaentity.entity.ScaGirls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,6 +32,10 @@ public class RestTempController {
 
     @GetMapping("/get")
     public Result get() {
+
+        ServiceInstance choose = balancerClient.choose("producer10");
+        Map<String, String> metadata = choose.getMetadata(); //获取nacos上的元数据
+
         //选择调用的微服务的名称
         //ServiceInstance 封装了服务的基本信息，如 IP，端口
         ServiceInstance si = balancerClient.choose("producer10");
