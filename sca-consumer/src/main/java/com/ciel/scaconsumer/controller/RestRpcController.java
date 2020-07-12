@@ -8,6 +8,7 @@ import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaconsumer.brex.BlockAndException;
+import com.ciel.scaconsumer.feignext.FeignUrl;
 import com.ciel.scaconsumer.feignext.FuckMyLifeXiaPeiXin;
 import com.ciel.scaconsumer.feignext.PublicTransactional10x;
 import com.ciel.scaconsumer.feignext.PublicTransactional20x;
@@ -58,6 +59,9 @@ public class RestRpcController {
 
     @Autowired
     protected FuckMyLifeXiaPeiXin fuckMyLifeXiaPeiXin;
+
+    @Autowired
+    protected FeignUrl feignUrl;
     /**
      * feign协议
      */
@@ -69,6 +73,9 @@ public class RestRpcController {
 
     @GetMapping("/rpcs")
     public Result rpcs(){
+
+        String ali = feignUrl.ali();
+        System.out.println(ali);
 
         applicationContext.getEnvironment().getProperty("person.xiapeixin"); //获取配置
 

@@ -5,6 +5,7 @@ import com.ciel.scaapi.feign.FuckMyLifeFeign;
 import com.ciel.scaapi.util.SysUtils;
 import com.ciel.scaentity.entity.ScaGirls;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,14 @@ public class FeignController implements FuckMyLifeFeign {
         strings.add(nameh);
         strings.add(name);
         return strings;
+    }
+
+
+    @Override
+    @GetMapping(value = "/get/map")
+    public String getQueryMap(@SpringQueryMap ScaGirls scaGirls) {
+        System.out.println(scaGirls);
+        return scaGirls.getName();
     }
 
     @Override

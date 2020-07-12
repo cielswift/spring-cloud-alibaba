@@ -110,6 +110,18 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
+        <dependency> <!--feign 性能优化-->
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+            <version>11.0</version>
+        </dependency>
+
+<!--        <dependency> &lt;!&ndash;feign 性能优化&ndash;&gt;-->
+<!--            <groupId>io.github.openfeign</groupId>-->
+<!--            <artifactId>feign-okhttp</artifactId>-->
+<!--            <version>11.0</version>-->
+<!--        </dependency>-->
+
         <dependency> <!--knife4j 接口文档-->
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>

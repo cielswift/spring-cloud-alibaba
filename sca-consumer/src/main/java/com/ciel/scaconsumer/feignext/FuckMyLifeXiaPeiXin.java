@@ -2,7 +2,9 @@ package com.ciel.scaconsumer.feignext;
 
 import com.ciel.scaapi.feign.FuckMyLifeFeign;
 import com.ciel.scaentity.entity.ScaGirls;
+import feign.QueryMap;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +15,6 @@ import java.util.List;
  * fallbackFactory: 异常处理工厂
  * configuration : 配置类
  * path: 被调用者的context-path 项目根路径
- *
  */
 @FeignClient(contextId = "producer10",name = "producer10",
         fallbackFactory = ProducerFallbackFactory.class,
@@ -33,6 +34,13 @@ public interface FuckMyLifeXiaPeiXin extends FuckMyLifeFeign {
     @Override
     @GetMapping(value = "/get", headers = {"mother=fuck","name=ciel"})
     List<String> format(@RequestParam("name")String name);
+
+    /**
+     * get 请求传递对象 使用SpringQueryMap
+     */
+    @Override
+    @GetMapping(value = "/get/map")
+    String getQueryMap(@SpringQueryMap ScaGirls scaGirls);
 
     /**
      *Post方式可以传递对象需要使用@RequestBody

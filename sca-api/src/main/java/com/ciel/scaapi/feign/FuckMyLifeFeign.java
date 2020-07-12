@@ -15,6 +15,11 @@ public interface FuckMyLifeFeign {
     public List<String> format(String name);
 
     /**
+     * get 请求传递对象
+     */
+    public String getQueryMap(ScaGirls scaGirls);
+
+    /**
      * post 调用带参数
      */
     public String posts(ScaGirls scaGirls,Long id);

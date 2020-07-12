@@ -144,12 +144,6 @@
             <version>3.4.0</version>
         </dependency>
 
-        <dependency>  <!-- http请求库-->
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.7.2</version>
-        </dependency>
-
     </dependencies>
 
 
