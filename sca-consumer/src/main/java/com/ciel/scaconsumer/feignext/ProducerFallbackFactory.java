@@ -16,22 +16,24 @@ public class ProducerFallbackFactory implements FallbackFactory<FuckMyLifeXiaPei
 
     @Override
     public FuckMyLifeXiaPeiXin create(Throwable throwable) {
+
         return new FuckMyLifeXiaPeiXin() {
             @Override
             public List<String> format(String name) {
                 return Faster.toList("get 异常");
             }
-
+            @Override
+            public String getQueryMap(ScaGirls scaGirls) {
+                return "get 异常";
+            }
             @Override
             public String posts(ScaGirls scaGirls, Long id) {
                 return "post 异常";
             }
-
             @Override
             public String puts(ScaGirls scaGirls, Long id) {
                 return "put 异常";
             }
-
             @Override
             public String delete(Long id, String name) {
                 return "delete 异常";

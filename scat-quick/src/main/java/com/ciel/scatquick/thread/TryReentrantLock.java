@@ -17,14 +17,12 @@ public class TryReentrantLock {
 
         for (int i = 0; i < 1000; i++) {
             new Thread(() -> {
-
                 try {
+                    //lock.tryLock(); //尝试立即获取锁
                     lock.lock();
-
                     Integer integer = list.get(0);
                     integer += 1;
                     list.set(0, integer);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -62,18 +60,33 @@ public class TryReentrantLock {
         }
     }
 
+    public static volatile int cut  = 984;
+
     public static void stampedLock(){
+
         //读的过程中也允许获取写锁后写入 //乐观锁
         StampedLock stampedLock = new StampedLock();
-        long version = stampedLock.writeLock(); //写锁 版本
+
+        long version = stampedLock.writeLock(); //写锁 返回版本 0 表示失败
+        cut = 1 << 5; //操作资源
         stampedLock.unlockWrite(version); //释放写锁 根据版本
 
         long stamp = stampedLock.tryOptimisticRead(); // 获得一个乐观读锁,并返回版本号
+
         if (!stampedLock.validate(stamp)) { // 检查乐观读锁后是否有其他写锁发生 ;通过validate()去验证版本号
 
+            //说明有其他写锁
             long lockRead = stampedLock.readLock();// 获取一个悲观读锁
+            cut = 1 << 6; //操作资源
             stampedLock.unlockRead(lockRead); // 释放悲观读锁
         }
+
+        long tti = stampedLock.readLock();// 获取一个悲观读锁
+        long ws = stampedLock.tryConvertToWriteLock(tti);  //读锁转换为写锁
+
+        stampedLock.unlockRead(ws);
+        long sp = stampedLock.writeLock();
+        stampedLock.unlock(sp);
     }
 
     public static void main(String[] args){

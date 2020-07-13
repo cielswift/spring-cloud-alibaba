@@ -32,10 +32,31 @@ public class J8JVM<@RepAction("cc") T> {
 
         }
 
+
+        //java 运算符号
+
+        int a = 1 << 30;
+
+        int b = 64 >> 2;
+
+        int c = 6 ^ 3;
+//0110 //相同的为0，不同的为1
+//0011
+//0101
+        int d = 6 & 3;
+//0110 //一个为0即为0
+//0011
+//0010
+        int e = 6 | 3;
+//0110 //一个为1即为1
+//0011
+//0111
+        System.out.println(e);
+
         //jps
         //jstack 9950
 
-       // jhsdb jmap --heap --pid 1284
+        // jhsdb jmap --heap --pid 1284
 
 //        jstat -参数 线程id 执行时间（单位毫秒） 执行次数
 //        jstat -gc 19098 200 5  # 每隔200ms查看一次GC和堆的相关信息, 共查看5次

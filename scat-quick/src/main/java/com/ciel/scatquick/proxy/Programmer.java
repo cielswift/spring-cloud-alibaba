@@ -11,9 +11,14 @@ public class Programmer implements Empor {
     public Programmer(){ //必须有无参构造函数 否则报错
 
     }
+
     @Override
-    public void work(String work) {
+    public String work(String work) throws Exception {
         System.out.println(name + "正在工作..."+work);
+        if(System.currentTimeMillis()%2==0){
+            throw new Exception("停电了");
+        }
+        return "加班的代码成果";
     }
 
     public String getName() {
@@ -24,27 +29,5 @@ public class Programmer implements Empor {
         this.name = name;
     }
 
-    public static void main(String[] args) {
-
-        //java 运算符号
-
-        int a = 1 << 30 ;
-
-        int b = 64 >> 2;
-
-        int c = 6^3;
-//0110 //相同的为0，不同的为1
-//0011
-//0101
-        int d = 6&3;
-//0110 //一个为0即为0
-//0011
-//0010
-        int e = 6|3;
-//0110 //一个为1即为1
-//0011
-//0111
-        System.out.println(e);
-    }
 
 }

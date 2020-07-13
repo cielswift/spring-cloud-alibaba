@@ -9,10 +9,7 @@ public class VolatileOneWriteManyRead {
         //volatile 修改对所有线程可见 ,立即写入主内存
 
         Fox fox = new Fox();
-
-        new Thread(() -> {
-            fox.run();
-        }).start();
+        new Thread(fox::run).start();
 
         Thread.sleep(1000);
 

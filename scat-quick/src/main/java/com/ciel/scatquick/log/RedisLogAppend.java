@@ -1,10 +1,9 @@
 package com.ciel.scatquick.log;
 
+import com.ciel.scaapi.util.Faster;
+import com.ciel.scaapi.util.JWTUtils;
+import com.ciel.scaentity.entity.ScaGirls;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 日志提交到redis
@@ -14,23 +13,17 @@ public class RedisLogAppend {
 
     public static void main(String[] args) {
 
-        log.info("fuck yuo mother");
+        ScaGirls scaGirls = new ScaGirls();
+        scaGirls.setName("刘学文");
+        scaGirls.setBirthday(Faster.now());
 
-        String join = String.join("=", "b","c");
+        String token = JWTUtils.createToken(scaGirls);
 
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 0,
-                TimeUnit.SECONDS, new LinkedBlockingDeque<>(1024));
+        System.out.println(token);
 
-        executor.submit(RedisLogAppend::run);
+        ScaGirls scaGirls1 = JWTUtils.parseToken(token, ScaGirls.class);
 
-
-
+        System.out.println(scaGirls);
     }
 
-
-    public static void run(){
-        while(true){
-            System.out.println("fuck you mother");
-        }
-    }
 }

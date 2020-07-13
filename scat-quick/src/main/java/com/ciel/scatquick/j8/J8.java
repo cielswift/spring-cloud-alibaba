@@ -4,7 +4,7 @@ import com.ciel.scaentity.entity.ScaGirls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -134,7 +134,7 @@ public class J8 {
         List<List<String>> lsn = new ArrayList<>();
         List<String> ls1 = new ArrayList<>();ls1.add("a");ls1.add("b");
         List<String> ls2 = new ArrayList<>();ls1.add("c");ls1.add("d");
-        lsn.add(ls2); lsn.add(ls2);
+        lsn.add(ls1); lsn.add(ls2);
 
         Object collect7 = lsn.stream().flatMap(t -> t.stream()).collect(Collectors.toList());
         System.out.println(collect7);

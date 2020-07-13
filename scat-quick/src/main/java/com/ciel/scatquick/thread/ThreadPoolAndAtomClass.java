@@ -4,10 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.lucene.util.NamedThreadFactory;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicStampedReference;
-import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.atomic.*;
 
 public class ThreadPoolAndAtomClass {
 
@@ -137,6 +134,12 @@ public class ThreadPoolAndAtomClass {
         atomicLong.compareAndSet(0,1); //如果当前是0才会修改
 
         longAdder.increment(); //自增
+
+        //AtomicReference：原子更新引用类型；
+
+    //    AtomicStampedReference：原子更新带有版本号的引用类型；
+
+     //   AtomicMarkableReference：原子更新带有标记位的引用类型。可以原子更新一个布尔类型的标记为和引用类型；
 
     }
 }

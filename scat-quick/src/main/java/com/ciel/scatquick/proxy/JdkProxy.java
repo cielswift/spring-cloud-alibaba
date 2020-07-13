@@ -44,7 +44,7 @@ public class JdkProxy implements InvocationHandler {
         return invoke;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Programmer programmer = new Programmer("夏培鑫");
         JdkProxy jdkProxy = new JdkProxy(programmer);

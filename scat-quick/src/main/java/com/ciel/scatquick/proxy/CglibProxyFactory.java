@@ -10,14 +10,14 @@ import java.lang.reflect.Method;
 /**
  * cglib 动态代理
  */
-public class CglibProxyFactory implements MethodInterceptor {
-    private Object target;
+public class CglibProxyFactory<T> implements MethodInterceptor {
+    private T target;
 
-    public CglibProxyFactory(Object target) {
+    public CglibProxyFactory(T target) {
         this.target = target;
     }
 
-    public Object getProxyInstance() {
+    public T getProxyInstance() {
         // 创建 Enhancer 对象
         Enhancer enhancer = new Enhancer();
         // 设置目标对象的Class
@@ -25,14 +25,13 @@ public class CglibProxyFactory implements MethodInterceptor {
         // 设置回调操作，相当于InvocationHandler
         enhancer.setCallback(this);
 
-        return enhancer.create(); //被代理类必须有无参构造函数 否则报错
+        return (T)enhancer.create(); //被代理类必须有无参构造函数 否则报错
     }
 
     /**
-     *
-     * @param proxy  com.ciel.scatquick.proxy.Programmer$$EnhancerByCGLIB$$d0aaa01e 代理对象
-     * @param method work 方法
-     * @param args 代码 参数
+     * @param proxy       com.ciel.scatquick.proxy.Programmer$$EnhancerByCGLIB$$d0aaa01e 代理对象
+     * @param method      work 方法
+     * @param args        代码 参数
      * @param methodProxy
      * @return
      * @throws Throwable
@@ -45,26 +44,36 @@ public class CglibProxyFactory implements MethodInterceptor {
         // 两种方式执行方法，第二行注释掉的，和当前行代码效果相同，下面会分析；
         // Object invoke = methodProxy.invokeSuper(proxy, args);
 
-        if("work".equals(method.getName())){
-            Object invoke = method.invoke(target, args);
-            System.out.println("提交");
-            return invoke;
-        }
+        try {
 
-        System.out.println("回滚");
+            if ("work".equals(method.getName())) {
+                Object invoke = method.invoke(target, args);
+                //  System.out.println("提交");
+
+                if(invoke.getClass().isAssignableFrom(String.class)){
+                    System.out.println(true);
+                }
+
+                return invoke;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getCause().getMessage() +"::回滚");
+        }
 
         return null;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Programmer programmer = new Programmer("夏培鑫");
+        CglibProxyFactory<Programmer> cglibProxyFactory = new CglibProxyFactory<>(programmer);
+        Programmer proxyInstance =  cglibProxyFactory.getProxyInstance();
 
-        CglibProxyFactory cglibProxyFactory = new CglibProxyFactory(programmer);
+        String work = proxyInstance.work("代码");
 
-        Programmer proxyInstance = (Programmer)cglibProxyFactory.getProxyInstance();
+        System.out.println(work);
 
-        proxyInstance.work("代码");
 
     }
 }

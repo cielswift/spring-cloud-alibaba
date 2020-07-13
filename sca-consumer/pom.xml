@@ -84,7 +84,7 @@
 
             </exclusions>
         </dependency>
-
+        
         <dependency> <!--dubbo 调用-->
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>
@@ -95,7 +95,7 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
 
-        <dependency> <!--流量控制、熔断降级 客户端-->
+        <dependency> <!--注册到控制台上-->
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-transport-simple-http</artifactId>
         </dependency>

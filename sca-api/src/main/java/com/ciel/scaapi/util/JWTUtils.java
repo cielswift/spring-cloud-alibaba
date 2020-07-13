@@ -7,14 +7,13 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ciel.scaentity.entity.ScaGirls;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JWTUtils {
     /**
@@ -67,7 +66,7 @@ public class JWTUtils {
 
     public static <T> String createToken(T load) {
 
-        return JWT.create().withHeader(HEAD)  //生成 头
+        String jwtStr = JWT.create().withHeader(HEAD)  //生成 头
                 /* 设置 载荷 Payload */
                 .withClaim("BODY", JSON.toJSONString(load))
                 .withIssuer("SCA_SERVER") // 签名是有谁生成 例如 服务器
@@ -75,9 +74,11 @@ public class JWTUtils {
                 // .withNotBefore(new Date())//定义在什么时间之前，该jwt都是不可用的
                 .withAudience("SCA_USER")// 签名的观众 也可以理解谁接受签名的
                 .withIssuedAt(new Date()) // 生成签名的时间
-                .withExpiresAt(new Date(System.currentTimeMillis()+(1000*time))) //过期时间
+                .withExpiresAt(new Date(System.currentTimeMillis() + (1000 * time))) //过期时间
                 /* 签名 Signature */
                 .sign(ALGORITHM);
+
+        return Base64Utils.encodeToString(jwtStr.getBytes()); //jwt编码
     }
 
     /**
@@ -98,9 +99,12 @@ public class JWTUtils {
      */
 
     public static <T> T parseToken(String token, Class<T> t){
+
+        byte[] bytes = Base64Utils.decodeFromString(token); //解码
+
         DecodedJWT jwt = null;
         try {
-            jwt =  commonParse(token); //获取值
+            jwt =  commonParse(new String(bytes)); //获取值
         }catch (TokenExpiredException exception){
             throw new RuntimeException("token已过期");
         }catch (Exception exception){

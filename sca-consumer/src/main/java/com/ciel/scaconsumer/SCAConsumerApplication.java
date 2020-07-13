@@ -115,7 +115,7 @@ public class SCAConsumerApplication {
     }
 
     public static SentinelClientHttpResponse r3(HttpRequest request, byte[] body,
-                                                ClientHttpRequestExecution execution, BlockException ex) {
+                                                ClientHttpRequestExecution execution, Throwable ex) {
         System.err.println("rest 错误了::" + ex.getClass().getCanonicalName());
         return new SentinelClientHttpResponse("rest 错误了:: ");
     }

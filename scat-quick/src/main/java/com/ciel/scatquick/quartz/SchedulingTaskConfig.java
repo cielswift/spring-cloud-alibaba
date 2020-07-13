@@ -2,6 +2,7 @@ package com.ciel.scatquick.quartz;
 
 import com.alibaba.fastjson.JSON;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.JWTUtils;
 import com.ciel.scatquick.beanload.AppEventPush;
 import com.ciel.scatquick.beanload.AppEvn;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -166,7 +167,7 @@ public class SchedulingTaskConfig {
     @Autowired
     protected RestTemplate restTemplate;
 
-    @Scheduled(cron = "1/1 * * * 9 ?")
+    @Scheduled(cron = "1/1 * * * * ?")
     public void rest() throws InterruptedException, ExecutionException, TimeoutException {
 
         Result result = threadPoolExecutor.submit(() -> {
@@ -175,7 +176,15 @@ public class SchedulingTaskConfig {
 
             String baid = restTemplate.getForObject("http://106.12.213.120:3000/", String.class);
 
-            return Result.ok().data(ali + baid);
+            Result data = Result.ok().data(ali + baid);
+
+            String token = JWTUtils.createToken(data);
+
+            String md5 = JWTUtils.md5(token.getBytes());
+
+            redisTemplate.opsForValue().set(md5,token);
+
+            return data;
         }).get(1, TimeUnit.SECONDS);
 
 
