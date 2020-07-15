@@ -46,7 +46,7 @@ spring:
   redis:
     database: 2
     #password: root #ciel
-    host: 120.27.69.29
+    host: 106.12.213.120
     port: 6379 #
   mail:
     username: 15966504931@163.com #邮箱账户
@@ -84,8 +84,14 @@ spring:
   elasticsearch:
     rest:
       uris:
-        - http://120.27.69.29:9200
+        - http://106.12.213.120:9200
         #- http://127.0.0.1:19390
+
+#rocketmq 事务
+rocketmq:
+  producer:
+    group: quick_1 #组
+  name-server: 120.27.69.29:9876
 
 #日志
 logging:

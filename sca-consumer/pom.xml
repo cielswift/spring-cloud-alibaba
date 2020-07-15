@@ -84,7 +84,7 @@
 
             </exclusions>
         </dependency>
-        
+
         <dependency> <!--dubbo 调用-->
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>
@@ -100,7 +100,7 @@
             <artifactId>sentinel-transport-simple-http</artifactId>
         </dependency>
 
-        <dependency> <!--sentinel 的规则存储到 nacos-->
+        <dependency> <!--sentinel 配置规则持久化 nacos-->
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>

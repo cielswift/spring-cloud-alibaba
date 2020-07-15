@@ -1,6 +1,5 @@
 package com.ciel.scaproducer1.mq.rocket;
 
-import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaentity.entity.ScaGirls;
 import lombok.extern.slf4j.Slf4j;

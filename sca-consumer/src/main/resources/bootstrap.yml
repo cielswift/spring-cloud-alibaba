@@ -55,6 +55,8 @@ spring:
             refresh: true
 
     sentinel: #限流
+      enabled: true
+      eager: false #取消懒加载 默认true 懒加载
       filter:
         enabled: true #对springmvc端点的保护
       transport:
@@ -76,7 +78,7 @@ spring:
             data-type: json
             rule-type: flow
 
-#  //resource：资源名称；
+  #  //resource：资源名称；
 #  //limitApp：来源应用；
 #  //grade：阈值类型，0表示线程数，1表示QPS；
 #  //count：单机阈值；

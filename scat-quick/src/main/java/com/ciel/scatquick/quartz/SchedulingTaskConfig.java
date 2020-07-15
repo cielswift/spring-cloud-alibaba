@@ -87,7 +87,6 @@ public class SchedulingTaskConfig {
         simpleMailMessage.setFrom("15966504931@163.com"); //自己, 设置邮件发送者
         javaMailSender.send(simpleMailMessage);
 
-
         //文件邮件
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
@@ -167,7 +166,7 @@ public class SchedulingTaskConfig {
     @Autowired
     protected RestTemplate restTemplate;
 
-    @Scheduled(cron = "1/1 * * * * ?")
+    @Scheduled(cron = "1/1 * * * 10 ?")
     public void rest() throws InterruptedException, ExecutionException, TimeoutException {
 
         Result result = threadPoolExecutor.submit(() -> {
