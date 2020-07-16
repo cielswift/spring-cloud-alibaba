@@ -22,5 +22,6 @@ public class RocketListener implements RocketMQListener<ScaGirls> {
 
         log.info("收到消息-> {}",message);
     }
+    
 
 }

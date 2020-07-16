@@ -35,7 +35,9 @@ public class BeanLoadInter  implements BeanPostProcessor,
         SmartInstantiationAwareBeanPostProcessor {
 
     /**
-     * 初始化回调（例如InitializingBean的{@code afterPropertiesSet}或自定义的初始化方法）。 该bean将已经用属性值填充
+     * 初始化回调（例如InitializingBean的{@code afterPropertiesSet}或自定义的初始化方法）。
+     * 该bean将已经用属性值填充 初始化bean之前，相当于把bean注入spring上下文之前
+     *
      */
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -45,6 +47,8 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     /**
      * 该bean将已经用属性值填充
+     *初始化bean之后，相当于把bean注入spring上下文之后
+     *
      *
      * 后置处理 比如返回一个代理对象
      */
@@ -56,7 +60,10 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /**2
+    /**
+     * 实例化bean之前，相当于new这个bean之前
+     *
+     *
      * 如果此方法返回一个非null对象，则Bean创建过程 会短路。唯一的后续处理是postProcessAfterInitialization
      *
      * 返回 null 继续进行默认实例化
@@ -67,6 +74,9 @@ public class BeanLoadInter  implements BeanPostProcessor,
     }
 
     /**
+     *实例化bean之后，相当于new这个bean之后
+     *
+     *
      * 但在发生Spring属性填充（通过显式属性或自动装配）之前
      * 这是在给定bean上执行自定义字段注入的理想回调
      * 正常返回true 返回false 也将阻止任何后续的InstantiationAwareBeanPostProcessor
@@ -88,6 +98,11 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     /**1
      * bean的类型；如果不可预测，则返回{@code null}
+     *
+     * 该触发点发生在postProcessBeforeInstantiation之前(在图上并没有标明，因为一般不太需要扩展这个点)，
+     * 这个方法用于预测Bean的类型，返回第一个预测成功的Class类型，如果不能预测返回null；
+     * 当你调用BeanFactory.getType(name)时当通过bean的名字无法得到bean类型信息时就调用该回调方法来决定类型信息
+     *
      */
     @Override
     public Class<?> predictBeanType(Class<?> beanClass, String beanName) throws BeansException {
@@ -96,12 +111,21 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     /**
      * 返回候选构造函数，如果未指定，则为{@code null
+     *
+     * 该触发点发生在postProcessBeforeInstantiation之后，用于确定该bean的构造函数之用，
+     * 返回的是该bean的所有构造函数列表。用户可以扩展这个点，来自定义选择相应的构造器来实例化这个bean
+     *
      */
     @Override
     public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, String beanName) throws BeansException {
         return null;
     }
 
+    /**
+     * 该触发点发生在postProcessAfterInstantiation之后，当有循环依赖的场景，当bean实例化好之后，
+     * 为了防止有循环依赖，会提前暴露回调方法，用于bean实例化的后置处理。这个方法就是在提前暴露的回调方法中触发
+     *
+     */
     @Override
     public Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
         return bean;

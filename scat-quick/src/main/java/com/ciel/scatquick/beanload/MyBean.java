@@ -5,6 +5,7 @@ import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.*;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +26,14 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
 
         //带Aware 都是感知器
         BeanNameAware , //bean Name 感知
+        EnvironmentAware, //获得系统内的所有参数
         BeanClassLoaderAware, //bean加载 感知
         BeanFactoryAware, //factor
         ApplicationContextAware,
         MessageSourceAware,
         ApplicationEventPublisherAware, //发布事件
-        ResourceLoaderAware {
+        ResourceLoaderAware {// 用于获取ResourceLoader的一个扩展类，
+    // ResourceLoader可以用于获取classpath内所有的资源对象，可以扩展此类来拿到ResourceLoader对象  {
 
     /**
      * Aware  //Aware接口也是为了能够感知到自身的一些属性。
@@ -58,7 +61,10 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
         System.out.println("属性 set 方法执行之后");
     }
 
-
+    /**
+     * 是在postProcessBeforeInitialization之后，InitializingBean.afterPropertiesSet之前
+     *
+     */
     @PostConstruct
     public void init() {
         System.out.println("@PostConstruct 方法初始化");
@@ -78,7 +84,7 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
     @Override
     public void afterSingletonsInstantiated() {
 
-        System.err.println("===================bean 加载完成 后续处理=======================");
+        System.err.println("===================当所有单例 bean 都初始化完成以后 bean 加载完成 后续处理=======================");
     }
 
 
@@ -121,4 +127,8 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
         //获取资源加载器，这样获取外部资源文件
     }
 
+    @Override
+    public void setEnvironment(Environment environment) {
+
+    }
 }

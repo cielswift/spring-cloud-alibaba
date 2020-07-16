@@ -8,6 +8,7 @@ import com.ciel.scatquick.mq.rocket.RocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,9 +19,9 @@ public class MqController {
     protected RocketService rocketService;
 
     @GetMapping("/send")
-    public Result send() throws AlertException {
+    public Result send(@RequestParam(value = "name",required = false,defaultValue = "lxw") String name) throws AlertException {
         ScaGirls scaGirls = new ScaGirls();
-        scaGirls.setName("lxw");
+        scaGirls.setName(name);
         scaGirls.setBirthday(Faster.now());
         rocketService.rocketSend(scaGirls);
 

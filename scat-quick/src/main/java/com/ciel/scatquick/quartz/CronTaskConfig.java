@@ -1,40 +1,20 @@
 package com.ciel.scatquick.quartz;
 
-import com.alibaba.fastjson.JSON;
-import com.ciel.scaapi.retu.Result;
-import com.ciel.scaapi.util.JWTUtils;
-import com.ciel.scatquick.beanload.AppEventPush;
-import com.ciel.scatquick.beanload.AppEvn;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.ApplicationEventMulticaster;
-import org.springframework.context.event.EventListener;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.Schedules;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.*;
 
-@EnableScheduling //开启定时任务
+
 @Configuration
-public class SchedulingTaskConfig {
+public class CronTaskConfig {
 
     /**
      * 字段	允许值	允许的特殊字符
@@ -97,97 +77,6 @@ public class SchedulingTaskConfig {
         mimeMessageHelper.setFrom("15966504931@163.com"); //自己, 设置邮件发送者
         mimeMessageHelper.addAttachment("code.yml",ResourceUtils.getFile("classpath:bootstrap.yml"));
         javaMailSender.send(mimeMessage);
-    }
-
-
-    @Autowired
-    protected RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
-    protected ThreadPoolExecutor threadPoolExecutor;
-
-    @Autowired
-    protected ThreadPoolTaskExecutor taskExecutor;
-
-    @Scheduled(cron = "1/35 * * * 10 ?" )
-    public void redisWrite(){
-
-        threadPoolExecutor.submit(() -> {
-
-            System.out.println(String.format("START: CURRENT THREAD NAME: %s",Thread.currentThread().getName()));
-
-            redisTemplate.opsForValue()
-                    .set(String.valueOf(System.currentTimeMillis()),"Fuck is the my life",6,TimeUnit.HOURS);
-
-            System.out.println(String.format("END: CURRENT THREAD NAME: %s",Thread.currentThread().getName()));
-
-        });
-    }
-
-    /**
-     * 事件发布器 自定义
-     */
-
-    @Autowired
-    protected AppEventPush appEventPush;
-
-    @Autowired
-    protected ApplicationContext applicationContext;
-
-    /**
-     * 事件发布器 spring
-     */
-    @Autowired
-    protected ApplicationEventPublisher applicationEventPublisher;
-
-
-
-    /**
-     * 发布事件
-     */
-    @Scheduled(cron = "1/30 * * * 10 ?")
-    public void tes(){
-
-        //applicationEventPublisher.publishEvent();
-        applicationContext.publishEvent(new AppEvn(applicationContext,"app发布事件"));
-
-        appEventPush.sendEmail("japan tokyo");
-    }
-
-    /**
-     * 代替事件监听器,不用写ApplicationListener
-     */
-    @EventListener
-    public void listenHello(AppEvn event) {
-        System.out.println(String.format("@EventListener 收到事件: 名称%s ,源%s ",event.getName(),event.getSource().getClass().getName()));
-    }
-
-
-    @Autowired
-    protected RestTemplate restTemplate;
-
-    @Scheduled(cron = "1/1 * * * 10 ?")
-    public void rest() throws InterruptedException, ExecutionException, TimeoutException {
-
-        Result result = threadPoolExecutor.submit(() -> {
-
-            String ali = restTemplate.getForObject("http://120.27.69.29:3000/", String.class);
-
-            String baid = restTemplate.getForObject("http://106.12.213.120:3000/", String.class);
-
-            Result data = Result.ok().data(ali + baid);
-
-            String token = JWTUtils.createToken(data);
-
-            String md5 = JWTUtils.md5(token.getBytes());
-
-            redisTemplate.opsForValue().set(md5,token);
-
-            return data;
-        }).get(1, TimeUnit.SECONDS);
-
-
-        System.out.println(JSON.toJSONString(result));
     }
 
 }
