@@ -134,7 +134,10 @@ public class GlobalCustomFilter {
                         return response.writeWith(Mono.just(buffer));
                     }
 
-                    return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+//                    exchange.getRequest().mutate().path() //修改请求
+//                    exchange.mutate() //修改ex
+
+                    return chain.filter(exchange).then(Mono.fromRunnable(() -> {//传递给下一个过滤器
 
                         Faster.println("登录检查token 过滤器 POST 执行");
                     }));

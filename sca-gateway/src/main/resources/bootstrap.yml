@@ -72,9 +72,11 @@ spring:
 #            #- Method=GET
 #            #- RemoteAddr=192.168.1.1.24
 #            #- Weight=group1, 8
+#             - Rzv=aa.bb #自定义谓词
 #          filters:
 #            - StripPrefix=1 #访问路径 http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
-
+#            - AddResponseHeader=cron,* #响应添加头
+#            - FilXia=a,b  #自定义过滤器
            # - StripPrefix=2 会把的请求的路径去除两位
            # curl http://localhost:9201/user-service/a/user/1 =  curl http://localhost:8201/user/1
           #  - PrefixPath=/user 会对原有路径进行增加操作
