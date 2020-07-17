@@ -35,6 +35,7 @@ public class BeanFactorLoadInter implements BeanFactoryPostProcessor {
         BigDecimal divide = new BigDecimal("26.79")
                 .divide(new BigDecimal("25.97"), 2, BigDecimal.ROUND_HALF_DOWN); // / 保留2位
 
+        divide.setScale(2,BigDecimal.ROUND_HALF_UP); //格式化
         Stream.generate(() -> UUID.randomUUID().toString()).limit(50000).forEach(System.err::println);
 
         //正则表达式

@@ -19,9 +19,23 @@
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
-    <!-- 彩色日志格式 -->
+
+
+    <!-- 日志打印格式 变量存储 -->
     <property name="CONSOLE_LOG_PATTERN"
               value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <property name="custom-pattern"
+     value="%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) %green([${LOG_HOME},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]) %magenta(${PID:-}) %white(---) %-20(%yellow([%20.20thread])) %-55(%cyan(%.32logger{30}:%L)) %highlight(- %msg%n)">
+    </property>
+
+
+<!--    %-4relative [%thread] %-5level %logger{32} - %msg%n-->
+<!--    然后打印出来的格式效果是：-->
+<!--    176 [main] DEBUG manual.architecture.HelloWorld2 - Hello world.-->
+
+<!--    上面这个格式的第一个字段代表从程序启动开始后经过的毫秒数，第二个字段代表打印出这条日志的线程名字，-->
+<!--    第三个字段代表日志信息的日志打印级别，第四个字段代表 logger name，第五个字段是日志信息，第六个字段仅仅是代表一个换行符-->
 
 
     <!-- 输入日志到redis-->
