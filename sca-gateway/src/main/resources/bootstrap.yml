@@ -61,6 +61,9 @@ spring:
         locator:
           enabled: true  #开启根据服务名称进行转发
           lower-case-service-id: true #微服务名称小写
+#      default-filters:#默认过滤器
+#        - FilXia=a,b  #默认过滤器
+
 #      routes:
 #        - id: consumer #id 任意
 #          uri: lb://consumer #如果是以lb开头，则会开启负载均衡
@@ -99,7 +102,8 @@ spring:
       #表示 一秒内，允许 一个请求通过，令牌桶的填充速率也是一秒钟添加一个令牌。
       #最大突发状况 也只允许 一秒内有一次请求，可以根据业务来调整 。
 
-#    loadbalancer:
+
+    #    loadbalancer:
 #      retry:
 #        enabled: true #该参数用来开启重试机制
     sentinel: #限流

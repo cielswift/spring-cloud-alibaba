@@ -97,11 +97,11 @@ public final class Faster {
 
     /**
      * 转为json
-     * @param objects
+     * @param object
      * @return
      */
-    public static String toJson(Objects objects){
-        return JSON.toJSONString(objects);
+    public static String toJson(Object object){
+        return JSON.toJSONString(object);
     }
 
     /**

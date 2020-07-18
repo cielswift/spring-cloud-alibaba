@@ -1,6 +1,5 @@
 package com.ciel.scagateway.filter.routes;
 
-import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.RoundRobinRule;
 import org.springframework.cloud.gateway.filter.factory.RequestRateLimiterGatewayFilterFactory;
 import org.springframework.cloud.gateway.filter.factory.RetryGatewayFilterFactory;
@@ -32,8 +31,10 @@ public class CodeRouters {
         return new RoundRobinRule();
     }
 
+    //http://127.0.0.1:5210/gateway/actuator/gateway/routes //查看所有路由
 
     //http://127.0.0.1:5210/gateway/con/consumer/d1?name=xia
+
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()

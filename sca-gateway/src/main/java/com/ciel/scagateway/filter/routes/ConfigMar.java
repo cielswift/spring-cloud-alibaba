@@ -7,4 +7,5 @@ public class ConfigMar {
 
     protected String str;
     protected String end;
+
 }

@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/socket/**", "/error/**",
+        web.ignoring().antMatchers("/socket/**", "/error/**","/pay/**",
                 "/websocket/**", "/els/**", "/sharding/**", "/asyn/**","/bodyz/**","/tco/**","/mq/**");
     }
 

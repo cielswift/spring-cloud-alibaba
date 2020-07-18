@@ -1,5 +1,6 @@
 package com.ciel.scaapi.util;
 
+import cn.hutool.core.lang.Snowflake;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,8 @@ public class FileUpload2Nginx {
 
     protected String imgAccUri;
 
+    protected Snowflake snowflake = new Snowflake(7,1);
+
     /**
      * 图片保存
      *
@@ -39,17 +42,22 @@ public class FileUpload2Nginx {
         log.info("图片上传开始-> 原始文件名:{}",multipartFile.getOriginalFilename());
         long str = System.currentTimeMillis();
 
+        //文件名
         String fileName = getFileName(multipartFile);
 
+        //日期路径
         String pathByDate = pathByDate(Faster.now());
 
+        //日期路径 +  文件名
         String path = pathByDate + fileName;
 
+        //是否存在 创建
         chekAndCreat(imgSaveUri + pathByDate);
 
         multipartFile.transferTo(new File(imgSaveUri + path));
 
-        setPremmers(path);
+        //文件权限
+        setPremmers(imgSaveUri + path);
 
         log.info("图片保存完成-> 原始文件名:{}, 保存路径:{}  耗时:{}"
                 ,multipartFile.getOriginalFilename(),imgSaveUri + path,System.currentTimeMillis() -str);
@@ -69,6 +77,7 @@ public class FileUpload2Nginx {
         log.info("文件上传开始-> 原始文件名:{}",multipartFile.getOriginalFilename());
         long str = System.currentTimeMillis();
 
+        //获取一个随机的文件名称
         String fileName = getFileName(multipartFile);
 
         String pathByDate = pathByDate(Faster.now());
@@ -79,7 +88,7 @@ public class FileUpload2Nginx {
 
         multipartFile.transferTo(new File(fileSaveUri + path));
 
-        setPremmers(path);
+        setPremmers(fileSaveUri +  path);
 
         log.info("文件保存完成-> 原始文件名:{}, 保存路径:{}  耗时:{}"
                 ,multipartFile.getOriginalFilename(),imgSaveUri + path,System.currentTimeMillis() -str);
@@ -89,12 +98,11 @@ public class FileUpload2Nginx {
 
 
     public String getFileName(MultipartFile multipartFile) {
-        int lastIndexOf = multipartFile.getOriginalFilename().lastIndexOf(".");
-        String exName = multipartFile.getOriginalFilename().substring(lastIndexOf,
-                multipartFile.getOriginalFilename().length());
-        return String.valueOf(System.currentTimeMillis() + 17L) + exName;
+        String filename = multipartFile.getOriginalFilename();
+        int lastIndexOf = filename.lastIndexOf(".");
+        String exName = filename.substring(lastIndexOf, filename.length());
+        return String.valueOf(snowflake.nextId()).concat(exName);
     }
-
 
     public void chekAndCreat(String path) {
         File file = new File(path);
