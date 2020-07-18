@@ -70,7 +70,7 @@ public class LogAspect implements Ordered {
 
         long str = System.currentTimeMillis();
 
-        HttpServletRequest request = SysUtils.getRequest();
+        HttpServletRequest request = SysUtils.currentRequest();
 
         Map<String, Serializable> info = new HashMap<>();
 

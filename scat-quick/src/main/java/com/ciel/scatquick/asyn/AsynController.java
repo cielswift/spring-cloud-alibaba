@@ -60,7 +60,7 @@ public class AsynController {
     public void b(Integer status) throws AlertException {
         System.out.println(Thread.currentThread().getName());
 
-        HttpServletResponse response = SysUtils.getResponse(); //先获取响应 因为下面是两一个线程所以找不到了;
+        HttpServletResponse response = SysUtils.currentResponse(); //先获取响应 因为下面是两一个线程所以找不到了;
 
         ListenableFuture<String> result = service.returnMsg(status);
 
@@ -94,7 +94,7 @@ public class AsynController {
     @GetMapping("/c")
     public void c() throws IOException {
 
-        HttpServletResponse response = SysUtils.getResponse();
+        HttpServletResponse response = SysUtils.currentResponse();
         service.asynDown(response);
 
     }

@@ -28,7 +28,7 @@ public class FeignInterceptor implements RequestInterceptor {
         if(requestTemplate.url().contains("producer20")){
 
             //spring 获取当前请求的request对象;
-            HttpServletRequest request = SysUtils.getRequest();
+            HttpServletRequest request = SysUtils.currentRequest();
 
             //spring 获取当前请求的response对象
             //HttpServletResponse response = requestAttributes.getResponse();

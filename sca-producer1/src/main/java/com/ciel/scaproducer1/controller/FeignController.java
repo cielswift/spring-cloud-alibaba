@@ -25,7 +25,7 @@ public class FeignController implements FuckMyLifeFeign {
     @GetMapping("/get")
     public List<String> format(@RequestParam("name")String name) {
 
-        HttpServletRequest request = SysUtils.getRequest();
+        HttpServletRequest request = SysUtils.currentRequest();
         String token = request.getHeader("Authentication");
         String mother = request.getHeader("mother");
         String nameh = request.getHeader("name");

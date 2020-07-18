@@ -37,24 +37,22 @@ public class SysUtils {
     /**
      * 获取request
      *
-     * @return request
      */
-    public static HttpServletRequest getRequest() {
-        return getRequestAttributes().getRequest();
+    public static HttpServletRequest currentRequest() {
+        return currentRequestAttributes().getRequest();
     }
 
-    private static ServletRequestAttributes getRequestAttributes() {
-        RequestContextHolder.currentRequestAttributes();
-        return (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    private static ServletRequestAttributes currentRequestAttributes() {
+        //RequestContextHolder.getRequestAttributes();
+        return (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     }
 
     /**
      * 获取response
      *
-     * @return response
      */
-    public static HttpServletResponse getResponse() {
-        return getRequestAttributes().getResponse();
+    public static HttpServletResponse currentResponse() {
+        return currentRequestAttributes().getResponse();
     }
 
     /**

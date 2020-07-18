@@ -93,7 +93,7 @@ public class TwoCodeController {
         ImageIO.write(resultImg, "png", os);
         InputStream input = new ByteArrayInputStream(os.toByteArray());
 
-        Faster.binary(input,SysUtils.getResponse());
+        Faster.binary(input,SysUtils.currentResponse());
 
     }
 

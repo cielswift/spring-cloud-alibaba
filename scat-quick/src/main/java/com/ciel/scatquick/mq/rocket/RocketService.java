@@ -52,7 +52,7 @@ public class RocketService {
 //                UUID.randomUUID().toString(),sendCallback);
 
         GenericMessage<ScaGirls> message = new GenericMessage<>(scaGirls);
-        message.getHeaders().put("token","fuck");
+
         //发送事务消息
         TransactionSendResult paramg = rocketMQTemplate
                 .sendMessageInTransaction(topic, message, scaGirls.getName());
