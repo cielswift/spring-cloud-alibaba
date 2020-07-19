@@ -33,6 +33,10 @@ spring:
     password: ciel
     database: 13
   cloud:
+    config:
+      allow-override: true #允许本地配置覆盖远程配置
+      override-none: false #是否一切配置已本地配置为准 外部属性应具有最低优先级，并且不应覆盖任何现有属性源
+      override-system-properties: true #外部属性应覆盖系统属性
     nacos:  #使用nacos注册中心
       discovery: #注册中心
         server-addr: 127.0.0.1:13100,127.0.0.1:13101,127.0.0.1:13102
@@ -50,6 +54,10 @@ spring:
         prefix: application-dev  #文件名 ;如果没有配置则默认为 ${spring.appliction.name} (优先级高)
         refresh-enabled: true #刷新配置文件
         extension-configs: #其他配置
+          - dataId: other-dev.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+        shared-configs: #其他共享配置
           - dataId: other-dev.yaml
             group: DEFAULT_GROUP
             refresh: true
@@ -156,6 +164,9 @@ management:
     web:
       exposure:
         include: '*' #暴漏端点
+  endpoint:
+    health:
+      show-details: always
 
 logging: #日志
   config: classpath:logback-spring.xml

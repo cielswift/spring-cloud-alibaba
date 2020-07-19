@@ -11,8 +11,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.Ordered;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -52,7 +50,7 @@ public class LogAspect implements Ordered {
      */
 
 
-    @Pointcut("@annotation(com.ciel.scatquick.aoptxspi.Logs)")
+    @Pointcut("@annotation(com.ciel.scatquick.aoptxspi.LogsAnnal)")
     public void logPointCut() {
     }
 
@@ -101,7 +99,7 @@ public class LogAspect implements Ordered {
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
-        Logs annotation = currentMethod.getAnnotation(Logs.class);
+        LogsAnnal annotation = currentMethod.getAnnotation(LogsAnnal.class);
 
         log.info("{} -> 请求参数:{},请求方式:{},请求URL:{},请求IP:{}," +
                         "响应数据:{} ,当前用户:ID:{},当前用户:姓名:{}, 执行时间:{}ms",

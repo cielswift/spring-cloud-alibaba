@@ -3,9 +3,8 @@ package com.ciel.scatquick.controller;
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaentity.entity.ScaUser;
-import com.ciel.scatquick.aoptxspi.Logs;
+import com.ciel.scatquick.aoptxspi.LogsAnnal;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +36,7 @@ public class HiController {
      * 获取验证码
      */
     @GetMapping("/sms")
-    @Logs
+    @LogsAnnal
     public void sms(@RequestParam("username") String username,
                     @RequestParam("phone") String phone){
         //发送验证码逻辑;
@@ -51,7 +50,7 @@ public class HiController {
     }
 
 
-    @Logs
+    @LogsAnnal
     @GetMapping("/hi")
     //spring security 权限注解
     @PreAuthorize("hasAnyAuthority('add') and hasAnyRole('ADMIN')")
@@ -69,7 +68,7 @@ public class HiController {
     }
 
 
-    @Logs
+    @LogsAnnal
     @GetMapping("/ha")
     @PreAuthorize("hasAnyAuthority('add') and hasAnyRole('ADMIN')")
     public Result ha(String name){

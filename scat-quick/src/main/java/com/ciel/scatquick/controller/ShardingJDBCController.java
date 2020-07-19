@@ -15,7 +15,7 @@ import com.ciel.scaapi.util.SysUtils;
 import com.ciel.scacommons.mapper.ScaGirlsMapper;
 import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaUser;
-import com.ciel.scatquick.aoptxspi.Logs;
+import com.ciel.scatquick.aoptxspi.LogsAnnal;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
@@ -69,7 +69,7 @@ public class ShardingJDBCController {
 
 
     @GetMapping("/girls/list")
-    @Logs
+    @LogsAnnal
     @Cacheable(value = "scagirls",keyGenerator = "autoGenMy")
     public Result girls() throws MissingServletRequestParameterException {
 

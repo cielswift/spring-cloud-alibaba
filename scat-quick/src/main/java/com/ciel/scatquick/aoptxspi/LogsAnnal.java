@@ -9,11 +9,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface Logs {
+public @interface LogsAnnal {
 
     /**
      * 打印前缀
-     * @return
      */
     String prefix() default "默认日志->";
 

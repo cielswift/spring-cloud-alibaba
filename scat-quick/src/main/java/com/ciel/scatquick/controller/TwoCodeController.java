@@ -2,7 +2,7 @@ package com.ciel.scatquick.controller;
 
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.SysUtils;
-import com.ciel.scatquick.aoptxspi.Logs;
+import com.ciel.scatquick.aoptxspi.LogsAnnal;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
@@ -66,7 +66,7 @@ public class TwoCodeController {
         return matrixImage ;
     }
 
-    @Logs
+    @LogsAnnal
     @RequestMapping("/cre")
     public void cre() throws IOException, WriterException {
 
