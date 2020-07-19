@@ -122,6 +122,8 @@ feign:
         connectTimeout: 600000
         readTimeout: 600000
         loggerLevel: FULL
+#        requestInterceptors: 全局默认
+#          - com.ciel.scaconsumer.feignext.FeignInterceptor
       producer10:  #调用的微服务的名称
         connectTimeout: 600000
         readTimeout: 600000

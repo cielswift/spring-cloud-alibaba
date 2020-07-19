@@ -22,6 +22,12 @@ public class ProducerFallbackFactory implements FallbackFactory<FuckMyLifeXiaPei
             public List<String> format(String name) {
                 return Faster.toList("get 异常");
             }
+
+            @Override
+            public String head(String token) {
+                return "get 异常";
+            }
+
             @Override
             public String getQueryMap(ScaGirls scaGirls) {
                 return "get 异常";

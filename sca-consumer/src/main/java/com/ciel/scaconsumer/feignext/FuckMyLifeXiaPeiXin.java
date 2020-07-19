@@ -38,6 +38,13 @@ public interface FuckMyLifeXiaPeiXin extends FuckMyLifeFeign {
     List<String> format(@RequestParam("name")String name);
 
     /**
+     * 发送请求头
+     */
+    @Override
+    @GetMapping("/head")
+    String head(@RequestHeader("token") String token);
+
+    /**
      * get 请求传递对象 使用SpringQueryMap
      */
     @Override

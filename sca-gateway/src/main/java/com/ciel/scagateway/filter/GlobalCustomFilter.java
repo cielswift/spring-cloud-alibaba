@@ -52,6 +52,7 @@ public class GlobalCustomFilter {
     public GlobalFilter loginJwtFilter() {
         return (exchange, chain) -> {
 
+
             Faster.println("登录检查token 过滤器 PRE 执行");
 
             ServerHttpRequest request = exchange.getRequest();

@@ -3,6 +3,8 @@ package com.ciel.scaconsumer;
 import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import com.alibaba.cloud.sentinel.rest.SentinelClientHttpResponse;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.ciel.scaapi.util.Faster;
+import com.ciel.scaconsumer.config.RestInterceptor;
 import com.ciel.scaconsumer.feignext.FeignGlobalConfig;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
@@ -92,6 +94,8 @@ public class SCAConsumerApplication {
     public RestTemplate restTemplateIp(){
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        restTemplate.setInterceptors(Faster.toList(new RestInterceptor())); //设置拦截器
         return restTemplate;
     }
 
@@ -103,6 +107,8 @@ public class SCAConsumerApplication {
     public RestTemplate restTemplateServer(){
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        restTemplate.setInterceptors(Faster.toList(new RestInterceptor())); //设置拦截器
         return restTemplate;
     }
 

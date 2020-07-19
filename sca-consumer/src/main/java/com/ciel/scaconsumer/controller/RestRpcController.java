@@ -7,6 +7,7 @@ import com.ciel.scaapi.dubbo.ApplicationServer;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
+import com.ciel.scaapi.util.SysUtils;
 import com.ciel.scaconsumer.brex.BlockAndException;
 import com.ciel.scaconsumer.feignext.FeignUrl;
 import com.ciel.scaconsumer.feignext.FuckMyLifeXiaPeiXin;
@@ -17,7 +18,6 @@ import com.ciel.scaentity.entity.ScaGirls;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
@@ -85,6 +85,9 @@ public class RestRpcController {
         scaGirls.setName("liuxuewen");
         scaGirls.setBirthday(Faster.now());
         scaGirls.setPrice(new BigDecimal("25.5"));
+
+        String head =
+                fuckMyLifeXiaPeiXin.head(SysUtils.currentRequest().getHeader("Authentication"));
 
         String posts = fuckMyLifeXiaPeiXin.posts(scaGirls, 2L);
 

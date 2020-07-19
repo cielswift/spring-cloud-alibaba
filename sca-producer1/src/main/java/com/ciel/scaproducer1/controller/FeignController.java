@@ -38,6 +38,11 @@ public class FeignController implements FuckMyLifeFeign {
         return strings;
     }
 
+    @Override
+    @GetMapping("/head")
+    public String head(@RequestHeader("token") String token) {
+        return token;
+    }
 
     @Override
     @GetMapping(value = "/get/map")

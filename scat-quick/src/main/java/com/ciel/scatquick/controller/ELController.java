@@ -2,6 +2,7 @@ package com.ciel.scatquick.controller;
 
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scacommons.config.SnowFlake;
+import com.ciel.scatquick.aoptxspi.Logs;
 import com.ciel.scatquick.el.ElasticMapper;
 import com.ciel.scatquick.el.Human;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,7 @@ public class ELController {
         return Result.ok().data(exists);
     }
 
+    @Logs
     @GetMapping("/add")
     public Result add(){
         long nextId = snowFlake.nextId(false);

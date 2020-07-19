@@ -58,6 +58,7 @@ public class RestTempController {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         /** json ----------------------------------------------------------------------------*/
 
+        //设置请求头
         HttpHeaders headers = new HttpHeaders();
 //        MediaType type = MediaType.parseMediaType("application/json;charset=UTF-8");
 //        headers.setContentType(type); //设置请求类型
