@@ -65,7 +65,7 @@ public class PayController {
         context.put("total_amount","439862");
         context.put("subject","naizi");
 
-        request.setBizContent(Faster.toJson(context));
+        request.setBizContent(Faster.toJson(context,false));
         AlipayTradePrecreateResponse response = alipayClient.execute(request);
 
         HashMap hashMap = Faster.parseJson(response.getBody(), HashMap.class);
@@ -96,7 +96,7 @@ public class PayController {
         HashMap<String, String> context = new HashMap<>();
         context.put("out_trade_no",no);
 
-        request.setBizContent(Faster.toJson(context));
+        request.setBizContent(Faster.toJson(context,false));
 
         AlipayTradeQueryResponse response = alipayClient.execute(request);
 

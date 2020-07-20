@@ -82,6 +82,7 @@ public class ELController {
         return Result.ok().data(all);
     }
 
+    @LogsAnnal
     @GetMapping("/list/{page}/{size}")
     public Result list(@PathVariable(value = "page",required = false) Integer page
             ,@PathVariable(value = "size",required = false) Integer size){

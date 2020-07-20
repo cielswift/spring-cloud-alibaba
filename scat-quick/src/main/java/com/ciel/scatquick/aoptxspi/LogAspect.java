@@ -2,12 +2,14 @@ package com.ciel.scatquick.aoptxspi;
 
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.SysUtils;
+import com.ciel.scatquick.jvmdb.sqlite.Sqlite;
 import com.ciel.scatquick.security.realm.ScaCusUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Aspect //当前是一个切面类
 @Component
@@ -24,6 +27,15 @@ import java.util.Map;
 //@Order(1)
 @Slf4j
 public class LogAspect implements Ordered {
+
+    /**
+     * 线程池
+     */
+    @Autowired
+    protected ThreadPoolExecutor threadPoolExecutor;
+
+    @Autowired
+    protected Sqlite sqlite;
 
     /**
      * 控制aop执行属顺序
@@ -82,13 +94,10 @@ public class LogAspect implements Ordered {
             info.put("id",0);
         }
 
-        //执行方法
+        //执行方法,或者继续执行下一个aop
         Object methodReturn = point.proceed();
 
-        String result = "null";
-        if(!Faster.isNull(methodReturn)){
-            result = methodReturn.toString();
-        }
+        Long end = System.currentTimeMillis()- str;
 
         Signature sig = point.getSignature();
         MethodSignature msig = null;
@@ -101,10 +110,31 @@ public class LogAspect implements Ordered {
 
         LogsAnnal annotation = currentMethod.getAnnotation(LogsAnnal.class);
 
-        log.info("{} -> 请求参数:{},请求方式:{},请求URL:{},请求IP:{}," +
-                        "响应数据:{} ,当前用户:ID:{},当前用户:姓名:{}, 执行时间:{}ms",
-                annotation.prefix(), point.getArgs(), request.getMethod(), request.getRequestURI(), request.getRemoteAddr(),
-                result, info.get("id"), info.get("name"), System.currentTimeMillis() - str);
+
+        threadPoolExecutor.submit(() -> {
+
+            LogInfo logInfo = new LogInfo(null,
+                    Faster.toString(point.getArgs()),
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    request.getRemoteAddr(),
+                    Faster.toJson(methodReturn,true),
+                    Faster.toString(info.get("id")),
+                    Faster.toString(info.get("name")),
+                    end,
+                    Faster.format(Faster.now()));
+
+            try {
+                sqlite.insert(logInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            log.info("{} -> 请求参数:{},请求方式:{},请求路径:{},请求IP:{}," +
+                            "响应数据:{} ,当前用户:ID:{},当前用户:姓名:{}, 执行时间:{}ms",
+                    annotation.prefix(), logInfo.getParam(), logInfo.getMethod(), logInfo.getPath(), logInfo.getIp(),
+                    logInfo.getResp(), logInfo.getUserId(), logInfo.getUserName(), logInfo.getTime());
+        });
 
         return methodReturn;
     }

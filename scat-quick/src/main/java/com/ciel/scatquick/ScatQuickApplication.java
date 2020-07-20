@@ -5,14 +5,6 @@ import com.ciel.scatquick.algorithm.LockMid;
 import com.ciel.scatquick.aoptxspi.SpiInterface;
 import com.ciel.scatquick.beanload.AppListener;
 import com.ciel.scatquick.init.AppInitializer;
-import com.ciel.scatquick.proxy.CglibProxyFactory;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.xia.bean.XiapeixinFcs;
 import com.xia.bean.XiapexinFjs;
 import com.xia.config.*;
@@ -34,28 +26,17 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.ServiceLoader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 排除 DruidDataSourceAutoConfigure 自动配置
@@ -130,6 +111,7 @@ import java.util.regex.Pattern;
  * 配合CommandLineRunner 控制初始化顺序
  */
 @Order(value = 1)
+
 public class ScatQuickApplication implements CommandLineRunner {
 
     public static void main(String[] args) {

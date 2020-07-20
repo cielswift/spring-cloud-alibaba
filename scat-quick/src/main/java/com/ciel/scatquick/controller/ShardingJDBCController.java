@@ -70,7 +70,8 @@ public class ShardingJDBCController {
 
     @GetMapping("/girls/list")
     @LogsAnnal
-    @Cacheable(value = "scagirls",keyGenerator = "autoGenMy")
+   // @Cacheable(value = "scagirls",keyGenerator = "autoGenMy")
+    @Transactional
     public Result girls() throws MissingServletRequestParameterException {
 
         scaGirlsMapper.deleteAll(7L);

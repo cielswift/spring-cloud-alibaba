@@ -35,6 +35,8 @@ public class Jvm {
 
     }
 
+//  -XX:+PrintGCDetails -Xloggc:gc.log 打印gc日志 访问https://www.gceasy.io/
+
 
     //jps
     //jstack 9950

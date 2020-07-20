@@ -79,7 +79,6 @@ spring:
             groupId: DEFAULT_GROUP
             data-type: json
             rule-type: flow
-
         c2:
           file: #class下获取配置
             file: classpath:flowrule.json
@@ -98,7 +97,7 @@ spring:
     base-url: http://127.0.0.1:9411/
   sleuth:
     sampler:
-      probability: 1 #percentage是采样比例
+      probability: 1 #percentage是采样比例  默认0.1
 
 dubbo: #dubbo配置
   protocol:

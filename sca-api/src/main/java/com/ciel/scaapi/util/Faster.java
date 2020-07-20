@@ -44,6 +44,7 @@ public final class Faster {
      */
     private static final SimpleDateFormat FORMAT_STR_DETAIL = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+
     /**
      * 格式化格式,返回新的对象避免线程安全问题;
      */
@@ -95,12 +96,32 @@ public final class Faster {
         return sb.toString();
     }
 
+
+    /**
+     * 转字符串
+     */
+    public static String toString(Object... objs){
+        if(Faster.isNull(objs)){
+            return null;
+        }
+        return Arrays.stream(objs).map(Object::toString).reduce((x, y) -> x+","+y).orElse("");
+    }
+
+
     /**
      * 转为json
      * @param object
+     * @param suppress 是否压制异常
      * @return
      */
-    public static String toJson(Object object){
+    public static String toJson(Object object,boolean suppress){
+        if(suppress){
+            try {
+                return JSON.toJSONString(object);
+            }catch (Exception e){
+                return null;
+            }
+        }
         return JSON.toJSONString(object);
     }
 

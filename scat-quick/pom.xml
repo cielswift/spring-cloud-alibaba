@@ -207,6 +207,17 @@
             <version>2.1.0</version>
         </dependency>
 
+        <dependency> <!--kafka-->
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <dependency> <!--sqlite本地数据库记录日志-->
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.32.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
