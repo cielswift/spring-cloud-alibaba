@@ -5,6 +5,8 @@ import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.Cluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -30,28 +32,10 @@ public class KafkaAutoConfig {
         return new KafkaTransactionManager<String, Object>(factory);
     }
 
-
-    @Bean("cusProducerFactory")
-    @Primary
-    public ProducerFactory<String, Object>
-    producerFactory(@Autowired DefaultKafkaProducerFactory<String, Object> factory){
-
-        Map<String, Object> properties = factory.getConfigurationProperties();
-
-        properties.put("partitioner.class","org.apache.kafka.clients.producer.Partitioner"); //分区策略
-        properties.put("interceptor.classes","org.apache.kafka.clients.producer.ProducerInterceptor"); //拦截器
-        properties.put("compression.type", "gzip"); //开启压缩
-
-        return new DefaultKafkaProducerFactory<String, Object>(properties);
-    }
-
-
     @Bean
     @Primary
-    public KafkaTemplate<String, Object> kafkaTemplate(@Qualifier("cusProducerFactory") ProducerFactory<String, Object> factory,
+    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> factory,
                                                        ProducerListener<String, Object> producerListener){
-
-
         KafkaTemplate<String, Object> template = new KafkaTemplate<>(factory);
         template.setProducerListener(producerListener); //设置回调
         return template;
@@ -100,7 +84,6 @@ public class KafkaAutoConfig {
     /**
      * 拦截器
      */
-    @Bean
     public ProducerInterceptor<String, Object> producerInterceptor() {
         return new ProducerInterceptor<String, Object>() {
             @Override

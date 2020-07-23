@@ -15,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.concurrent.ListenableFuture;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -22,9 +26,10 @@ import java.util.function.Function;
 @Slf4j
 public class KafkaServer {
 
+    
     public static final String TOPIC = "cielswift";
 
-    //一个组里的消费者不能消费同一个分区的数据
+    //一个组里的消费者不能消费同一个分区的数据, 因为有offer
 
     //实际上所有的配置实现都是在org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration中完成
 
