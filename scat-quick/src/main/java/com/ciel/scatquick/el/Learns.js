@@ -68,6 +68,9 @@ GET /b2b/good/_search
     }
     },
 
+
+
+
   },
   "match": { //简单条件 分词查询
     "name": "盘尼 阿莫" //多个条件 空格隔开
@@ -102,7 +105,19 @@ GET /b2b/good/_search
   }
 ],
     "from": 0, //分页
-    "size": 20 //分页
+    "size": 20, //分页
+
+  {
+    "query":{
+    "multi_match":
+    {
+      "query":"夏培鑫",
+        "fields":["name","detail"] //多字段匹配
+    }
+  }
+  },
+
+
 }
 
 GET _analyze  //查看分词器效果
