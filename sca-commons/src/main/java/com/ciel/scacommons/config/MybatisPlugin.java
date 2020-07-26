@@ -2,7 +2,10 @@ package com.ciel.scacommons.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
@@ -13,6 +16,7 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.extension.MybatisMapWrapperFactory;
 import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
 import com.baomidou.mybatisplus.extension.parsers.DynamicTableNameParser;
@@ -26,6 +30,8 @@ import net.sf.jsqlparser.statement.update.Update;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.type.JdbcType;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -227,10 +233,33 @@ public class MybatisPlugin {
             dbConfig.setInsertStrategy(FieldStrategy.NOT_NULL);
             dbConfig.setUpdateStrategy(FieldStrategy.NOT_NULL);
 
-            
+
             globalConfig.setDbConfig(dbConfig);
 
         };
+    }
+
+
+   // @Bean //Map下划线自动转驼峰
+    public ConfigurationCustomizer configurationCustomizer() {
+        return i -> i.setObjectWrapperFactory(new MybatisMapWrapperFactory());
+    }
+
+ //   @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer(){
+        MapperScannerConfigurer scannerConfigurer = new MapperScannerConfigurer();
+        //可以通过环境变量获取你的mapper路径,这样mapper扫描可以通过配置文件配置了
+        scannerConfigurer.setBasePackage("com.yourpackage.*.mapper");
+        return scannerConfigurer;
+    }
+
+    public MybatisConfiguration mybatisConfiguration(){
+        MybatisConfiguration configuration = new MybatisConfiguration();
+        configuration.setDefaultScriptingLanguage(MybatisXMLLanguageDriver.class);
+        configuration.setJdbcTypeForNull(JdbcType.NULL);
+        configuration.setMapUnderscoreToCamelCase(true);//开启下划线转驼峰
+    //    sqlSessionFactory.setConfiguration(configuration);
+        return configuration;
     }
 
     /**

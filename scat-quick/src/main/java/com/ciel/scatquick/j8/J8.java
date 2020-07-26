@@ -17,16 +17,15 @@ public class J8 {
     public static void main(String[] args) throws IOException {
 
         long ccs = Files.lines(Paths.get("C:/ciel/zipkin.txt")).count(); //获取行数
-
         Logger logger = LoggerFactory.getLogger(J8.class); //日志
 
         List<String> ciel = new ArrayList<>();
         ciel.add("ciel");ciel.add("xia");ciel.add("swift");ciel.add("join");
 
-        Map<Integer, String> collect8 = ciel.stream()
+        Map<Integer, Object> collect8 = ciel.stream()
                 .filter(t -> t.length() == 3) //过滤
                 .map(String::hashCode)  //转换 并且可以和原集合的泛型不一致; 这里就 string 变成了 Integer
-                .collect(Collectors.toMap(Object::hashCode, String::valueOf)); //收集到map 中
+                .collect(Collectors.toMap(Object::hashCode, t-> t)); //收集到map 中
         // .collect(Collectors.toList()); //收集到集合中;
         //.toArray(); //收集到数组中
         //.collect(Collectors.toSet()); //收集到集合中

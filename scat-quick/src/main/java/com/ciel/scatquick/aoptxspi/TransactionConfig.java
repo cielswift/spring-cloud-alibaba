@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TransactionConfig {
 
+    //TransactionAspectSupport.invokeWithinTransaction 事务增强方法
     /**
      * @Transactional解释
      */

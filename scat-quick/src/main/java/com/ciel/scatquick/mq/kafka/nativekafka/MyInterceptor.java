@@ -1,5 +1,6 @@
 package com.ciel.scatquick.mq.kafka.nativekafka;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -20,9 +21,12 @@ public class MyInterceptor implements ProducerInterceptor<String,String> {
     @Override
     public ProducerRecord<String, String> onSend(ProducerRecord<String, String> record) {
 
-        String newValue = record.value().concat(">>>".concat(LocalDateTime.now().toString()));
+        String value = record.value();
 
-        return new ProducerRecord<String, String>(record.topic(),record.key(),newValue);
+        Map<String, Object> map = JSON.parseObject(value, Map.class);
+        map.put("拦截器添加header","for toy");
+
+        return new ProducerRecord<String, String>(record.topic(),record.key(),JSON.toJSONString(map));
     }
 
     /**
@@ -53,6 +57,6 @@ public class MyInterceptor implements ProducerInterceptor<String,String> {
      */
     @Override
     public void configure(Map<String, ?> configs) {
-
+        System.out.println(configs);
     }
 }

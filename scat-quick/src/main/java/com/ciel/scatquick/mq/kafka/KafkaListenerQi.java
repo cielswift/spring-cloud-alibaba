@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KafkaListenerQi {
 
+    //有几个分区就应该有几个消费者 提高并发
+
     @KafkaListener(topics = "cielswift",groupId = "ciel-group",
             topicPartitions=@TopicPartition(topic = "cielswift", //主题
                                      partitionOffsets = @PartitionOffset(partition = "0",initialOffset = "0") //分区 偏移量
             )) //监听哪一个分区
     public void zeroMessage(ConsumerRecord<String,Object> message){
-
+        
         log.info("==============================================================");
         log.info("0号分区的数据:"+message.offset()+"=="+message.value());
         log.info("==============================================================");

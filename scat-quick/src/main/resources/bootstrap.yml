@@ -102,7 +102,7 @@ mybatisplus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志
     map-underscore-to-camel-case: true #下划线转驼峰
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath*:mapper/*Mapper.xml
   typeAliasesPackage: com.ciel.scaentity.entity  #实体扫描
   global-config:
     db-config:

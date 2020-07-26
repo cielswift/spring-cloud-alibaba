@@ -28,6 +28,14 @@ public class BeanRegistry implements BeanDefinitionRegistryPostProcessor, Priori
      * 最后执行没有实现顺序接口的;
      * <p>
      * 参考 org.springframework.context.support.AbstractApplicationContext.refresh()  invokeBeanFactoryPostProcessors
+     *
+     * 从容器中找出所有的后置处理器的名称
+     * 对后置处理器进行分类，分为PriorityOrdered、Ordered和regular三类
+     * 将实现PriorityOrdered接口的BeanPostProcessors实例化并注册到容器
+     * 将实现Ordered接口的BeanPostProcessors实例化并注册到容器
+     * 将常规的BeanPostProcessors实例化并注册到容器
+     * 从新将所有内部的BeanPostProcessors注册到容器
+     * 重新注册ApplicationListenerDetector后置处理器
      */
     @Override
     public int getOrder() {

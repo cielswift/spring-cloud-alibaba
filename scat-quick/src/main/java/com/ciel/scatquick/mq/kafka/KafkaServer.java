@@ -74,7 +74,6 @@ public class KafkaServer {
 
         ListenableFuture<SendResult<String, Object>> send =
                 kafkaTemplate.send("cielswift", key.intValue() % 2, String.valueOf(key), JSON.toJSONString(scaGirls));
-
         //send方法后面调用get方法即可 ,同步; 可以重载规定时间没有返回报错;
         //    SendResult<String, Object> stringObjectSendResult = obj.get();
 
