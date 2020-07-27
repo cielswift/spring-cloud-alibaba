@@ -26,6 +26,7 @@ import java.lang.reflect.Constructor;
  *   finishBeanFactoryInitialization() 注册所有业务Bean
  *
  *   @Autowired的实现是通过AutowiredAnnotationBeanPostProcessor后置处理器中实现的
+ *   buildAutowiringMetadata
  *------------------------------------------------------------------------------------------
  *
  *  在Spring的DefaultSingletonBeanRegistry类中，你会赫然发现类上方挂着这三个Map：
@@ -35,6 +36,10 @@ import java.lang.reflect.Constructor;
  *
  * earlySingletonObjects 映射Bean的早期引用，也就是说在这个Map里的Bean不是完整的，甚至还不能称之为“Bean”，只是一个Instance.
  *
+ *  singletonObjects：存放完成创建的Bean所有步骤的单实例Bean
+ * earlySingletonObjects：存放只完成了创建Bean的第一步，且是由单实例工厂创建的Bean
+ * singletonFactories：存放只完成了创建Bean的第一步后，提前暴露Bean的单实例工厂
+
  *
  * AutowiredAnnotationBeanPostProcessor：对注解@Autowired的实现
  * CommonAnnotationBeanPostProcessor： 对JSR-250的支持，如对 @Resource、@PostConstruct和@PreDestroy 的实现

@@ -26,6 +26,7 @@ public class WindowsSystem implements Condition {
 
         try {
             Runtime r = Runtime.getRuntime();
+
             Properties props = System.getProperties();
             InetAddress addr = InetAddress.getLocalHost();
 

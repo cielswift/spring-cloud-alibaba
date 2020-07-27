@@ -43,7 +43,10 @@ public class MyBean implements InitializingBean, DisposableBean, //加载 //销�
      * 实现BeanNameAware 可以获取 bean的名称
      * 实现了BeanFactoryAware接口的类，能够获取到BeanFactory对象
      *
-     * 参考 org.springframework.context.support.ApplicationContextAwareProcessor.invokeAwareInterfaces(..)方法
+     * 为了保证一部分Aware必须在后置处理器postProcessBeforeInitialization方法之前执行，
+     * 所以在Bean初始化之前直接调用了invokeAwareMethods方法
+     *
+     * 剩余部分的Aware的自动装配都是在 org.springframework.context.support.ApplicationContextAwareProcessor.invokeAwareInterfaces(..)方法
      */
 
     /**

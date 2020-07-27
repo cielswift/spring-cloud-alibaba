@@ -70,10 +70,13 @@ public class KafkaServer {
 
 
     public void send(ScaGirls scaGirls,Function<SendResult<String, Object>,String> success) throws Exception {
-        Long key = System.currentTimeMillis() + 7;
+
+        long key = System.currentTimeMillis() + scaGirls.hashCode();
+
+        long pari = key % 2;
 
         ListenableFuture<SendResult<String, Object>> send =
-                kafkaTemplate.send("cielswift", key.intValue() % 2, String.valueOf(key), JSON.toJSONString(scaGirls));
+                kafkaTemplate.send("cielswift", (int) pari, String.valueOf(key), JSON.toJSONString(scaGirls));
         //send方法后面调用get方法即可 ,同步; 可以重载规定时间没有返回报错;
         //    SendResult<String, Object> stringObjectSendResult = obj.get();
 
