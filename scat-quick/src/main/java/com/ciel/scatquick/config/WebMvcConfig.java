@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -127,6 +129,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //时间格式化
                 objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
                 objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+
+                //全局配置序列化返回 JSON 处理
+                SimpleModule simpleModule = new SimpleModule();
+                //Long 类型js 精度丢失问题
+                simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+                objectMapper.registerModule(simpleModule);
 
                 MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
                 converter.setObjectMapper(objectMapper);

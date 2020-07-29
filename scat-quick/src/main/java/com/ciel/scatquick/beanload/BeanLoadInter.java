@@ -19,6 +19,14 @@ import java.lang.reflect.Constructor;
  *
  *   InstantiationAwareBeanPostProcessor 是 BeanPostProcessor 的子接口
  *   SmartInstantiationAwareBeanPostProcessor 是 InstantiationAwareBeanPostProcessor  的子接口
+ *
+ *   registerBeanPostProcessors()：完成了所有后置处理器 BeanPostProcessor 的实例化，并注册到容器。
+ *   finishBeanFactoryInitialization(beanFactory);：方法完成了对所有业务单例Bean的初始化，并注册到容器
+ *
+ *   finishBeanFactoryInitialization() 注册所有业务Bean
+ *
+ *   @Autowired的实现是通过AutowiredAnnotationBeanPostProcessor后置处理器中实现的
+ *   buildAutowiringMetadata
  *------------------------------------------------------------------------------------------
  *
  *  在Spring的DefaultSingletonBeanRegistry类中，你会赫然发现类上方挂着这三个Map：
@@ -27,6 +35,14 @@ import java.lang.reflect.Constructor;
  * singletonFactories 映射创建Bean的原始工厂
  *
  * earlySingletonObjects 映射Bean的早期引用，也就是说在这个Map里的Bean不是完整的，甚至还不能称之为“Bean”，只是一个Instance.
+ *
+ *  singletonObjects：存放完成创建的Bean所有步骤的单实例Bean
+ * earlySingletonObjects：存放只完成了创建Bean的第一步，且是由单实例工厂创建的Bean
+ * singletonFactories：存放只完成了创建Bean的第一步后，提前暴露Bean的单实例工厂
+
+ *
+ * AutowiredAnnotationBeanPostProcessor：对注解@Autowired的实现
+ * CommonAnnotationBeanPostProcessor： 对JSR-250的支持，如对 @Resource、@PostConstruct和@PreDestroy 的实现
  *
  */
 @Component
@@ -51,6 +67,8 @@ public class BeanLoadInter  implements BeanPostProcessor,
      *
      *
      * 后置处理 比如返回一个代理对象
+     * AnnotationAwareAspectJAutoProxyCreator：AOP代理的后置处理器，
+     * AOP生成代理的地方就是在后置处理器的postProcessAfterInitialization方法中实现的
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {

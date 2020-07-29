@@ -15,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.concurrent.ListenableFuture;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -22,9 +26,10 @@ import java.util.function.Function;
 @Slf4j
 public class KafkaServer {
 
+    
     public static final String TOPIC = "cielswift";
 
-    //一个组里的消费者不能消费同一个分区的数据
+    //一个组里的消费者不能消费同一个分区的数据, 因为有offer
 
     //实际上所有的配置实现都是在org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration中完成
 
@@ -65,11 +70,13 @@ public class KafkaServer {
 
 
     public void send(ScaGirls scaGirls,Function<SendResult<String, Object>,String> success) throws Exception {
-        Long key = System.currentTimeMillis() + 7;
+
+        long key = System.currentTimeMillis() + scaGirls.hashCode();
+
+        long pari = key % 2;
 
         ListenableFuture<SendResult<String, Object>> send =
-                kafkaTemplate.send("cielswift", key.intValue() % 2, String.valueOf(key), JSON.toJSONString(scaGirls));
-
+                kafkaTemplate.send("cielswift", (int) pari, String.valueOf(key), JSON.toJSONString(scaGirls));
         //send方法后面调用get方法即可 ,同步; 可以重载规定时间没有返回报错;
         //    SendResult<String, Object> stringObjectSendResult = obj.get();
 

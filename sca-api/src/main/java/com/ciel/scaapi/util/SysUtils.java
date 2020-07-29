@@ -24,10 +24,8 @@ public class SysUtils {
      * @return 当前用户
      */
     public static Object currentUser() {
-
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
-
         if(!Faster.isNull(authentication)){
             return authentication.getPrincipal();
         }

@@ -1,25 +1,15 @@
 package com.xia.config;
 
-import com.ciel.scatquick.ScatQuickApplication;
 import com.xia.bean.XiapeixinFas;
 import com.xia.bean.XiapeixinFbs;
 import com.xia.bean.XiapeixinFis;
 import com.xia.contional.WindowsSystem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Configuration
 @Conditional(WindowsSystem.class) //返回true才会生效

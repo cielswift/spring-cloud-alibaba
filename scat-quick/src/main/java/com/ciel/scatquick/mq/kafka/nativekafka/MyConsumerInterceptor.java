@@ -12,9 +12,9 @@ public class MyConsumerInterceptor implements ConsumerInterceptor<String,String>
     @Override
     public ConsumerRecords<String, String> onConsume(ConsumerRecords<String, String> records) {
 
-        records.forEach(t -> {
-            System.out.println("得到数据"+t.partition()+t.key()+t.value());
-        });
+//        records.forEach(t -> {
+//            System.out.println("得到数据"+t.partition()+t.key()+t.value());
+//        });
 
         return records;
     }
@@ -32,5 +32,6 @@ public class MyConsumerInterceptor implements ConsumerInterceptor<String,String>
     @Override
     public void configure(Map<String, ?> configs) {
 
+        System.out.println(configs);
     }
 }
