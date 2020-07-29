@@ -68,10 +68,77 @@ GET /b2b/good/_search
     }
     },
 
+
   },
   "match": { //简单条件 分词查询
     "name": "盘尼 阿莫" //多个条件 空格隔开
   },
+
+  {
+    "query":{
+    "match": {
+      "name": {
+        "query": "西林 警用",
+            "operator": "and"  //and 查询
+      }
+    }
+  }
+  },
+  {
+    "query":{
+    "match": {
+      "name": {
+        "query": "西林 僵尸",
+            "minimum_should_match": "75%" //匹配度查询
+      }
+
+    }
+  }}
+  ,{
+    "query": {
+      "bool": {
+        "must": [
+          {"match": {
+              "name": "西林"
+            }},
+          {
+            "match": {
+              "name": "僵尸"
+            }
+          }
+        ],
+            "minimum_should_match": "50%"//匹配度查询
+      }
+    }
+  },
+
+  {
+    "query": {
+    "bool": {
+      "should": [
+        {
+          "match": {
+            "name":{
+              "query": "僵尸",
+              "boost": 0  //指定查询权重
+            }
+          }
+        },
+        {
+          "match": {
+            "name": {
+              "query": "西林",
+              "boost": 2 //指定查询权重
+            }
+          }
+        }
+      ]
+    }
+  }
+  },
+
+
+
   "term": { //简单条件 精确查询
     "price": "55.5"
   },
