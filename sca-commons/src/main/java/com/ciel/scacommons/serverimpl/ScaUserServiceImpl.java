@@ -28,24 +28,17 @@ import java.util.List;
  */
 @Service
 @Primary
-
-/**
- * 指定缓存通用配置; cacheManager指定使用哪一个缓存管理器
- */
-@CacheConfig(cacheNames = "scaUser",cacheManager = "cacheManagerJSON")
 public class ScaUserServiceImpl extends ServiceImpl<ScaUserMapper, ScaUser> implements IScaUserService {
 
     @Autowired
     protected IScaApplicationService applicationService;
 
     @Override
-    @Cacheable(value = "scaUser", keyGenerator = "autoGenMy")
     public List<ScaUser> lists(String name) {
         return baseMapper.selectList(null);
     }
 
     @Override
-    @CachePut(value = "scaUser",keyGenerator = "autoGenMy")
     public boolean deleteByName(String name) {
         return baseMapper.delete(new LambdaQueryWrapper<ScaUser>().eq(ScaUser::getUsername,name)) > 1;
     }

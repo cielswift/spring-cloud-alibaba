@@ -26,7 +26,7 @@ spring:
         filters: stat #Druid内置提供一个StatFilter，用于统计监控信息
         initial-size: 16
         min-idle: 16
-        max-active: 32
+        max-active: 16
         time-between-eviction-runs-millis: 5000
         validation-query: SELECT 1 FROM dual
       datasource:

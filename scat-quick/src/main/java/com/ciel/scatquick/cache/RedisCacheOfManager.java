@@ -1,40 +1,27 @@
 package com.ciel.scatquick.cache;
 
-import com.ciel.scaapi.exception.AlertException;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.Arrays;
 
 /**
  * 开启缓存
  */
-@EnableCaching(proxyTargetClass = true)
+@EnableCaching(proxyTargetClass = true,order= Ordered.LOWEST_PRECEDENCE )
 @Configuration
 public class RedisCacheOfManager {
 
@@ -90,30 +77,41 @@ public class RedisCacheOfManager {
      * 缓存key的生成器
      */
     @Bean
-    public KeyGenerator autoGenMy(){ //定义缓存 key 的生成策略
+    public KeyGenerator autoGenSP(){ //定义缓存 key 的生成策略
         return (target, method, params) ->
                 target.getClass().getName() + "_"
                         + method.getName() + "_"
                         + Arrays.asList(params).toString();
     }
 
-
     @Bean
-    @Primary
-    @SuppressWarnings("all")
-    public RedisCacheManager cacheManagerJSON(@Qualifier("cacheRedis") RedisTemplate<String, Object> redisTemplate) throws AlertException {
+    public CacheManager redisCacheManagerSP(@Autowired RedisConnectionFactory connectionFactory) {
 
-        RedisCacheWriter redisCacheWriter =
-                RedisCacheWriter.nonLockingRedisCacheWriter(redisTemplate.getConnectionFactory());
+        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofSeconds(30) //过期时间
+                );
 
-        RedisCacheConfiguration redisCacheConfiguration =
-                RedisCacheConfiguration.defaultCacheConfig()
-                        .serializeValuesWith(RedisSerializationContext.SerializationPair
-                                .fromSerializer(redisTemplate.getValueSerializer()));
-
-        //设置默认超过期时间是30秒
-        redisCacheConfiguration.entryTtl(Duration.ofSeconds(30));
-        return new RedisCacheManager(redisCacheWriter, redisCacheConfiguration);
+        return RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(configuration)
+                .transactionAware()
+                .build();
     }
+
+//    @Bean
+//    @Primary
+//    @SuppressWarnings("all")
+//    public CacheManager redisCacheManagerSP(@Qualifier("cacheRedis") RedisTemplate<String, Object> redisTemplate) throws AlertException {
+//
+//        RedisCacheWriter redisCacheWriter =
+//                RedisCacheWriter.nonLockingRedisCacheWriter(redisTemplate.getConnectionFactory());
+//
+//        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+//                        .serializeValuesWith(RedisSerializationContext.SerializationPair
+//                        .fromSerializer(redisTemplate.getValueSerializer()));
+//
+//        //设置默认超过期时间是30秒
+//        redisCacheConfiguration.entryTtl(Duration.ofSeconds(3));
+//        return new RedisCacheManager(redisCacheWriter, redisCacheConfiguration);
+//    }
 
 }

@@ -1,15 +1,15 @@
-package com.ciel.scatquick.type;
+package com.ciel.scatquick.anntion;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class TypeFather implements Fatherz<String, Integer> {
+public class FatherType implements Fatherz<String, Integer> {
 
     public static void main(String[] args) {
 
        // Type type = TypeFather.class.getGenericSuperclass(); //获取父类的类型
 
-        Type type = TypeFather.class.getGenericInterfaces()[0]; //获取接口类型
+        Type type = FatherType.class.getGenericInterfaces()[0]; //获取接口类型
 
         if (type instanceof ParameterizedType) {
 

@@ -13,6 +13,8 @@ import java.util.HashMap;
  */
 public final class Result extends HashMap<String,Object> {
 
+    public static final long serialVersionUID = 1L;
+
     /**
      * 200 正常
      */

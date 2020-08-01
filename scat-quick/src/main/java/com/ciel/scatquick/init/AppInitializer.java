@@ -36,7 +36,7 @@ public class AppInitializer implements ApplicationContextInitializer<Configurabl
         MapPropertySource mapPropertySource = new MapPropertySource("cus-cc", map);
         environment.getPropertySources().addLast(mapPropertySource);
 
-
         System.out.println("当前运行端口:"+environment.getProperty("server.port"));
     }
+
 }

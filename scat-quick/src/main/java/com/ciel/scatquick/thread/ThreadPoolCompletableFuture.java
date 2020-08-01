@@ -31,11 +31,16 @@ public class ThreadPoolCompletableFuture {
             2, TimeUnit.SECONDS, //超出核心线程的超时时间 会释放
             new LinkedBlockingDeque<>(1024), //阻塞队列
             threadFactory //线程工程
-            //  ,new ThreadPoolExecutor.AbortPolicy() //拒绝策略 抛出异常
-            //   ,new ThreadPoolExecutor.CallerRunsPolicy() //main 线程处理
-            //   ,new ThreadPoolExecutor.DiscardPolicy() //队列满了不出异常 丢弃任务 没有异常
-            ,new ThreadPoolExecutor.DiscardOldestPolicy()  //队列满了和第一个线程竞争 失败丢弃任务 没有异常
-    );
+
+            /*
+             * 线程池对拒绝任务(无限程可用)的处理策略
+             * ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。
+             * ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。
+             * ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程） 没有异常
+             * ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务,如果执行器已关闭,则丢弃.
+             */
+            //在使用CompletableFuture的时候线程池拒绝策略最好使用AbortPolicy，如果线程池满了直接抛出异常中断主线程，达到快速失败的效果
+            ,new ThreadPoolExecutor.DiscardOldestPolicy());
 
     public static void threadPoll() throws ExecutionException, InterruptedException {
 
@@ -52,7 +57,7 @@ public class ThreadPoolCompletableFuture {
             return "xiapeixin";
         });
 
-        String s = submit1.get(); //返回执行结果 ,可能阻塞
+        String s = submit1.get(); //返回执行结果 ,阻塞
 //        get(long timeout, TimeUnit unit)：获取结果，但只等待指定的时间；
 //        cancel(boolean mayInterruptIfRunning)：取消当前任务；
 //        isDone()：判断任务是否已完成
@@ -71,7 +76,7 @@ public class ThreadPoolCompletableFuture {
         CompletableFuture.runAsync(() -> System.out.println(Thread.currentThread().getName() + ": america girl"), threadPool);
 
         // 如果执行成功 传入一个回调函数, 可以返回一个新的结果
-        CompletableFuture.supplyAsync(() -> "fuck young girl").thenApply(r -> r.toUpperCase());
+        CompletableFuture.supplyAsync(() -> "fuck young girl").thenApply(String::toUpperCase);
 
         // 如果执行成功 传入一个回调函数, 不能收到结果 也不能返回结果
         CompletableFuture.supplyAsync(() -> "fuck young girl").thenRun(() -> System.out.println("wy"));
@@ -81,7 +86,7 @@ public class ThreadPoolCompletableFuture {
             System.out.println("the result is : " + result);
         });
         //每个提供回调方法的函数都有两个异步（Async）变体，异步就是另外起一个线程 ,可以用自己的线程池
-        CompletableFuture.supplyAsync(() -> "fuck young girl").thenApplyAsync(r -> r.toUpperCase(),threadPool);
+        CompletableFuture.supplyAsync(() -> "fuck young girl").thenApplyAsync(String::toUpperCase,threadPool);
 
         // 如果执行异常, 起到 catch的作用
         CompletableFuture<String> exce = supplyAsync.exceptionally((e) -> {

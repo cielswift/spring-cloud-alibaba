@@ -23,11 +23,12 @@ spring:
       primary: master #设置默认的数据源或者数据源组,默认值即为master ; 两套配置的主库和从库相反
       druid: #druid 全局配置
         filters: stat #Druid内置提供一个StatFilter，用于统计监控信息
-        initial-size: 8
-        min-idle: 8
+        initial-size: 16
+        min-idle: 16
         max-active: 16
         time-between-eviction-runs-millis: 5000
         validation-query: SELECT 1 FROM dual
+        max-wait: 20000
       datasource:
         master:
           username: root

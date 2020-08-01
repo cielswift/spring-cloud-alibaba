@@ -22,7 +22,7 @@ import java.util.Date;
 @TableName("sca_girls")
 public class ScaGirls implements Serializable {
 
-    protected static final long serialVersionUID = 71L;
+    protected static final long serialVersionUID = 1L;
 
     @TableId(value = "ID",type = IdType.ASSIGN_ID)
     private Long id;
@@ -34,7 +34,6 @@ public class ScaGirls implements Serializable {
 //    public Long getId() {
 //        return id;
 //    }
-
 
 
     @TableField("NAME")

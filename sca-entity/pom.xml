@@ -16,22 +16,22 @@
         <dependency> <!--mybatis plus-->
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.3.1</version>
+            <version>3.3.2</version>
         </dependency>
 
         <dependency> <!--mybatis plus插件-->
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
-            <version>3.3.1</version>
+            <version>3.3.2</version>
         </dependency>
 
         <dependency> <!--mybatis plus 多数据源-->
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.1</version>
         </dependency>
 
-<!--        <dependency> &lt;!&ndash;缓存&ndash;&gt;-->
+        <!--        <dependency> &lt;!&ndash;缓存&ndash;&gt;-->
 <!--            <groupId>org.mybatis.caches</groupId>-->
 <!--            <artifactId>mybatis-ehcache</artifactId>-->
 <!--            <version>1.2.0</version>-->

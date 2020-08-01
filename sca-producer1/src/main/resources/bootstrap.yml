@@ -23,7 +23,7 @@ spring:
         filters: stat #Druid内置提供一个StatFilter，用于统计监控信息
         initial-size: 16 #初始化大小
         min-idle: 16 #最小
-        max-active: 32 #最大
+        max-active: 16 #最大
         time-between-eviction-runs-millis: 5000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
         validation-query: SELECT 1 FROM dual
         max-wait:  6000  #配置获取连接等待超时的时间

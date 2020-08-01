@@ -7,7 +7,8 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         initialSize: 16
         minIdle: 16
-        maxActive: 32
+        maxActive: 16
+        maxWait: 20000
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
@@ -16,7 +17,8 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         initialSize: 16
         minIdle: 16
-        maxActive: 32
+        maxActive: 16
+        maxWait: 20000
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
@@ -25,7 +27,8 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         initialSize: 16
         minIdle: 16
-        maxActive: 32
+        maxActive: 16
+        maxWait: 20000
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1672/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root

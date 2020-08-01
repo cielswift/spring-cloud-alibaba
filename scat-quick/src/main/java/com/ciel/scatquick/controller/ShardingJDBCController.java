@@ -38,8 +38,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sharding")
-
-@CacheConfig(cacheNames = "scagirls",cacheManager = "cacheManagerJSON")
 @Slf4j
 @AllArgsConstructor
 public class ShardingJDBCController {
@@ -58,19 +56,19 @@ public class ShardingJDBCController {
 
     protected FileUpload2Nginx fileUpload2Nginx;
 
-    protected IScaUserService iScaUserService;
-
     protected ScaGirlsMapper scaGirlsMapper;
 
-    @GetMapping("/users")
-    public Result users(){
-        return Result.ok().data(iScaUserService.list());
+    @LogsAnnal
+    @GetMapping("/cache")
+    public Result users(double str ,double end){
+
+        List<ScaGirls> girls = scaGirlsService.girlsByPrice(str, end);
+        return Result.ok().data(girls);
     }
 
 
     @GetMapping("/girls/list")
     @LogsAnnal
-   // @Cacheable(value = "scagirls",keyGenerator = "autoGenMy")
     @Transactional
     public Result girls() throws MissingServletRequestParameterException {
 

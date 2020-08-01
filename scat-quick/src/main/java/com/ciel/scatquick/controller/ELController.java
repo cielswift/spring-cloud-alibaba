@@ -53,7 +53,7 @@ public class ELController {
     @LogsAnnal
     @GetMapping("/add")
     public Result add(){
-        long nextId = snowFlake.nextId(false);
+        long nextId = snowFlake.nextId();
         Human human = new Human();
         human.setId(nextId);
         human.setName("夏培鑫");
