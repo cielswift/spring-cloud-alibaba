@@ -1,5 +1,8 @@
 package com.ciel.scatquick.jvmdb;
 
+import org.ehcache.xml.model.Heap;
+import sun.tools.jar.resources.jar;
+
 public class Jvm {
     /*
     那么，顺理成章的，应该建立两块Survivor区，刚刚新建的对象在Eden中，经历一次Minor GC，
@@ -37,12 +40,56 @@ public class Jvm {
 
 //  -XX:+PrintGCDetails -Xloggc:gc.log 打印gc日志 访问https://www.gceasy.io/
 
-
     //jps
     //jstack 9950
 
     // jhsdb jmap --heap --pid 1284
 
+//    Heap Configuration:   #堆的内存配置
+//            MinHeapFreeRatio         = 0
+//    MaxHeapFreeRatio         = 100
+//            # 堆内存的最大值
+//            MaxHeapSize       = 8589934592 (8192.0MB)
+//            # 年轻代内存的大小
+//            NewSize           = 3221225472 (3072.0MB)
+//            # 年轻代内存的最大值
+//            MaxNewSize        = 3221225472 (3072.0MB)
+//            # 老年代内存的大小
+//            OldSize           = 5368709120 (5120.0MB)
+//            # 老年代和年轻代空间大小的比率
+//    # 因为设置Xmn参数，该设置未生效
+//            NewRatio                 = 2
+//   #Eden区和一个Survivor区的空间大小的比率
+//            SurvivorRatio            = 4
+//    # 元空间第一次触发垃圾回收的内存大小
+//            MetaspaceSize       = 268435456 (256.0MB)
+//            # 元空间内存的最大值
+//            MaxMetaspaceSize    = 536870912 (512.0MB)
+//    G1HeapRegionSize    = 0 (0.0MB)
+//
+//    Heap Usage: # 堆的使用情况
+//    PS Young Generation
+//    Eden Space: # Eden区内存的使用情况
+//            capacity = 2147483648 (2048.0MB)
+//    used     = 901945720 (860.16MB)
+//    free     = 1245537928 (1187.83MB)
+//            42.000120505690575% used
+//    From Space: # Survivor的From区内存的使用情况
+//            capacity = 536870912 (512.0MB)
+//    used     = 0 (0.0MB)
+//    free     = 536870912 (512.0MB)
+//            0.0% used
+//    To Space: # Survivor的To区内存的使用情况
+//            capacity = 536870912 (512.0MB)
+//    used     = 0 (0.0MB)
+//    free     = 536870912 (512.0MB)
+//            0.0% used
+//    PS Old Generation # 老年代内存的使用情况
+//            capacity = 5368709120 (5120.0MB)
+//    used     = 0 (0.0MB)
+//    free     = 5368709120 (5120.0MB)
+//            0.0% used
+ //   -------------------------------------------------------------------------------------------
 //        jstat -参数 线程id 执行时间（单位毫秒） 执行次数
 //        jstat -gc 19098 200 5  # 每隔200ms查看一次GC和堆的相关信息, 共查看5次
 
@@ -64,38 +111,30 @@ public class Jvm {
 //        FGCT：老年代垃圾回收消耗时间
 //        GCT：垃圾回收消耗总时间
 
-    //-Xms2048m -Xmx2048m
-//        -Xms:初始堆大小，JVM启动的时候，给定堆空间大小。
-//
-//        -Xmx:最大堆大小，JVM运行过程中，如果初始堆空间不足的时候，最大可以扩展到多少。
-//
-//        -Xmn：设置年轻代大小。整个堆大小=年轻代大小+年老代大小+元空间大小。元空间一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。
-//
-//        -Xss： 设置每个线程的Java栈大小。JDK5.0以后每个线程Java栈大小为1M，以前每个线程堆栈大小为256K。根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。
-//
-//        -XX:NewSize=n:设置年轻代大小
-//
-//                -XX:NewRatio=n:设置年轻代和年老代的比值。如:为3，表示年轻代与年老代比值为1：3，年轻代占整个年轻代+年老代和的1/4
-//
-//                -XX:SurvivorRatio=n:年轻代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：3，表示Eden：Survivor=3：2，一个Survivor区占整个年轻代的1/5
-//
-//                -XX:MaxPermSize=n:设置持久代大小。不推荐手工设置。
-//
-//        -XX:MaxTenuringThreshold：设置垃圾最大年龄。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。对于年老代比较多的应用，可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概率。
+  //  java -server -Xmx8G -Xms8G -Xmn3G -XX:SurvivorRatio=4 -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=512M -jar one-more-study-0.0.1-SNAPSHOT.jar
 
-//             -Xss：设置一个线程栈的大小；
-//            -Xms：设置堆的最小值（初始值）；
-//            -Xmx：设置堆的最大值；
-//            -Xmn：设置年轻代的大小，表示NewSize=MaxNewSize=Xmn，一般建议该参数来设置新生代大小，避免新生代扩容，优先级低于-XX:NewSize和-XX:MaxNewSize参数；
-//            -XX:NewSize：设置年轻代最小值（初始值）；
-//            -XX:MaxNewSize：设置年轻代最大值；
-//            -XX:NewRatio：设置年轻代和年老代的比值。如：为3，表示年轻代:年老代=1:3，年轻代占整个年轻代年老代和的1/4；
-//            -XX:SurvivorRatio：设置年轻代中Eden区与两个Survivor区的比值。如：3，表示Eden:Survivor=3:2，一个Survivor区占整个年轻代的1/5；
-//            -XX:PermSize： 设置方法区初始大小（JDK1.7及以前）；
-//            -XX:MaxPermSize： 设置方法区最大大小（JDK1.7及以前）；
-//            -XX:MetaspaceSize： 设置元数据区初始值（JDK1.8及以后）；
-//            -XX:MaxMetaspaceSize：设置 元数据区最大值（JDK1.8及以后）；
-//            -XX:MaxDirectMemorySize：设置直接内存大小，默认与堆内存最大值一样（-Xmx）；
+    //-Xms2048m -Xmx2048m
+//  -Xms6g 初始堆大小，JVM启动的时候，给定堆空间大小。
+//   -Xmx6g 最大堆大小，JVM运行过程中，如果初始堆空间不足的时候，最大可以扩展到多少。
+//   -Xmn2g 设置年轻代大小。整个堆大小=年轻代大小+年老代大小+元空间大小。元空间一般固定大小为64m，
+//                所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。
+//   -XX:NewRatio=1 指定老年代和年轻代空间大小的比率。默认为2，即老年代和年轻代空间大小的比率为2:1，
+//                      年轻代占整个堆内存空间大小的1/3下面的例子是把老年代和年轻代空间大小的比率设置为1 比Xmn优先级低;
+//    -XX:SurvivorRatio=4 指定Eden区和一个Survivor区的空间大小的比率。默认为8，即Eden区和一个Survivor区的空间大小为8:1，
+//                  因为一共有两个Survivor区，所以Eden区占年轻代内存大小的80%。
+//                  下面的例子是把Eden区和一个Survivor区的空间大小的比率设置为4
+//   -XX:MetaspaceSize=256M 指定元空间第一次触发垃圾回收的内存大小的阈值
+//   -XX:MaxMetaspaceSize=512M 指定元空间所分配内存的最大值
+//   -Xss： 设置每个线程的Java栈大小。JDK5.0以后每个线程Java栈大小为1M，以前每个线程堆栈大小为256K。
+//                  根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。
+//                  但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。
+//
+//
+//    -XX:MaxTenuringThreshold：设置垃圾最大年龄。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。
+//    对于年老代比较多的应用，可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，
+//    这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概率。
+
+
 
 
 }
