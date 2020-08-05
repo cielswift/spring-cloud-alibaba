@@ -1,4 +1,4 @@
-package com.ciel.scatquick.jvmdb.sqlite;
+package com.ciel.scatquick.sqlite;
 
 import org.springframework.stereotype.Component;
 

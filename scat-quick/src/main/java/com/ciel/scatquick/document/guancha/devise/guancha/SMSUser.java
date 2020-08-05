@@ -1,4 +1,4 @@
-package com.ciel.scatquick.devise.guancha;
+package com.ciel.scatquick.document.guancha.devise.guancha;
 
 /**
  * SMSUser类即是ConcreteObserver，值得注意的是该类也持有了Subject接口的具体实现类即CommentaryObjec的引用，

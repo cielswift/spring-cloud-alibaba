@@ -14,6 +14,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.WebDataBinder;
@@ -35,6 +36,12 @@ import java.util.Date;
 @RestControllerAdvice
 @Slf4j
 public class AfterGlobalExceptionReturnController implements ResponseBodyAdvice<Object> {
+
+
+//    使用form data方式调用接口，校验异常抛出 BindException
+//    使用 json 请求体调用接口，校验异常抛出 MethodArgumentNotValidException
+//    单个参数校验异常抛出ConstraintViolationException
+//    注：单个参数校验需要在参数上增加校验注解，并在类上标注@Validated
 
     /**
      * 参数预处理

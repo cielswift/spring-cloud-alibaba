@@ -1,4 +1,4 @@
-package com.ciel.scatquick.devise.guancha;
+package com.ciel.scatquick.document.guancha.devise.guancha;
 
 /**
  * 观察者

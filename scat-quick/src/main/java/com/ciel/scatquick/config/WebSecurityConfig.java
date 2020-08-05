@@ -20,10 +20,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //开启权限注解,默认是关闭的
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    /**
+     * 配合测试 @MatrixVariable 使 ; 不要被自动移除了：
+     */
+    @Bean
+    HttpFirewall httpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowSemicolon(true); //可包含;
+
+        firewall.setAllowUrlEncodedDoubleSlash(true); //可包含 //
+
+        firewall.setAllowUrlEncodedPercent(true); // 可包含  %
+
+        firewall.setAllowBackSlash(true); //可包含  正反斜杠
+        firewall.setAllowUrlEncodedSlash(true);
+
+
+        firewall.setAllowUrlEncodedPeriod(true); //可包含 .
+
+        return firewall;
+    }
 
     /**
      *不经过security的过滤器

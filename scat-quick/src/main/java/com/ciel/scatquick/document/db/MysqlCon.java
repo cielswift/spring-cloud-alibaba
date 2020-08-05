@@ -1,4 +1,4 @@
-package com.ciel.scatquick.jvmdb;
+package com.ciel.scatquick.document.db;
 
 import org.aspectj.weaver.ast.Not;
 

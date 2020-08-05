@@ -17,7 +17,9 @@ import org.springframework.web.filter.FormContentFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.util.UrlPathHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -145,6 +147,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
         }
     }
 
+
+    /**
+     * 配合测试 @MatrixVariable 使 ; 不要被自动移除了：
+     * @param configurer
+     */
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        urlPathHelper.setRemoveSemicolonContent(false);
+        configurer.setUrlPathHelper(urlPathHelper);
+    }
 
     /**
      * --------------------------------------------------------------------------------

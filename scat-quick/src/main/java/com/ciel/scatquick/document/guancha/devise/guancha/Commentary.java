@@ -1,4 +1,4 @@
-package com.ciel.scatquick.devise.guancha;
+package com.ciel.scatquick.document.guancha.devise.guancha;
 
 /**
  * 该接口定义了解说员用来评论的方法

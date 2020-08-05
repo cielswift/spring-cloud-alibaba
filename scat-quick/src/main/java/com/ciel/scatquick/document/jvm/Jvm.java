@@ -1,4 +1,4 @@
-package com.ciel.scatquick.jvmdb;
+package com.ciel.scatquick.document.jvm;
 
 import org.ehcache.xml.model.Heap;
 import sun.tools.jar.resources.jar;
@@ -13,6 +13,7 @@ public class Jvm {
 
     上述机制最大的好处就是，整个过程中，永远有一个survivor space是空的，另一个非空的survivor space无碎片。
      */
+
 
     public static void main(String[] args) {
 

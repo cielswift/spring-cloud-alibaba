@@ -58,6 +58,15 @@ public class ShardingJDBCController {
 
     protected ScaGirlsMapper scaGirlsMapper;
 
+    //pamr/123;name=javaboy
+
+    @GetMapping("/pamr/{id}")
+    public Result parm(@PathVariable("id") Integer id,@MatrixVariable String name){
+
+        return Result.ok();
+    }
+
+
     @LogsAnnal
     @GetMapping("/cache")
     public Result users(double str ,double end){
