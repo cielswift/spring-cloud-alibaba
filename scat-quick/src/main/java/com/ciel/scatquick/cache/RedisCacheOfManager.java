@@ -17,11 +17,12 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 开启缓存
  */
-@EnableCaching(proxyTargetClass = true,order= Ordered.LOWEST_PRECEDENCE )
+@EnableCaching(proxyTargetClass = true, order = Ordered.LOWEST_PRECEDENCE)
 @Configuration
 public class RedisCacheOfManager {
 
@@ -57,6 +58,8 @@ public class RedisCacheOfManager {
         redisTemplate.setValueSerializer(RedisSerializer.json());
         redisTemplate.setHashValueSerializer(RedisSerializer.json());
 
+
+
 //        //下面代码解决LocalDateTime序列化与反序列化不一致问题
 //        Jackson2JsonRedisSerializer<Object> j2jrs = new Jackson2JsonRedisSerializer<>(Object.class);
 //        ObjectMapper om = new ObjectMapper();
@@ -77,7 +80,7 @@ public class RedisCacheOfManager {
      * 缓存key的生成器
      */
     @Bean
-    public KeyGenerator autoGenSP(){ //定义缓存 key 的生成策略
+    public KeyGenerator autoGenSP() { //定义缓存 key 的生成策略
         return (target, method, params) ->
                 target.getClass().getName() + "_"
                         + method.getName() + "_"

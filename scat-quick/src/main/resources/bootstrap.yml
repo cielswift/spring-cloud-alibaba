@@ -54,7 +54,7 @@ spring:
     database: 2
     #password: root #ciel
     host: 120.27.69.29
-    port: 6379 #
+    port: 6379
     timeout: 2000
   mail:
     username: 15966504931@163.com #邮箱账户
