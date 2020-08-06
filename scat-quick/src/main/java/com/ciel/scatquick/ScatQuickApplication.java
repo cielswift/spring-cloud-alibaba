@@ -10,6 +10,7 @@ import com.xia.bean.XiapexinFjs;
 import com.xia.config.*;
 import org.apache.commons.io.IOUtils;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -162,6 +163,15 @@ public class ScatQuickApplication implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
+
+        //spring中有个工具类 层次查找
+        BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext,String.class);
+        BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,String.class);
+
+//        @Autowired
+//        AnnotationConfigApplicationContext annotationConfigApplicationContext;
+//        annotationConfigApplicationContext.setParent(applicationContext); //设置父容器
+//        annotationConfigApplicationContext.refresh();
 
         System.out.println("INIT ORDER 1");
 
