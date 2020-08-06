@@ -25,8 +25,14 @@ import java.lang.reflect.Constructor;
  *
  *   finishBeanFactoryInitialization() 注册所有业务Bean
  *
+ *   CommonAnnotationBeanPostProcessor： 对JSR-250的支持，如对 @Resource、@PostConstruct和@PreDestroy 的实现
  *   @Autowired的实现是通过AutowiredAnnotationBeanPostProcessor后置处理器中实现的
  *   buildAutowiringMetadata
+ *
+ *   AnnotationConfigApplicationContext来加载@Configuration修饰的类 ;@Configuration修饰的类，也被注册到spring容器中
+ *
+ *   @Configuration、@Bean、@CompontentScan、@CompontentScans,@Import,@Conditional
+ *    都是被这个类ConfigurationClassPostProcessor处理的;
  *------------------------------------------------------------------------------------------
  *
  *  在Spring的DefaultSingletonBeanRegistry类中，你会赫然发现类上方挂着这三个Map：
@@ -39,10 +45,16 @@ import java.lang.reflect.Constructor;
  *  singletonObjects：存放完成创建的Bean所有步骤的单实例Bean
  * earlySingletonObjects：存放只完成了创建Bean的第一步，且是由单实例工厂创建的Bean
  * singletonFactories：存放只完成了创建Bean的第一步后，提前暴露Bean的单实例工厂
-
  *
- * AutowiredAnnotationBeanPostProcessor：对注解@Autowired的实现
- * CommonAnnotationBeanPostProcessor： 对JSR-250的支持，如对 @Resource、@PostConstruct和@PreDestroy 的实现
+ *  DefaultListableBeanFactory 的beanPostProcessors  是一个BeanPostProcessor类型的集合 (后置处理器集合)
+ *  AbstractApplicationContext# registerBeanPostProcessors.
+ *      PostProcessorRegistrationDelegate# registerBeanPostProcessors 添加的
+ *       方法内部主要用到了4个BeanPostProcessor类型的List集合
+ *          priorityOrderedPostProcessors（指定优先级的BeanPostProcessor）
+ *          orderedPostProcessors（指定了顺序的BeanPostProcessor）
+ *          nonOrderedPostProcessors（未指定顺序的BeanPostProcessor）
+ *          MergedBeanDefinitionPostProcessor类型的BeanPostProcessor列表
+ *
  *
  */
 @Component
@@ -81,8 +93,8 @@ public class BeanLoadInter  implements BeanPostProcessor,
     /**
      * 实例化bean之前，相当于new这个bean之前
      *
-     *
-     * 如果此方法返回一个非null对象，则Bean创建过程 会短路。唯一的后续处理是postProcessAfterInitialization
+     * 如果此方法返回一个非null对象，则Bean创建过程 那么那么spring自带的实例化bean的过程就被跳过了。
+     * 唯一的后续处理是postProcessAfterInitialization
      *
      * 返回 null 继续进行默认实例化
      */
@@ -93,7 +105,6 @@ public class BeanLoadInter  implements BeanPostProcessor,
 
     /**
      *实例化bean之后，相当于new这个bean之后
-     *
      *
      * 但在发生Spring属性填充（通过显式属性或自动装配）之前
      * 这是在给定bean上执行自定义字段注入的理想回调
@@ -128,7 +139,7 @@ public class BeanLoadInter  implements BeanPostProcessor,
     }
 
     /**
-     * 返回候选构造函数，如果未指定，则为{@code null
+     * 返回候选构造函数，如果未指定，则为 null
      *
      * 该触发点发生在postProcessBeforeInstantiation之后，用于确定该bean的构造函数之用，
      * 返回的是该bean的所有构造函数列表。用户可以扩展这个点，来自定义选择相应的构造器来实例化这个bean

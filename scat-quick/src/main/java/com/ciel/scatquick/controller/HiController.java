@@ -5,6 +5,7 @@ import com.ciel.scaapi.retu.Result;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.aoptxspi.LogsAnnal;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 @Validated
 public class HiController {
+
 
     protected ApplicationContext applicationContext;
 

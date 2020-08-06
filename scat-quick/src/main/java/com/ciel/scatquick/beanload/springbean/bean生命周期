@@ -1,0 +1,148 @@
+不管是xml还是配置类 都会生成BeanDefinition对象，最后Bean工厂就会根据这份Bean的定义信息，对bean进行实例化、初始化等等操作。
+你可以把BeanDefinition丢给Bean工厂，然后Bean工厂就会根据这个信息帮你生产一个Bean实例，拿去使用。
+BeanDefinition里面里面包含了bean定义的各种信息，如：bean对应的class、scope、lazy信息、dependOn信息、
+autowireCandidate（是否是候选对象）、primary（是否是主要的候选者）等信息
+
+ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
+
+     //设置此bean的父bean名称（对应xml中bean元素的parent属性）
+     void setParentName(@Nullable String parentName);
+
+    //返回此bean定义时指定的父bean的名称
+     String getParentName();
+
+     //指定此bean定义的bean类名(对应xml中bean元素的class属性)
+     void setBeanClassName(@Nullable String beanClassName);
+
+     //返回此bean定义的当前bean类名
+      //注意，如果子定义重写/继承其父类的类名，则这不一定是运行时使用的实际类名。此外，这可能只是调用工厂方法的类，
+      //或者在调用方法的工厂bean引用的情况下，它甚至可能是空的。因此，不要认为这是运行时的最终bean类型，
+      //而只将其用于单个bean定义级别的解析目的。
+     String getBeanClassName();
+
+      //设置此bean的生命周期，如：singleton、prototype（对应xml中bean元素的scope属性）
+     void setScope(@Nullable String scope);
+
+      返回此bean的生命周期，如：singleton、prototype
+     String getScope();
+
+     设置是否应延迟初始化此bean（对应xml中bean元素的lazy属性）
+     void setLazyInit(boolean lazyInit);
+
+     返回是否应延迟初始化此bean，只对单例bean有效
+     boolean isLazyInit();
+
+      设置此bean依赖于初始化的bean的名称,bean工厂将保证dependsOn指定的bean会在当前bean初始化之前先初始化好
+     void setDependsOn(@Nullable String... dependsOn);
+
+     返回此bean所依赖的bean名称
+     String[] getDependsOn();
+
+     设置此bean是否作为其他bean自动注入时的候选者
+     void setAutowireCandidate(boolean autowireCandidate);
+
+     返回此bean是否作为其他bean自动注入时的候选者
+     boolean isAutowireCandidate();
+
+      设置此bean是否为自动注入的主要候选者
+     void setPrimary(boolean primary);
+
+      返回此bean是否作为自动注入的主要候选者
+     boolean isPrimary();
+
+      指定要使用的工厂bean（如果有）。这是要对其调用指定工厂方法的bean的名称。
+      * factoryBeanName：工厂bean名称
+     void setFactoryBeanName(@Nullable String factoryBeanName);
+
+    返回工厂bean名称（如果有）（对应xml中bean元素的factory-bean属性）
+     String getFactoryBeanName();
+
+     // 指定工厂方法（如果有）。此方法将使用构造函数参数调用，如果未指定任何参数，
+     //则不使用任何参数调用。该方法将在指定的工厂bean（如果有的话）上调用，或者作为本地bean类上的静态方法调用。
+     void setFactoryMethodName(@Nullable String factoryMethodName);
+
+     //返回工厂方法名称（对应xml中bean的factory-method属性）
+     String getFactoryMethodName();
+
+      返回此bean的构造函数参数值
+     ConstructorArgumentValues getConstructorArgumentValues();
+
+      是否有构造器参数值设置信息（对应xml中bean元素的<constructor-arg />子元素）
+     default boolean hasConstructorArgumentValues() {
+         return !getConstructorArgumentValues().isEmpty();
+     }
+
+     // 获取bean定义是配置的属性值设置信息
+     MutablePropertyValues getPropertyValues();
+
+      //* 这个bean定义中是否有属性设置信息（对应xml中bean元素的<property />子元素）
+     default boolean hasPropertyValues() {
+         return !getPropertyValues().isEmpty();
+     }
+
+      //设置bean初始化方法名称
+     void setInitMethodName(@Nullable String initMethodName);
+
+     /**
+      * bean初始化方法名称
+      */
+     String getInitMethodName();
+
+     /**
+      * 设置bean销毁方法的名称
+      */
+     void setDestroyMethodName(@Nullable String destroyMethodName);
+
+     /**
+      * bean销毁的方法名称
+      */
+     String getDestroyMethodName();
+
+     /**
+      * 设置bean的role信息
+      */
+     void setRole(int role);
+
+     /**
+      * bean定义的role信息
+      */
+     int getRole();
+
+     /**
+      * 设置bean描述信息
+      */
+     void setDescription(@Nullable String description);
+
+     /**
+      * bean描述信息
+      */
+     String getDescription();
+
+     /**
+      * bean类型解析器
+      */
+     ResolvableType getResolvableType();
+
+     /**
+      * 是否是单例的bean
+      */
+     boolean isSingleton();
+
+     /**
+      * 是否是多列的bean
+      */
+     boolean isPrototype();
+
+     /**
+      * 对应xml中bean元素的abstract属性，用来指定是否是抽象的
+      */
+     boolean isAbstract();
+
+     /**
+      * 返回此bean定义来自的资源的描述（以便在出现错误时显示上下文）
+      */
+     String getResourceDescription();
+
+     BeanDefinition getOriginatingBeanDefinition();
+
+ }

@@ -27,6 +27,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,25 +55,44 @@ import java.util.ServiceLoader;
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 /**
  * basePackages 扫描的位置
+ * basePackageClasses：指定一些类，spring容器会扫描这些类所在的包及其子包中的类 :basePackages的类型安全替代品
+ * nameGenerator：自定义bean名称生成器 ,NameGen.class
+ * resourcePattern：需要扫描包中的那些资源，默认是：** / *.class，即会扫描指定包中所有的class文件
+ * lazyInit：是否延迟初始化被注册的bean
  * excludeFilters 排除 FilterType.ANNOTATION 按注解排除 ,FilterType.ASSIGNABLE_TYPE,明确指定类 ,FilterType.REGEX,类名满足表达式
  * includeFilters 包含 FilterType.CUSTOM 自定义
- * useDefaultFilters = false 禁用默认规则 也就是不在扫描 @Component 等
+ *                  ANNOTATION：通过注解的方式来筛选候选者，即判断候选者是否有指定的注解
+ *                  ASSIGNABLE_TYPE：通过指定的类型来筛选候选者，即判断候选者是否是指定的类型
+ *                  ASPECTJ：ASPECTJ表达式方式，即判断候选者是否匹配ASPECTJ表达式
+ *                  REGEX：正则表达式方式，即判断候选者的完整名称是否和正则表达式匹配
+ *                  CUSTOM：用户自定义过滤器来筛选候选者，对候选者的筛选交给用户自己来判断
+ * useDefaultFilters = false 禁用默认规则 也就是不在扫描 @Component 等;
  */
 //@ComponentScan(basePackages = "com.ciel",
 //        excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION,value = {RepAction.class})},
 //        includeFilters = {@ComponentScan.Filter(type = FilterType.CUSTOM,value = TypeFilterCustom.class)}
-//        /*,useDefaultFilters = false */  )
+//        /*,useDefaultFilters = false */ )
 @ComponentScan(basePackages = "com.ciel")
 /**
- * 导入其他xml 配置文件
+ * 导入其他xml 配置文件;
+ *  以classpath:开头：检索目标为当前项目的classes目录
+ *  以classpath*:开头：检索目标为当前项目的classes目录，以及项目中所有jar包中的目录
+ *  *：文件通配符的方式  beans-*.xml
+ *  *：目录通配符的方式 /*//**beans-*.xml   ;两个/** 是注释避免注释冲突
+ *  **：递归任意子目录的方式 /**//**beans-*.xml ;两个/** 是注释避免注释冲突
  */
 @ImportResource(locations = "classpath:./sources/app-other.xml")
-
 /**
- * 导入其他 bean 或 配置 类
+ * 导入其他 bean 或 配置 类 ;value为@CompontentScan标注的类 ;value为@Configuration标注的类
+ *     value为ImportBeanDefinitionRegistrar接口类型
+ *     value为ImportSelector接口类型
+ *     value为DeferredImportSelector接口类型 :会将DeferredImportSelector类型的放在最后处理，
+ *             会先处理其他被导入的类，其他类会按照value所在的前后顺序进行处理;
+ *             可以在DeferredImportSelector导入的类中判断一下容器中是否已经注册了某个bean，
+ *             如果没有注册过，那么再来注册
  */
 @Import({XiapeixinFcs.class, ImportSelectTest.class, ImportBeanDefinitionRegistrarTest.class,
-        ConfigurationTest.class,ContionalConfig.class})
+        ConfigurationTest.class,ContionalConfig.class,ImportDefaultB.class,ImportDefaultA.class})
 
 /**
  * 导入其他配置类

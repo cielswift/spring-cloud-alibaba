@@ -1,5 +1,7 @@
 package com.ciel.scatquick.aoptxspi;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 /**
@@ -11,6 +13,11 @@ import java.lang.annotation.*;
 @Documented
 public @interface LogsAnnal {
 
+    /**
+     * 很多注解的不同属性起着相同的作用
+     */
+    @AliasFor(annotation = LogsAnnal.class, value = "prefix")
+    String value();
     /**
      * 打印前缀
      */

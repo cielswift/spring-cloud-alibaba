@@ -19,7 +19,7 @@ import javax.annotation.PreDestroy;
  *
  *
  */
-@Component
+@Component()
 public class MyBean implements InitializingBean, DisposableBean, //加载 //销毁
 
         //实现该接口后，当所有单例 bean 都初始化完成以后， 容器会回调该接口的方法 afterSingletonsInstantiated。

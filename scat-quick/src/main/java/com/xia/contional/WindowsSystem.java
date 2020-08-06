@@ -3,8 +3,12 @@ package com.xia.contional;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import java.net.InetAddress;
@@ -14,8 +18,14 @@ import java.util.Properties;
 
 @Data
 @Slf4j
-public class WindowsSystem implements Condition {
+//@Order(0)  //指定Condition的顺序
+public class WindowsSystem implements Condition , Ordered {
 
+    //指定Condition的顺序
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 
     /**
      * 返回true 生效
@@ -23,13 +33,42 @@ public class WindowsSystem implements Condition {
      */
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        printSystem();
 
+
+        /**
+         * 返回bean定义注册器，可以通过注册器获取bean定义的各种配置信息
+         */
+        //BeanDefinitionRegistry getRegistry();
+
+        /**
+         * 返回ConfigurableListableBeanFactory类型的bean工厂，相当于一个ioc容器对象
+         */
+        //ConfigurableListableBeanFactory getBeanFactory();
+
+        /**
+         * 返回当前spring容器的环境配置信息对象
+         */
+        //Environment getEnvironment();
+
+        /**
+         * 返回资源加载器
+         */
+        //ResourceLoader getResourceLoader();
+
+        /**
+         * 返回类加载器
+         */
+        //ClassLoader getClassLoader();
+
+        return true;
+    }
+
+    public void printSystem() {
         try {
             Runtime r = Runtime.getRuntime();
-
             Properties props = System.getProperties();
             InetAddress addr = InetAddress.getLocalHost();
-
             String ip = addr.getHostAddress();
             Map<String, String> map = System.getenv();
             String userName = map.get("USERNAME");// 获取用户名
@@ -70,10 +109,8 @@ public class WindowsSystem implements Condition {
             System.out.println("用户的账户名称：    " + props.getProperty("user.name"));
             System.out.println("用户的主目录：    " + props.getProperty("user.home"));
             System.out.println("用户的当前工作目录：    " + props.getProperty("user.dir"));
-        } catch (Exception e) {
-            return false;
-        }
+        }catch (Exception e){
 
-        return true;
+        }
     }
 }

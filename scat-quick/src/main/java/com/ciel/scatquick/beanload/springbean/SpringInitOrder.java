@@ -1,6 +1,6 @@
-package com.ciel.scatquick.beanload;
+package com.ciel.scatquick.beanload.springbean;
 
-public class InitOrder {
+public class SpringInitOrder {
 
 //    Spring 容器初始化流程大致流程如下：
 //

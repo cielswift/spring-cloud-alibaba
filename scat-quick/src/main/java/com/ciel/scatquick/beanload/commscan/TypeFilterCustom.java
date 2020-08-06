@@ -1,4 +1,4 @@
-package com.ciel.scatquick.beanload.filter;
+package com.ciel.scatquick.beanload.commscan;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.type.AnnotationMetadata;

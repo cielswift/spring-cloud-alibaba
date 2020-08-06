@@ -1,13 +1,11 @@
 package com.ciel.scatquick.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -21,14 +19,23 @@ import java.util.Arrays;
 /**
  * 开启缓存
  */
+
 @EnableCaching(proxyTargetClass = true,order= Ordered.LOWEST_PRECEDENCE )
 @Configuration
 public class RedisCacheOfManager {
 
     /**
-     * 缓存专用redis
+     * 缓存专用redis;
+     * autowireCandidate = false 不会作为其他bean的依赖而自动注入
+     * initMethod = "",destroyMethod = "" 初始化和销毁方法
      */
-    @Bean("cacheRedis")
+    @Bean(value = "cacheRedis",autowireCandidate = false)
+    @Lookup //返回新的对象
+    @Lazy //懒加载
+    /**
+     * RedisTemplate创建的时候会先将@DependsOn中指定的个bean先创建好
+     */
+    @DependsOn({"redisConnectionFactory"})
     public RedisTemplate<String, Object> cacheRedis(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         // 配置连接工厂

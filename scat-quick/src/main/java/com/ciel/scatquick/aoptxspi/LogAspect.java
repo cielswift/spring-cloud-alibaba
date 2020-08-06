@@ -2,8 +2,9 @@ package com.ciel.scatquick.aoptxspi;
 
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.SysUtils;
-import com.ciel.scatquick.jvmdb.sqlite.Sqlite;
+import com.ciel.scatquick.controller.HiController;
 import com.ciel.scatquick.security.realm.ScaCusUser;
+import com.ciel.scatquick.sqlite.Sqlite;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -11,6 +12,7 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -144,8 +146,13 @@ public class LogAspect implements Ordered {
 
         LogsAnnal annotation = currentMethod.getAnnotation(LogsAnnal.class);
 
+        //AnnotatedElementUtils是spring提供的一个查找注解的工具类
+        LogsAnnal annotation1 =
+                AnnotatedElementUtils.getMergedAnnotation(HiController.class, LogsAnnal.class);
 
         threadPoolExecutor.submit(() -> {
+
+
 
             LogInfo logInfo = new LogInfo(null,
                     Faster.toString(point.getArgs()),
