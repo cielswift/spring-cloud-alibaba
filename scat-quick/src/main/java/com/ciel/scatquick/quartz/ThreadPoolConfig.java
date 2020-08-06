@@ -14,13 +14,15 @@ import java.util.concurrent.TimeUnit;
 @EnableScheduling //开启定时任务
 @Configuration
 public class ThreadPoolConfig {
+
+    private static int cpus = Runtime.getRuntime().availableProcessors();
     /**
      * jdk 原生线程池
      */
     @Bean("jdkThreadPoolExecutor")
     public ThreadPoolExecutor threadPoolExecutor(){
 
-        return new ThreadPoolExecutor(64,64,2, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(cpus,cpus+1,2, TimeUnit.SECONDS,
                 new LinkedBlockingDeque<Runnable>(1024),
                 new ThreadFactoryBuilder().setNameFormat("CIEL-JDK-POOL-%d").build(),
                 new ThreadPoolExecutor.DiscardOldestPolicy());
@@ -33,9 +35,9 @@ public class ThreadPoolConfig {
     public ThreadPoolTaskExecutor threadPoolTaskExecutor(){
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // 核心线程数
-        taskExecutor.setCorePoolSize(64);
+        taskExecutor.setCorePoolSize(cpus);
         // 最大线程数
-        taskExecutor.setMaxPoolSize(128);
+        taskExecutor.setMaxPoolSize(cpus+1);
         // 线程队列最大线程数
         taskExecutor.setQueueCapacity(1024);
 

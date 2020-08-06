@@ -20,9 +20,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +38,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
@@ -58,10 +63,14 @@ public class ShardingJDBCController {
 
     protected ScaGirlsMapper scaGirlsMapper;
 
+    protected RedisTemplate<String, Object> redisTemplate;
+
+
     //pamr/123;name=javaboy
 
     @GetMapping("/pamr/{id}")
     public Result parm(@PathVariable("id") Integer id,@MatrixVariable String name){
+
 
         return Result.ok();
     }
@@ -69,10 +78,39 @@ public class ShardingJDBCController {
 
     @LogsAnnal
     @GetMapping("/cache")
-    public Result users(double str ,double end){
+    public Result users(double str ,double end) {
+
+        /**
+         * redis 分布式锁
+         * setIfAbsent 没有这个key才会返回true;
+         * setIfPresent 有这个key 才会返回true ,也就是必须覆盖
+         */
+        Boolean absent = redisTemplate.opsForValue()
+                .setIfAbsent("cl-lock", 123578, 2, TimeUnit.SECONDS);
+        if (null != absent && absent) { //设置成功
+
+            //业务逻辑
+            redisTemplate.delete("cl-lock");
+        }
+
+        //redisson 分布式锁
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://120.27.69.29:6379")
+                //.setPassword()
+                .setDatabase(1);
+
+        Redisson redisson = (Redisson) Redisson.create(config);
+
+        RLock lock = redisson.getLock("cl-lock");
+        lock.lock(5, TimeUnit.SECONDS);
+
+        //业务逻辑
+        lock.unlock();
+
 
         List<ScaGirls> girls = scaGirlsService.girlsByPrice(str, end);
         return Result.ok().data(girls);
+
     }
 
 
