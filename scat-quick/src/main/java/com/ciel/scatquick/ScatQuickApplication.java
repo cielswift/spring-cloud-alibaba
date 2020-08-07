@@ -164,7 +164,8 @@ public class ScatQuickApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        //spring中有个工具类 层次查找
+        //ListableBeanFactory接口不支持层次查找
+        //spring中有个工具类 支持父子层次查找
         BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext,String.class);
         BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,String.class);
 

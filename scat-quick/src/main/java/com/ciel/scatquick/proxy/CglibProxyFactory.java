@@ -1,6 +1,11 @@
 package com.ciel.scatquick.proxy;
 
+import net.sf.cglib.core.NamingPolicy;
+import net.sf.cglib.core.Predicate;
 import net.sf.cglib.proxy.*;
+import org.springframework.objenesis.Objenesis;
+import org.springframework.objenesis.ObjenesisStd;
+import org.springframework.objenesis.instantiator.ObjectInstantiator;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -20,9 +25,19 @@ public class CglibProxyFactory<T> implements MethodInterceptor  {
     public T getProxyInstance() {
         // 创建 Enhancer 对象
         Enhancer enhancer = new Enhancer();
+
+        //表示生成代理类的名字的策略
+        enhancer.setNamingPolicy(new NamingPolicy(){
+            @Override
+            public String getClassName(String prefix, String source, Object key, Predicate names) {
+                return prefix.concat("CglibCielSwift");
+            }
+        });
+
         // 设置目标对象的Class
         enhancer.setSuperclass(target.getClass());
-        // 设置回调操作，相当于InvocationHandler
+        //设置代理对象实现的接口
+        enhancer.setInterfaces(target.getClass().getInterfaces());
 
         /*设置回调，需实现org.springframework.cglib.proxy.Callback接口，
         此处我们使用的是org.springframework.cglib.proxy.MethodInterceptor，也是一个接口，实现了Callback接口，
@@ -77,6 +92,37 @@ public class CglibProxyFactory<T> implements MethodInterceptor  {
         enhancer.setCallbacks(callbackHelper.getCallbacks());
         enhancer.setCallbackFilter(callbackHelper);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /**
+         * 当第1次调用work方法的时候，会被cglib拦截，进入lazyLoader的loadObject内部，
+         * 将这个方法的返回值作为work方法的调用者，loadObject中返回了一个对象，
+         * cglib内部会将loadObject方法的返回值和work方法关联起来，然后缓存起来，而第2次调用work方法的时候
+         * ，通过方法名去缓存中找，会直接拿到第1次返回的对象，所以第2次不会进入到loadObject方法中了
+         */
+        //创建一个LazyLoader对象
+        LazyLoader lazyLoader = new LazyLoader() {
+            @Override
+            public Object loadObject() throws Exception {
+                System.out.println("调用LazyLoader.loadObject()方法");
+                return target.getClass().getConstructor().newInstance();
+            }
+        };
+        enhancer.setCallback(lazyLoader);
+        enhancer.setCallbackFilter(null);
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+       // Dispatcher和LazyLoader作用很相似，区别是用Dispatcher的话每次对增强bean进行方法调用都会触发回调
+
+        Dispatcher dispatcher = new Dispatcher() {
+            @Override
+            public Object loadObject() throws Exception {
+                System.out.println("调用Dispatcher.loadObject()方法");
+                return target.getClass().getConstructor().newInstance();
+            }
+        };
+        enhancer.setCallback(dispatcher);
+        enhancer.setCallbackFilter(null);
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         return (T)enhancer.create(); //被代理类必须有无参构造函数 否则报错
     }
@@ -125,14 +171,26 @@ public class CglibProxyFactory<T> implements MethodInterceptor  {
 
     public static void main(String[] args) throws Exception {
 
+        //Objenesis 创建对象即使没有空的构造函数; 即使你有空的构造方法，也是不会执行的
+        Objenesis objenesis = new ObjenesisStd();
+
+        System ff = objenesis.newInstance(System.class);
+
+        ObjectInstantiator<System> of = objenesis.getInstantiatorOf(System.class);
+        System ff2 = of.newInstance();
+
+        System.out.println(ff);
+        System.out.println(ff2);
+
         Programmer programmer = new Programmer("夏培鑫");
         CglibProxyFactory<Programmer> cglibProxyFactory = new CglibProxyFactory<>(programmer);
+
         Programmer proxyInstance =  cglibProxyFactory.getProxyInstance();
 
         String work = proxyInstance.work("代码");
+        String work2 = proxyInstance.work("代码");
 
         System.out.println(work);
-
-
+        System.out.println(work2);
     }
 }
