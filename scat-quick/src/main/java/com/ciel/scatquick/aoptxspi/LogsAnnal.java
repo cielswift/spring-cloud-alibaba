@@ -17,7 +17,7 @@ public @interface LogsAnnal {
      * 很多注解的不同属性起着相同的作用
      */
     @AliasFor(annotation = LogsAnnal.class, value = "prefix")
-    String value();
+    String value() default "默认日志->";
     /**
      * 打印前缀
      */

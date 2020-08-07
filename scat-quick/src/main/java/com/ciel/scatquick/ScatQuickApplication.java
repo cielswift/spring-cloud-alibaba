@@ -165,8 +165,8 @@ public class ScatQuickApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         //spring中有个工具类 层次查找
-        BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext,String.class);
-        BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,String.class);
+        //BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext,String.class);
+        //BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,String.class);
 
 //        @Autowired
 //        AnnotationConfigApplicationContext annotationConfigApplicationContext;

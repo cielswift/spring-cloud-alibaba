@@ -1,5 +1,6 @@
 package com.ciel.scatquick.init;
 
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.Order;
@@ -27,6 +28,8 @@ public class AppInitializer implements ApplicationContextInitializer<Configurabl
 
         System.out.println("START ORDER 2");
 
+        //@RefreshScope //动态刷新配置文件
+
         //获取配置文件信息
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
 
@@ -34,7 +37,9 @@ public class AppInitializer implements ApplicationContextInitializer<Configurabl
         Map<String, Object> map = new HashMap<>();
         map.put("name-d", "transcation");
         MapPropertySource mapPropertySource = new MapPropertySource("cus-cc", map);
+
         environment.getPropertySources().addLast(mapPropertySource);
+       // environment.getPropertySources().addFirst(); 高优先级
 
         System.out.println("当前运行端口:"+environment.getProperty("server.port"));
     }

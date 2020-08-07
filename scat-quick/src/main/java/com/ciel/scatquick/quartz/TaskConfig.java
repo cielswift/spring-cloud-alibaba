@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -50,7 +51,7 @@ public class TaskConfig {
     /**
      * 发布事件
      */
-    @Scheduled(cron = "1/30 * * * 10 ?")
+    @Scheduled(cron = "1/30 * * * * ?")
     public void tes(){
         applicationEventPublisher.publishEvent(new AppEvn(applicationContext,"appEvn发布事件"));
         applicationContext.publishEvent(new AppEvn(applicationContext,"app发布事件"));
@@ -60,8 +61,11 @@ public class TaskConfig {
     /**
      * 代替事件监听器,不用写ApplicationListener
      */
-    @EventListener
+    @EventListener(AppEvn.class)
+    @Order(1) //监听顺序
     public void listenHello(AppEvn event) {
+
+        System.out.println("当前线程:"+Thread.currentThread().getName());
         System.out.println(String.format("@EventListener 收到事件: 名称%s ,源%s ",
                 event.getName(),event.getSource().getClass().getName()));
     }

@@ -241,6 +241,11 @@
             </exclusions>
         </dependency>
 
+        <dependency> <!--dubbo-->
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.7.5</version>
+        </dependency>
 
     </dependencies>
 

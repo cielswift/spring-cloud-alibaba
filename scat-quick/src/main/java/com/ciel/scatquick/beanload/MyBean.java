@@ -5,6 +5,8 @@ import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.*;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -17,8 +19,9 @@ import javax.annotation.PreDestroy;
  *
  * 参考 org.springframework.context.support.AbstractApplicationContext.refresh()  registerBeanPostProcessors
  *
- *
+ * ScopedProxyMode.TARGET_CLASS 返回代理对象
  */
+@Scope(proxyMode= ScopedProxyMode.TARGET_CLASS)
 @Component()
 public class MyBean implements InitializingBean, DisposableBean, //加载 //销毁
 
