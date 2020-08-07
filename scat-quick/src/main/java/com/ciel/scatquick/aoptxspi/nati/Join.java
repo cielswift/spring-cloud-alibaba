@@ -154,7 +154,6 @@ public class Join {
         proxyFactory.addAdvisor(th);
 
         //proxyFactory.addAdvice(methodInterceptor); 可以直接添加 通知
-
         //通过工厂提供的方法来生成代理对象
 
         Programmer userServiceProxy = (Programmer) proxyFactory.getProxy();
