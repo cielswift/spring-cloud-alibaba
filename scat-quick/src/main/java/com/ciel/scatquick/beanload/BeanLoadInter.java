@@ -32,7 +32,7 @@ import java.lang.reflect.Constructor;
  *   AnnotationConfigApplicationContext来加载@Configuration修饰的类 ;@Configuration修饰的类，也被注册到spring容器中
  *
  *   @Configuration、@Bean、@CompontentScan、@CompontentScans,@Import,@Conditional
- *    都是被这个类ConfigurationClassPostProcessor处理的;
+ *    都是被这个类ConfigurationClassPostProcessor处理的; 是BeanDefinitionRegistryPostProcessor的子接口
  *------------------------------------------------------------------------------------------
  *
  *  在Spring的DefaultSingletonBeanRegistry类中，你会赫然发现类上方挂着这三个Map：
