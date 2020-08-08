@@ -3,6 +3,7 @@ package com.ciel.scatquick.proxy;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.core.Predicate;
 import net.sf.cglib.proxy.*;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.objenesis.Objenesis;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.objenesis.instantiator.ObjectInstantiator;
@@ -33,6 +34,7 @@ public class CglibProxyFactory<T> implements MethodInterceptor  {
                 return prefix.concat("CglibCielSwift");
             }
         });
+
 
         // 设置目标对象的Class
         enhancer.setSuperclass(target.getClass());
@@ -186,6 +188,8 @@ public class CglibProxyFactory<T> implements MethodInterceptor  {
         CglibProxyFactory<Programmer> cglibProxyFactory = new CglibProxyFactory<>(programmer);
 
         Programmer proxyInstance =  cglibProxyFactory.getProxyInstance();
+
+
 
         String work = proxyInstance.work("代码");
         String work2 = proxyInstance.work("代码");

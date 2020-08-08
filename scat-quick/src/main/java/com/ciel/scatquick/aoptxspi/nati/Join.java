@@ -4,6 +4,8 @@ import com.ciel.scatquick.proxy.Programmer;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.*;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 
@@ -115,18 +117,13 @@ public class Join {
 
                 //返回此静态连接点  一般就为当前的Method(至少目前的唯一实现是MethodInvocation,所以连接点得静态部分肯定就是本方法)
                 AccessibleObject staticPart = invocation.getStaticPart();
-
-                Object result = invocation.proceed(); //转到拦截器链中的下一个拦截器
-
-                return result;
+                return invocation.proceed(); //转到拦截器链中的下一个拦截器
             }
         };
-
 
         //切入点和通知组装 //顾问
         DefaultPointcutAdvisor bef = new DefaultPointcutAdvisor(pointcut, beforeAdvice);
         bef.setOrder(1);
-
 
         DefaultPointcutAdvisor af = new DefaultPointcutAdvisor(pointcut, afterReturningAdvice);
         bef.setOrder(2);
@@ -139,7 +136,9 @@ public class Join {
 
         //通过spring提供的代理创建工厂来创建代理
         ProxyFactory proxyFactory = new ProxyFactory();
-
+        proxyFactory.setExposeProxy(true); //在threadLocal暴露代理对象
+        //强制使用cglib代理
+        proxyFactory.setProxyTargetClass(true);
         //为工厂指定目标对象
         proxyFactory.setTarget(target);
        // proxyFactory.setInterfaces();
@@ -148,10 +147,12 @@ public class Join {
 //        最终会有多个MethodInterceptor，这些MethodInterceptor会组成一个方法调用链
 
         //调用addAdvisor方法，为目标添加增强的功能，即添加Advisor，可以为目标添加很多个Advisor
+        //添加包装器 (包装器 = 通知 + 切入点)
         proxyFactory.addAdvisor(bef);
         proxyFactory.addAdvisor(af);
         proxyFactory.addAdvisor(me);
         proxyFactory.addAdvisor(th);
+
 
         //proxyFactory.addAdvice(methodInterceptor); 可以直接添加 通知
         //通过工厂提供的方法来生成代理对象
