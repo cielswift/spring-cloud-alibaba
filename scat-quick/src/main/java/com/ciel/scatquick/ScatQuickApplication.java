@@ -46,12 +46,11 @@ import java.util.ServiceLoader;
 @SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
 /**
  * 开启基于注解的aop
- * exposeProxy=true 表示通过aop框架暴露该代理对象，aopContext能够访问;
- *      然后就可以方法里获取当前类的代理对象;
- *          private HelloServiceImpl getHelloServiceImpl() {
- *           return AopContext.currentProxy() != null ? (HelloServiceImpl) AopContext.currentProxy() : this;
- *          }
+ *  exposeProxy=true 表示通过aop框架暴露该代理对象，AopContext.currentProxy() 能够访问;
  *  proxyTargetClass=true 使用cglib进行代理
+ *
+ *  会找到容器中所有标注有@Aspect注解的bean以及Advisor类型的bean，会将他们转换为Advisor集合，
+ *  spring会通过Advisor集合对容器中满足切入点表达式的bean生成代理对象
  */
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 /**

@@ -2,17 +2,17 @@ package com.ciel.scatquick.aoptxspi;
 
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.SysUtils;
-import com.ciel.scatquick.controller.HiController;
 import com.ciel.scatquick.security.realm.ScaCusUser;
 import com.ciel.scatquick.sqlite.Sqlite;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -31,10 +31,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class LogAspect implements Ordered {
 
     /**
-     * @EnableAspectJAutoProxy的主要作用是开启对AOP的支持;
-     * 主要起作用的是@Import(AspectJAutoProxyRegistrar.class)。
-     * AspectJAutoProxyRegistrar注册器的主要作用是将AnnotationAwareAspectJAutoProxyCreator后置处理器注册到容器中
+     * @EnableAspectJAutoProxy的主要作用是开启对AOP的支持;会在spring容器中注册一个bean
+     * #AnnotationAwareAspectJAutoProxyCreator对符合条件的bean，自动生成代理对象
+     * 注册器的主要作用是将AnnotationAwareAspectJAutoProxyCreator后置处理器注册到容器中
      *
+     *  而AspectJProxyFactory这个类可以通过解析@Aspect标注的类来生成代理aop代理对象
      *
      *   实现该接口后Spring 在解析配置类的时候会通过后置处理器ConfigurationClassPostProcessor调用到
      *   ImportBeanDefinitionRegistrar#registerBeanDefinitions()方法
@@ -61,6 +62,9 @@ public class LogAspect implements Ordered {
     拦截链的执行其实就是proceed()方法的递归调用
 
     ReflectiveMethodInvocation.proceed()
+
+
+    DefaultPointcutAdvisor; spring提供的实现 (切面+切入点实现+顺序) ;可以加入到spring容器中 和 @Aspect作用一样
      *
      */
 
@@ -95,6 +99,7 @@ public class LogAspect implements Ordered {
      *     args(java.lang.String,com.df.Book); 参数符合要求作为切入点
      *     execution (public * com.ciel.provider.controller.AppController.*(..))
      *     @annotation(com.yitian.sbadmin.common.annotation.AutoLog)  对所有带有AutoLog注解的方法切面
+     *     @within(com.javacode2018.aop.demo9.test10.Ann10) 匹配类上的注解
      */
 
 
@@ -103,7 +108,9 @@ public class LogAspect implements Ordered {
     }
 
 
-
+    /**
+     * 环绕通知类型 AspectJAroundAdvice
+     */
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
 
@@ -141,18 +148,17 @@ public class LogAspect implements Ordered {
             throw new IllegalArgumentException("Logs注解只能用于方法");
         }
         msig = (MethodSignature) sig;
+        //Method method = msig.getMethod(); 获取方法
         Object target = point.getTarget();
         Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
         LogsAnnal annotation = currentMethod.getAnnotation(LogsAnnal.class);
 
         //AnnotatedElementUtils是spring提供的一个查找注解的工具类
-        LogsAnnal annotation1 =
-                AnnotatedElementUtils.getMergedAnnotation(HiController.class, LogsAnnal.class);
+//        LogsAnnal annotation1 =
+//                AnnotatedElementUtils.getMergedAnnotation(HiController.class, LogsAnnal.class);
 
         threadPoolExecutor.submit(() -> {
-
-
 
             LogInfo logInfo = new LogInfo(null,
                     Faster.toString(point.getArgs()),
@@ -190,27 +196,41 @@ public class LogAspect implements Ordered {
 //    public void pointCutType() {
 //    }
 //
-//    // 建言
+//    // &&：多个匹配都需要满足
+//    ||：多个匹配中只需满足一个
+//    !：匹配不满足的情况下
 //    @Before("pointCutMethod() || pointCutType()")
 //------------------------------------------------------------------
 
-//    @Before("point()")  //之前执行
+//    @Before("point()")  //之前执行  (对应类AspectJMethodBeforeAdvice)
 //    public void before(JoinPoint joinPoint){
 //        System.out.println("bef");
+
+//    String toString();         //连接点所在位置的相关信息
+//    String toShortString();     //连接点所在位置的简短相关信息
+//    String toLongString();     //连接点所在位置的全部相关信息
+//    Object getThis();         //返回AOP代理对象
+//    Object getTarget();       //返回目标对象
+//    Object[] getArgs();       //返回被通知方法参数列表，也就是目前调用目标方法传入的参数
+//    Signature getSignature();  //返回当前连接点签名，这个可以用来获取目标方法的详细信息，如方法Method对象等
+//    SourceLocation getSourceLocation();//返回连接点方法所在类文件中的位置
+//    String getKind();        //连接点类型
+//    StaticPart getStaticPart(); //返回连接点静态部分
+
 //    }
 //
-//    @After("point()") //一定会执行
+//    @After("point()") //一定会执行 (对应类AspectJAfterAdvice)
 //    public void after(JoinPoint joinPoint){
 //        System.out.println("after");
 //    }
 //
-//    @AfterReturning(value = "point()",returning = "returnResult") //执行完后执行 有返回值
+//    @AfterReturning(value = "point()",returning = "returnResult") //执行完后执行 有返回值 (对应类AspectJAfterReturningAdvice)
 //    public void AfterReturning(JoinPoint joinPoint,Object returnResult){ //joinPoint要放在前面
 //
 //        System.out.println("AfterReturning");
 //    }
 //
-//    @AfterThrowing(value = "point()",throwing = "exceptionResult") //发生异常执行
+//    @AfterThrowing(value = "point()",throwing = "exceptionResult") //发生异常执行 (对应类AspectJAfterThrowingAdvice)
 //    public void AfterThrowing(JoinPoint joinPoint,Exception exceptionResult){
 //        System.out.println("AfterThrowing");
 //    }
@@ -220,4 +240,26 @@ public class LogAspect implements Ordered {
 //    @AfterReturning：后置通知，在目标方法执行结束后，如果执行成功，则执行通知定义的任务
 //    @AfterThrowing：异常通知，如果目标方法执行过程中抛出异常，则执行通知定义的任务
 //    @Around：环绕通知，在目标方法执行前和执行后，都需要执行通知定义的任务
+
+    /**
+     * Aspect内部的通知执行顺序
+     * try {
+     *     Object result = null;
+     *     try {
+     *         System.out.println("@Around通知start");
+     *         System.out.println("@Before通知!");
+     *         result = service4.say("路人");
+     *         System.out.println("@Around绕通知end");
+     *         return result;
+     *     } finally {
+     *         System.out.println("@After通知!");
+     *     }
+     *     System.out.println("@AfterReturning通知!");
+     *     return retVal;
+     * } catch (Throwable ex) {
+     *     System.out.println("@AfterThrowing通知!");
+     *     //继续抛出异常
+     *     throw ex;
+     * }
+     */
 }

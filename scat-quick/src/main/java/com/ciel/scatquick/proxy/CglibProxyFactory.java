@@ -190,7 +190,6 @@ public class CglibProxyFactory<T> implements MethodInterceptor  {
         Programmer proxyInstance =  cglibProxyFactory.getProxyInstance();
 
 
-
         String work = proxyInstance.work("代码");
         String work2 = proxyInstance.work("代码");
 

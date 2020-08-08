@@ -78,6 +78,15 @@ public class Join {
         /** 通知
          * 拦截目标方法的执行，可以在这个方法内部实现需要增强的逻辑，以及主动调用目标方法
          * 所有的通知均需要转换为MethodInterceptor类型的，最终多个MethodInterceptor组成一个方法拦截器连
+         *
+         * MethodBeforeAdvice最终会被包装为MethodBeforeAdviceInterceptor类型，
+         * 然后放到拦截器链中去执行，通过MethodBeforeAdviceInterceptor代码可以理解MethodBeforeAdvice的执行过程
+         *
+         * AfterReturningAdvice最终会被包装为AfterReturningAdviceInterceptor类型，然后放到拦截器链中去执行，
+         * 通过AfterReturningAdviceInterceptor代码可以理解AfterReturningAdvice的执行过程
+         *
+         * ThrowsAdvice最终会被包装为ThrowsAdviceInterceptor类型，然后放到拦截器链中去执行，
+         * 通过ThrowsAdviceInterceptor代码可以理解ThrowsAdvice的执行过程，; 构造参数传入一个自定义的 ThrowsAdvice 对象
          */
         MethodInterceptor methodInterceptor = new MethodInterceptor() {
             @Override
@@ -152,7 +161,6 @@ public class Join {
         proxyFactory.addAdvisor(af);
         proxyFactory.addAdvisor(me);
         proxyFactory.addAdvisor(th);
-
 
         //proxyFactory.addAdvice(methodInterceptor); 可以直接添加 通知
         //通过工厂提供的方法来生成代理对象

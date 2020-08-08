@@ -1,5 +1,6 @@
 package com.ciel.scatquick.proxy;
 
+import com.ciel.scatquick.aoptxspi.LogsAnnal;
 import org.springframework.aop.framework.AopContext;
 
 public class Programmer implements Empor {
@@ -14,6 +15,7 @@ public class Programmer implements Empor {
 
     }
 
+    @LogsAnnal
     @Override
     public String work(String work) throws Exception {
 
@@ -24,11 +26,11 @@ public class Programmer implements Empor {
             System.err.println("没有代理对象");
         }
 
-
         System.out.println(name + "正在工作..." + work);
         if (System.currentTimeMillis() % 2 == 0) {
             throw new Exception("停电了");
         }
+
         return "加班的代码成果";
     }
 

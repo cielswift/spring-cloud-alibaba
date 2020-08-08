@@ -4,14 +4,9 @@ import com.ciel.scatquick.proxy.Empor;
 import com.ciel.scatquick.proxy.Programmer;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.aop.Advisor;
 import org.springframework.aop.MethodBeforeAdvice;
-import org.springframework.aop.TargetClassAware;
-import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.*;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 
 public class AopFas {
@@ -37,28 +32,29 @@ public class AopFas {
 //
 //        上面的getInterceptorsAndDynamicInterceptionAdvice方法，通过代理调用目标方法的时候，最后需要通过方法和目标类的类型，
 //        从当前配置中会获取匹配的方法拦截器列表，获取方法拦截器列表是由AdvisorChainFactory负责的。
-//        getInterceptorsAndDynamicInterceptionAdvice会在调用代理的方法时会执行，稍后在执行阶段会详解。
+//        getInterceptorsAndDynamicInterceptionAdvice会在调用代理的方法时会执行，
 //
 //        目标方法和其关联的方法拦截器列表会被缓存在methodCache中，当顾问列表有变化的时候，methodCache缓存会被清除
+
+        advisedSupport.addAdvice(new MethodInterceptor(){
+            @Override
+            public Object invoke(MethodInvocation invocation) throws Throwable {
+                System.out.println("aaaaaaa:"+invocation.getMethod().getName());
+                return invocation.proceed();
+            }
+        });
 
         //如：添加一个前置通知
         advisedSupport.addAdvice(new MethodBeforeAdvice() {
             @Override
             public void before(Method method, Object[] args, Object target) throws Throwable {
+                System.out.println("bbbbbbbb");
                 //如果不是路人的时候，抛出非法访问异常
                 if ("路人".equals(method.getName())) {
                     throw new RuntimeException(String.format("[%s]非法访问!", method.getName()));
                 }
             }
         });
-        advisedSupport.addAdvice(new MethodInterceptor(){
-            @Override
-            public Object invoke(MethodInvocation invocation) throws Throwable {
-                System.out.println("aaaa:"+invocation.getMethod().getName());
-                return invocation.proceed();
-            }
-        });
-
 
         //2.根据配置信息获取AopProxy对象，AopProxy用来负责创建最终的代理对象
         /**
@@ -80,6 +76,19 @@ public class AopFas {
 //        cglib方式创建的代理最终会调用CglibAopProxy.CglibMethodInvocation#proceed方法。
 
         AopProxy aopProxy = aopProxyFactory.createAopProxy(advisedSupport);
+        /**
+         * createAopProxy -> ObjenesisCglibAopProxy -> getProxy
+         *
+         *  // 被代理的目标对象是否是动态的（是否是单例的）
+         *     boolean isStatic = this.advised.getTargetSource().isStatic();
+         *      //所谓静态的，你可以理解为是否是单例的
+         *           isStatic为true，表示目标对象是单例的，同一个代理对象中所有方法共享一个目标对象
+         *          isStatic为false的时候，通常每次调用代理的方法，target对象是不一样的，
+         *          所以方法调用万之后需要进行释放，可能有些资源清理，连接的关闭等操作
+         */
+
+        //获取方法的执行链 AdvisedSupport#getInterceptorsAndDynamicInterceptionAdvice
+        //AdvisorChainFactory 拦截器链工厂接口 默认实现是DefaultAdvisorChainFactory
 
         //3.通过AopProxy创建代理对象
         Programmer proxy = (Programmer)aopProxy.getProxy();
