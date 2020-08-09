@@ -4,24 +4,32 @@ import lombok.Data;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class ThreadSemaphore {
 
     public static void main(String[] args) {
 
-
-        Semaphore semaphore = new Semaphore(3); //控制线程并发数量 ,1个线程相当于同步代码
-
-        Num num = new Num();
-
-//        for (int i = 0; i < 5000; i++) {
-//            new Thread(new Helstrd(num, semaphore)).start();
-//        }
+        /**
+         * 三个许可证
+         * 控制线程并发数量 ,1个线程相当于同步代码
+         */
+        Semaphore semaphore = new Semaphore(3, true);
 
         for (int i = 0; i < 5000; i++) {
             new Thread(() -> {
+
+                boolean isSuccess = false;
                 try {
-                    semaphore.acquire();
+                    semaphore.acquire();//获取一个许可
+                    isSuccess = true; //许可获取成功
+
+                    //semaphore.acquire(2); //指定许可数量
+                    //指定许可数量尝试获取许可,true表示获取成功，false表示获取失败
+                    //boolean acquire = semaphore.tryAcquire(2, 1, TimeUnit.SECONDS);
+
+                    int permits = semaphore.availablePermits();
+                    System.out.println(String.format("当前可用的许可数量: %s",permits));
 
                     System.out.println(Thread.currentThread().getName() + ":运行中");
                     Thread.sleep(3000);
@@ -29,45 +37,22 @@ public class ThreadSemaphore {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    semaphore.release();
+
+                    if(isSuccess){ //成功在释放 ,如果凭空释放 会导致许可增多;
+
+                        System.out.println("===================================================================");
+                        semaphore.release(); //释放许可
+                        //semaphore.release(2); //释放多个
+                    }
+
+
                 }
 
-            }, i + "==线程==").start();
+            }, i + "==线程").start();
         }
 
 
-//        while (true) {
-//            System.out.println(num.getNum());
-//            Thread.sleep(1000);
-//        }
     }
 
-
-    public static class Helstrd implements Runnable {
-
-        private Semaphore semaphore;
-        private Num num;
-
-        public Helstrd(Num num, Semaphore semaphore) {
-            this.semaphore = semaphore;
-            this.num = num;
-        }
-
-        @SneakyThrows
-        @Override
-        public void run() {
-
-            semaphore.acquire();//许可
-            System.out.println(Thread.currentThread().getName() + ":A");
-            num.setNum(num.getNum() + 1);
-            semaphore.release(); //释放 acquire 和 release 中间是同步代码
-        }
-
-    }
-
-    @Data
-    public static class Num {
-        private int num = 0;
-    }
 }
 

@@ -6,7 +6,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadBaseLock {
     public static void main(String[] args) {
-
         Foods fs = new Foods("德国烤香肠");
 
         new Thread(() -> { while (true) { fs.produce(); } }, "PRODUCER1").start();
@@ -17,21 +16,21 @@ public class ThreadBaseLock {
 
         new Thread(() -> { while (true) { fs.consumer(); } }, "CONSUMER1").start();
         new Thread(() -> { while (true) { fs.consumer(); } }, "CONSUMER2").start();
-
-
     }
 
     public static class Foods {
         private String name;
         private int number;
-
         private int flag;
 
         public Foods(String name) {
             this.name = name;
         }
-
-        private Lock loc = new ReentrantLock(true); // 创建了一个对象锁; 公平锁
+        /**
+         * 可重入锁
+         * 可中断锁
+         */
+        private Lock loc = new ReentrantLock(true); // true公平锁,性能低
 
         //根据锁,来获取一个具有,等待,唤醒功能的这样一个对象
         //或者这样说;返回一个绑定到lock实例的对象
@@ -45,7 +44,6 @@ public class ThreadBaseLock {
 
             // (显式,手动的)获取锁;synchronized是隐式的锁;这个显式;
             loc.lock();
-
             try {
                 while (flag != 0) {
                     pro.await();   //生产者等待 ,必须是0才能生产
