@@ -145,7 +145,8 @@ public class ThreadPoolCompletableFuture {
 
         String s = submit1.get(); //返回执行结果 ,阻塞
 //        get(long timeout, TimeUnit unit)：获取结果，但只等待指定的时间；
-//        cancel(boolean mayInterruptIfRunning)：取消当前任务；
+//        cancel(boolean mayInterruptIfRunning)：取消当前任务； //是否给任务发送中断信号
+//        isCancelled：用来判断任务是否被取消
 //        isDone()：判断任务是否已完成
 
         CPU_THREAD_POOL.shutdown();  // shutdown()方法关闭线程池的时候，它会等待正在执行的任务先完成，然后再关闭。
@@ -226,16 +227,48 @@ public class ThreadPoolCompletableFuture {
         //放入ScheduledThreadPool的任务可以定期反复执行。
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(cros);
         // 1秒后执行一次性任务:
-        ses.schedule(() -> System.out.println("bb"), 5, TimeUnit.SECONDS);
+        ScheduledFuture<?> bb = ses.schedule(() -> System.out.println("bb"), 5, TimeUnit.SECONDS);
         //1秒后执行,每一秒执行一次
-        ses.scheduleAtFixedRate(() -> System.out.println("aa"), 1, 1, TimeUnit.SECONDS);
+        ScheduledFuture<?> aa = ses.scheduleAtFixedRate(() -> System.out.println("aa"), 1, 1, TimeUnit.SECONDS);
         //1秒后执行,每一秒执行一次
         ses.scheduleWithFixedDelay(() -> System.out.println("cc"), 1, 1, TimeUnit.SECONDS);
 
         // 注意FixedRate和FixedDelay的区别。
         //FixedRate是指任务总是以固定时间间隔触发，不管任务执行多长时间：
         //而FixedDelay是指，上一次任务执行完毕后，等待固定的时间间隔，再执行下一次任务
+
+        aa.cancel(true); //是否给任务发送中断信号
+        aa.isDone();
+
+
     }
+
+    public static void que() throws InterruptedException {
+
+        /**
+         * CompletionService相当于一个执行任务的服务，通过submit丢任务给这个服务，服务内部去执行任务，
+         * 可以通过服务提供的一些方法获取服务中已经完成的任务
+         * submit 用于向服务中提交有返回结果的任务，并返回Future对象
+         * take 从服务中返回并移除一个已经完成的任务，如果获取不到，会一致阻塞到有返回值为止。此方法会响应线程中断
+         * poll 从服务中返回并移除一个已经完成的任务，如果内部没有已经完成的任务，则返回空，此方法会立即响应
+         * poll(..) 尝试在指定的时间内从服务中返回并移除一个已经完成的任务，超时还是没有获取到已完成的任务则返回空。此方法会响应线程中断
+         *
+         * ExecutorCompletionService内部有个阻塞队列，任意一个任务完成之后，会将任务的执行结果（Future类型）放入阻塞队列中，
+         * 然后其他线程可以调用它take、poll方法从这个阻塞队列中获取一个已经完成的任务，
+         * 获取任务返回结果的顺序和任务执行完成的先后顺序一致，所以最先完成的任务会先返回
+         *
+         * 执行一批任务，然后消费执行结果
+         */
+        ExecutorCompletionService<String> completionService =
+                new ExecutorCompletionService(CPU_THREAD_POOL);
+
+        Future<String> take = completionService.take();
+        Future<String> poll = completionService.poll();
+
+        //必须等待所有的任务执行完成后统一返回
+        //CPU_THREAD_POOL.invokeAll()
+    }
+
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
