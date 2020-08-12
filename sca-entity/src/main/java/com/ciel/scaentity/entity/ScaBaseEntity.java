@@ -1,6 +1,7 @@
 package com.ciel.scaentity.entity;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,9 +24,14 @@ public abstract class ScaBaseEntity implements Serializable {
 
 
     /**
-     * json 序列化策略 ; 使用string 防止js 精度丢掉问题
+     * json 序列化策略 ; 使用string 防止js 精度丢掉问题  jack2
      */
     @JsonSerialize(using = ToStringSerializer.class)
+
+    /**
+     * json 序列化策略 ; 使用string 防止js 精度丢掉问题  fastjson
+     */
+    @JSONField(serializeUsing = ToStringSerializer.class)
     public Long getId() {
         return id;
     }
