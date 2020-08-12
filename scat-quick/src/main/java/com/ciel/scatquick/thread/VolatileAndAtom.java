@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -26,10 +28,23 @@ public class VolatileAndAtom {
 
         //------------------------------------------------------------------------------------------
         //如果不能使用volatile 可以使用jdk 原子类
+
+        //关于原子类操作，都位于java.util.concurrent.atomic包中
         LongAdder longAdder = new LongAdder(); //线程安全的原子类
+
         AtomicLong atomicLong = new AtomicLong(); //线程安全的原子类
 
+      //  public final int get() //获取当前的值
+      //  public final int getAndSet(int newValue)//获取当前的值，并设置新的值
+      //  public final int getAndIncrement()//获取当前的值，并自增
+       // public final int getAndDecrement() //获取当前的值，并自减
+      //  public final int getAndAdd(int delta) //获取当前的值，并加上预期的值
+      //  boolean compareAndSet(int expect, int update) //如果输入的数值等于预期值，则以原子方式将该值设置为输入值（update）
+      //  public final void lazySet(int newValue)//最终设置为newValue,使用 lazySet 设置之后可能导致其他线程在之后的一小段时间内还是可以读到旧的值。
+
+
         atomicLong.compareAndSet(0,1); //如果当前是0才会修改
+
 
         longAdder.increment(); //自增
 

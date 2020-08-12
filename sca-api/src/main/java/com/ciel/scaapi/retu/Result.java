@@ -1,9 +1,11 @@
 package com.ciel.scaapi.retu;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ciel.scaapi.util.Pager;
 import com.ciel.scaentity.entity.ScaGirls;
@@ -107,6 +109,18 @@ public final class Result extends HashMap<String,Object> {
         //包含策略 只序列化这些属性
         SimplePropertyPreFilter filter =
                 new SimplePropertyPreFilter(ScaGirls.class, "id","name");
+
+        //序列化策略
+        SerializeConfig serializeConfig = SerializeConfig.globalInstance;
+        serializeConfig.put(Long.class , ToStringSerializer.instance);
+        serializeConfig.put(Long.TYPE , ToStringSerializer.instance);
+
+        ScaGirls scaGirls = new ScaGirls();
+        scaGirls.setId(100L);
+
+        String s = JSONObject.toJSONString(scaGirls, serializeConfig, filter);
+
+        System.out.println(s);
 
         //filter.getIncludes().add()
      //   filter.getExcludes().add()

@@ -1,7 +1,16 @@
 package com.ciel.scatquick.thread;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.ciel.scaentity.entity.ScaGirls;
+import com.ciel.scaentity.entity.ScaUser;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.lucene.util.NamedThreadFactory;
+import org.apache.shardingsphere.core.yaml.swapper.impl.ShadowRuleConfigurationYamlSwapper;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -243,7 +252,7 @@ public class ThreadPoolCompletableFuture {
 
     }
 
-    public static void que() throws InterruptedException {
+    public static void que() throws InterruptedException, ExecutionException {
 
         /**
          * CompletionService相当于一个执行任务的服务，通过submit丢任务给这个服务，服务内部去执行任务，
@@ -262,8 +271,19 @@ public class ThreadPoolCompletableFuture {
         ExecutorCompletionService<String> completionService =
                 new ExecutorCompletionService(CPU_THREAD_POOL);
 
-        Future<String> take = completionService.take();
-        Future<String> poll = completionService.poll();
+        for (int i=0; i<100; i++){
+            completionService.submit(() -> {
+                System.out.println(String.format("当前线程: %s",Thread.currentThread().getName()));
+                return String.valueOf(System.currentTimeMillis());
+            });
+        }
+
+        while (true){
+
+            Future<String> take = completionService.take();
+
+            System.out.println(take.get());
+        }
 
         //必须等待所有的任务执行完成后统一返回
         //CPU_THREAD_POOL.invokeAll()
@@ -272,8 +292,11 @@ public class ThreadPoolCompletableFuture {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-        future();
+        //future();
 
-        shel();
+        //shel();
+
+        que();
+
     }
 }
