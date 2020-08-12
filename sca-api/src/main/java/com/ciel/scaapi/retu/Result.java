@@ -3,8 +3,10 @@ package com.ciel.scaapi.retu;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ciel.scaapi.util.Pager;
+import com.ciel.scaentity.entity.ScaGirls;
 
 import java.util.HashMap;
 
@@ -100,6 +102,16 @@ public final class Result extends HashMap<String,Object> {
     }
 
     public Result d2S(String format){
+
+
+        //包含策略 只序列化这些属性
+        SimplePropertyPreFilter filter =
+                new SimplePropertyPreFilter(ScaGirls.class, "id","name");
+
+        //filter.getIncludes().add()
+     //   filter.getExcludes().add()
+
+
         if("uc".equals(format)){
 
             /**
