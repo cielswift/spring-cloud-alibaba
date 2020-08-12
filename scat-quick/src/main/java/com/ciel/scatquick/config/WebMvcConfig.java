@@ -1,5 +1,8 @@
 package com.ciel.scatquick.config;
 
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.ciel.scatquick.controller.LoginInterceptor;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -146,6 +149,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
             }
         }
     }
+
+    //fast json 配置 防止//Long 类型js 精度丢失问题
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        FastJsonHttpMessageConverter fastJsonConverter = new FastJsonHttpMessageConverter();
+//        FastJsonConfig fjc = new FastJsonConfig();
+//        SerializeConfig serializeConfig = SerializeConfig.globalInstance;
+//        serializeConfig.put(Long.class , ToStringSerializer.instance);
+//        serializeConfig.put(Long.TYPE , ToStringSerializer.instance);
+//        fjc.setSerializeConfig(serializeConfig);
+//        fastJsonConverter.setFastJsonConfig(fjc);
+//        converters.add(fastJsonConverter);
+//    }
 
 
     /**
