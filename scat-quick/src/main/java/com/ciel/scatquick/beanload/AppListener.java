@@ -2,6 +2,7 @@ package com.ciel.scatquick.beanload;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -49,11 +50,20 @@ import java.util.Map;
  *
  */
 @Slf4j
-public class AppListener implements ApplicationListener<AppEvn> {
+public class AppListener implements ApplicationListener<AppEvn> , Ordered {
+
+    /**
+     * 监听顺序
+     */
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 
     @Override
     public void onApplicationEvent(AppEvn appEvn) {
 
+        System.out.println("当前线程:"+Thread.currentThread().getName());
         System.out.println(String.format("class 收到事件: 名称%s ,源 %s ", appEvn.getName(), appEvn.getSource().getClass().getName()));
 
         /**
@@ -84,4 +94,6 @@ public class AppListener implements ApplicationListener<AppEvn> {
             log.error("READ CLASS DEFAULT",e);
         }
     }
+
+
 }

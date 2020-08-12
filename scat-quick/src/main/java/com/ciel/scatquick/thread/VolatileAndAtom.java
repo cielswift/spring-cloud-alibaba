@@ -1,6 +1,7 @@
 package com.ciel.scatquick.thread;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
@@ -44,9 +45,16 @@ public class VolatileAndAtom {
     public static class Fox {
         protected volatile Integer space = 0;
 
+        @SneakyThrows
         public void run(){
-            while(space==0){
-                System.out.println("run run run==");
+            while(true){
+                Thread.sleep(200);
+                if(space ==2){
+                    System.out.println(Thread.currentThread().getName()+":run run run 222==");
+                }else{
+                    System.out.println(Thread.currentThread().getName()+":run run run 000==");
+                }
+
             }
         }
 

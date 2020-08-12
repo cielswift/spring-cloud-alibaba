@@ -19,12 +19,11 @@ public class AppEventPush implements ApplicationEventPublisherAware {
 
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-
         this.publisher = applicationEventPublisher;
     }
 
-    public void sendEmail(String address) {
 
+    public void sendEmail(String address) {
         AppEvn event = new AppEvn(this, address);
         publisher.publishEvent(event);
 

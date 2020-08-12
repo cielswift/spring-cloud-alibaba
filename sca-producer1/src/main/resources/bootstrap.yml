@@ -128,6 +128,7 @@ dubbo: #dubbo配置
     address: nacos://127.0.0.1:13100?backup=127.0.0.1:13101,127.0.0.1:13102&namespace=a998603d-3546-4ddc-9099-2ed82a6f3a68 #使用nacos注册中心
   application:
     qos-enable: false #运维服务是否开启
+    name: producer10
   consumer:
     check: false #启动时就检查服务
     version: 1.0

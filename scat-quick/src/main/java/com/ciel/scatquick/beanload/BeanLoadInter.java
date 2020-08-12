@@ -36,16 +36,34 @@ import java.lang.reflect.Constructor;
  *------------------------------------------------------------------------------------------
  *
  *  在Spring的DefaultSingletonBeanRegistry类中，你会赫然发现类上方挂着这三个Map：
- * singletonObjects 它是我们最熟悉的朋友，俗称“单例池”“容器”，缓存创建完成单例Bean的地方。
- *
- * singletonFactories 映射创建Bean的原始工厂
- *
- * earlySingletonObjects 映射Bean的早期引用，也就是说在这个Map里的Bean不是完整的，甚至还不能称之为“Bean”，只是一个Instance.
  *
  *  singletonObjects：存放完成创建的Bean所有步骤的单实例Bean
- * earlySingletonObjects：存放只完成了创建Bean的第一步，且是由单实例工厂创建的Bean
- * singletonFactories：存放只完成了创建Bean的第一步后，提前暴露Bean的单实例工厂
+ *  earlySingletonObjects：存放只完成了创建Bean的第一步，且是由单实例工厂创建的Bean
+ *  singletonFactories：存放只完成了创建Bean的第一步后，提前暴露Bean的单实例工厂
+ *      AbstractBeanFactory#doGetBean ->getSingleton 从缓存查找
  *
+ * 1.从容器中获取serviceA
+ * 2.容器尝试从3个缓存中找serviceA，找不到
+ * 3.准备创建serviceA
+ * 4.调用serviceA的构造器创建serviceA，得到serviceA实例，此时serviceA还未填充属性，未进行其他任何初始化的操作
+ * 5.将早期的serviceA暴露出去：即将其丢到第3级缓存singletonFactories中
+ * 6.serviceA准备填充属性，发现需要注入serviceB，然后向容器获取serviceB
+ * 7.容器尝试从3个缓存中找serviceB，找不到
+ * 8.准备创建serviceB
+ * 9.调用serviceB的构造器创建serviceB，得到serviceB实例，此时serviceB还未填充属性，未进行其他任何初始化的操作
+ * 10.将早期的serviceB暴露出去：即将其丢到第3级缓存singletonFactories中
+ * 11.serviceB准备填充属性，发现需要注入serviceA，然后向容器获取serviceA
+ * 12.容器尝试从3个缓存中找serviceA，发现此时serviceA位于第3级缓存中，经过处理之后，serviceA会从第3级缓存中移除，然后会存到第2级缓存中，然后将其返回给serviceB，此时serviceA通过serviceB中的setServiceA方法被注入到serviceB中
+ * 13.serviceB继续执行后续的一些操作，最后完成创建工作，然后会调用addSingleton方法，将自己丢到第1级缓存中，并将自己从第2和第3级缓存中移除
+ * 14.serviceB将自己返回给serviceA
+ * 15.serviceA通过setServiceB方法将serviceB注入进去
+ * 16.serviceB继续执行后续的一些操作，最后完成创建工作,然后会调用addSingleton方法，将自己丢到第1级缓存中，并将自己从第2和第3级缓存中移除
+ *
+ * ((DefaultListableBeanFactory) beanFactory).setAllowRawInjectionDespiteWrapping(true); 允许循环引用
+ * AbstractAutowireCapableBeanFactory#getEarlyBeanReferenc 从3级缓存中获取bean的时候，会调用上面这个方法来获取bean;
+ *  这个方法内部会看一下容器中是否有SmartInstantiationAwareBeanPostProcessor这种处理器，
+ *  然后会依次调用这种处理器中的getEarlyBeanReference方法;我们可以自定义一个SmartInstantiationAwareBeanPostProcessor
+ *--------------------------------------------------------------------------------------------------------
  *  DefaultListableBeanFactory 的beanPostProcessors  是一个BeanPostProcessor类型的集合 (后置处理器集合)
  *  AbstractApplicationContext# registerBeanPostProcessors.
  *      PostProcessorRegistrationDelegate# registerBeanPostProcessors 添加的

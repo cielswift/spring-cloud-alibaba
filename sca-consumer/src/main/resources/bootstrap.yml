@@ -106,8 +106,11 @@ dubbo: #dubbo配置
     accesslog: true  #将访问日志输出到当前应用的log4j日志
   registry:
     address: nacos://127.0.0.1:13100?backup=127.0.0.1:13101,127.0.0.1:13102&namespace=a998603d-3546-4ddc-9099-2ed82a6f3a68 #使用nacos注册中心
+    protocol: nacos #nacos注册中心
+    check: true #启动检查
   application:
     qos-enable: false #运维服务是否开启
+    name: consumer #服务名称
   consumer:
     check: false #启动时就检查服务
     version: 1.0 #版本

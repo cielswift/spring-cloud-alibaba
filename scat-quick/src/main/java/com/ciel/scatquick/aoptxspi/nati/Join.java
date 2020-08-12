@@ -4,6 +4,8 @@ import com.ciel.scatquick.proxy.Programmer;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.*;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 
@@ -76,6 +78,15 @@ public class Join {
         /** 通知
          * 拦截目标方法的执行，可以在这个方法内部实现需要增强的逻辑，以及主动调用目标方法
          * 所有的通知均需要转换为MethodInterceptor类型的，最终多个MethodInterceptor组成一个方法拦截器连
+         *
+         * MethodBeforeAdvice最终会被包装为MethodBeforeAdviceInterceptor类型，
+         * 然后放到拦截器链中去执行，通过MethodBeforeAdviceInterceptor代码可以理解MethodBeforeAdvice的执行过程
+         *
+         * AfterReturningAdvice最终会被包装为AfterReturningAdviceInterceptor类型，然后放到拦截器链中去执行，
+         * 通过AfterReturningAdviceInterceptor代码可以理解AfterReturningAdvice的执行过程
+         *
+         * ThrowsAdvice最终会被包装为ThrowsAdviceInterceptor类型，然后放到拦截器链中去执行，
+         * 通过ThrowsAdviceInterceptor代码可以理解ThrowsAdvice的执行过程，; 构造参数传入一个自定义的 ThrowsAdvice 对象
          */
         MethodInterceptor methodInterceptor = new MethodInterceptor() {
             @Override
@@ -115,18 +126,13 @@ public class Join {
 
                 //返回此静态连接点  一般就为当前的Method(至少目前的唯一实现是MethodInvocation,所以连接点得静态部分肯定就是本方法)
                 AccessibleObject staticPart = invocation.getStaticPart();
-
-                Object result = invocation.proceed(); //转到拦截器链中的下一个拦截器
-
-                return result;
+                return invocation.proceed(); //转到拦截器链中的下一个拦截器
             }
         };
-
 
         //切入点和通知组装 //顾问
         DefaultPointcutAdvisor bef = new DefaultPointcutAdvisor(pointcut, beforeAdvice);
         bef.setOrder(1);
-
 
         DefaultPointcutAdvisor af = new DefaultPointcutAdvisor(pointcut, afterReturningAdvice);
         bef.setOrder(2);
@@ -139,7 +145,9 @@ public class Join {
 
         //通过spring提供的代理创建工厂来创建代理
         ProxyFactory proxyFactory = new ProxyFactory();
-
+        proxyFactory.setExposeProxy(true); //在threadLocal暴露代理对象
+        //强制使用cglib代理
+        proxyFactory.setProxyTargetClass(true);
         //为工厂指定目标对象
         proxyFactory.setTarget(target);
        // proxyFactory.setInterfaces();
@@ -148,6 +156,7 @@ public class Join {
 //        最终会有多个MethodInterceptor，这些MethodInterceptor会组成一个方法调用链
 
         //调用addAdvisor方法，为目标添加增强的功能，即添加Advisor，可以为目标添加很多个Advisor
+        //添加包装器 (包装器 = 通知 + 切入点)
         proxyFactory.addAdvisor(bef);
         proxyFactory.addAdvisor(af);
         proxyFactory.addAdvisor(me);
