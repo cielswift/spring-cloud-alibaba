@@ -1,10 +1,6 @@
 package com.ciel.scatquick.thread;
 
-import lombok.Data;
-import lombok.SneakyThrows;
-
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 public class ThreadSemaphore {
 
