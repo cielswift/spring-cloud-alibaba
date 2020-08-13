@@ -51,7 +51,7 @@ public class TaskConfig {
     /**
      * 发布事件
      */
-    @Scheduled(cron = "1/30 * * * * ?")
+    @Scheduled(cron = "1/30 * * * 1 ?")
     public void tes(){
         applicationEventPublisher.publishEvent(new AppEvn(applicationContext,"appEvn发布事件"));
         applicationContext.publishEvent(new AppEvn(applicationContext,"app发布事件"));

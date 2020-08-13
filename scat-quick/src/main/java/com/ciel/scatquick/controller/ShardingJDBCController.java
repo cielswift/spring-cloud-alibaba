@@ -9,6 +9,7 @@ import com.ciel.scaapi.crud.IScaRoleService;
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.AppContext;
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.FileUpload2Nginx;
 import com.ciel.scaapi.util.SysUtils;
@@ -23,6 +24,7 @@ import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.config.Config;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -71,7 +73,6 @@ public class ShardingJDBCController {
     @GetMapping("/pamr/{id}")
     public Result parm(@PathVariable("id") Integer id,@MatrixVariable String name){
 
-
         return Result.ok();
     }
 
@@ -106,6 +107,10 @@ public class ShardingJDBCController {
 
         //业务逻辑
         lock.unlock();
+
+        AppContext.setToken("xiapeixin");
+
+        AppContext.innSet("xiapeixin");
 
 
         List<ScaGirls> girls = scaGirlsService.girlsByPrice(str, end);

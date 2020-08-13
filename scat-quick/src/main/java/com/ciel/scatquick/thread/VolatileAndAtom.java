@@ -2,10 +2,13 @@ package com.ciel.scatquick.thread;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 
+@Slf4j
 public class VolatileAndAtom {
 
     public static void main(String[] args) throws InterruptedException {
@@ -28,7 +31,7 @@ public class VolatileAndAtom {
 
         //关于原子类操作，都位于java.util.concurrent.atomic包中
         LongAdder longAdder = new LongAdder(); //线程安全的原子类
-
+        
         AtomicLong atomicLong = new AtomicLong(); //线程安全的原子类
 
       //  public final int get() //获取当前的值
@@ -78,6 +81,11 @@ public class VolatileAndAtom {
 //        newUpdater()创建一个更新器，并且需要设置想要更新的类和属性。
 //
 //        第二步，更新的对象属性必须使用 public volatile 修饰符
+
+//        AtomicReferenceFieldUpdater<ScaGirls, String> name =
+//                AtomicReferenceFieldUpdater.newUpdater(ScaGirls.class, String.class, "name");
+
+
     }
 
     @Data

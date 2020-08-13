@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -18,12 +17,10 @@ public class Pager  implements Serializable {
     /**
      * 当前页
      */
-    @NotNull(message = "当前页不能为空")
     private long current;
     /**
      * 每页数量
      */
-    @NotNull(message = "每页数量不能为空")
     private long size;
     /**
      * 总数量

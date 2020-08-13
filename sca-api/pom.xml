@@ -20,12 +20,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <version>4.9.28.ALL</version>
-        </dependency>
-
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
@@ -37,20 +31,6 @@
             <artifactId>spring-cloud-starter-security</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <dependency> <!--web 方式启动-->
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-messaging</artifactId>
-            <version>5.2.4.RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-
 
     </dependencies>
 </project>

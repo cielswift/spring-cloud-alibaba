@@ -3,21 +3,28 @@ package com.ciel.scacommons.serverimpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ciel.scaapi.crud.IScaGirlsService;
+import com.ciel.scaapi.util.AppContext;
 import com.ciel.scacommons.mapper.ScaGirlsMapper;
 import com.ciel.scaentity.entity.ScaGirls;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 
 /**
  * 指定缓存通用配置; cacheManager指定使用哪一个缓存管理器
  */
+@Slf4j
 @CacheConfig(cacheNames = "scaGirls", cacheManager = "redisCacheManagerSP")
 public class ScaGirlsServiceImpl extends ServiceImpl<ScaGirlsMapper, ScaGirls> implements IScaGirlsService {
 
+    @Autowired
+    protected ThreadPoolExecutor threadPoolExecutor;
 
     /**
      * 开启缓存,
@@ -56,6 +63,28 @@ public class ScaGirlsServiceImpl extends ServiceImpl<ScaGirlsMapper, ScaGirls> i
 //            }
 //    )
     public List<ScaGirls> girlsByPrice(double str, double end) {
+
+
+        log.info("获取到token: {} ",AppContext.getToken());
+        log.info("aa获取到innToken: {} ",AppContext.innGet());
+
+        new Thread(() -> {
+
+            //从父线程获取 ;
+            log.info("AA获取到innToken: {} ",AppContext.innGet());
+
+        }).start();
+
+        //线程池无效 因为池里的线程不是父线程创建的
+        threadPoolExecutor.submit(() -> {
+            log.info("获取到token: {} ",AppContext.getToken());
+            log.info("获取到innToken: {} ",AppContext.innGet());
+        });
+
+        log.info("清除token:");
+        AppContext.CURRENT.remove();
+        AppContext.traceIdKD.remove();
+
         return list(new QueryWrapper<ScaGirls>().lambda().between(ScaGirls::getPrice, str, end));
     }
 

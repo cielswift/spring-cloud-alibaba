@@ -33,14 +33,14 @@ spring:
       fetchMaxWait: 500 #默认值：500毫秒
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #序列化
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #序列化
-    properties:
+    #properties:
       #这个参数指定producer在发送批量消息前等待的时间，当设置此参数后，即便没有达到批量消息的指定大小(batch-size)，
       #到达时间后生产者也会发送批量消息到broker。默认情况下，生产者的发送消息线程只要空闲了就会发送消息，
       #即便只有一条消息。设置这个参数后，发送线程会等待一定的时间，这样可以批量发送消息增加吞吐量，但同时也会增加延迟。
-      linger.ms: 50 #默认值：0毫秒，当消息发送比较频繁时，增加一些延迟可增加吞吐量和性能
+      #linger.ms: 50 #默认值：0毫秒，当消息发送比较频繁时，增加一些延迟可增加吞吐量和性能
       #这个参数指定producer在一个TCP connection可同时发送多少条消息到broker并且等待broker响应，
       #设置此参数较高的值可以提高吞吐量，但同时也会增加内存消耗。另外，如果设置过高反而会降低吞吐量，
       #因为批量消息效率降低。设置为1，可以保证发送到broker的顺序和调用send方法顺序一致，即便出现失败重试的情况也是如此。
       #注意：当前消息符合at-least-once，自kafka1.0.0以后，为保证消息有序以及exactly once，这个配置可适当调大为5。
-      max.in.flight.requests.per.connection: 1 #默认值：5，设置为1即表示producer在connection上发送一条消息，至少要等到这条消息被broker确认收到才继续发送下一条，因此是有序的。
+      #max.in.flight.requests.per.connection: 1 #默认值：5，设置为1即表示producer在connection上发送一条消息，至少要等到这条消息被broker确认收到才继续发送下一条，因此是有序的。
 
