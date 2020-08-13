@@ -164,6 +164,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    }
 
 
+//    ObjectMapper mapper = new ObjectMapper();
+//
+//    mapper.setSerializationInclusion(Include.NON_NULL);
+//
+////通过该方法对mapper对象进行设置，所有序列化的对象都将按改规则进行系列化
+////Include.Include.ALWAYS 默认
+////Include.NON_DEFAULT 属性为默认值不序列化
+////Include.NON_EMPTY 属性为 空（“”） 或者为 NULL 都不序列化
+////Include.NON_NULL 属性为NULL 不序列化
+
+
+
     /**
      * 配合测试 @MatrixVariable 使 ; 不要被自动移除了：
      * @param configurer
