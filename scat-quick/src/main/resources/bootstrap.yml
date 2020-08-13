@@ -103,7 +103,8 @@ rocketmq:
 
 #日志
 logging:
-  config: classpath:logback-spring.xml
+#  config: classpath:logback-spring.xml
+  config: classpath:log4j2-spring.xml
 
 mybatisplus:
   configuration:
