@@ -30,6 +30,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class LogAspect implements Ordered {
 
+   // private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogAspect.class);
+
     /**
      * @EnableAspectJAutoProxy的主要作用是开启对AOP的支持;会在spring容器中注册一个bean
      * #AnnotationAwareAspectJAutoProxyCreator对符合条件的bean，自动生成代理对象
