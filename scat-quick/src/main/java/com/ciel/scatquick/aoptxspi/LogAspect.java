@@ -122,7 +122,6 @@ public class LogAspect implements Ordered {
 //		System.out.println(point.getTarget().getClass());  //获得真实对象
 //		System.out.println(point.getThis().getClass());  //获得代理对象
 
-
         long str = System.currentTimeMillis();
 
         HttpServletRequest request = SysUtils.currentRequest();
@@ -140,6 +139,7 @@ public class LogAspect implements Ordered {
         }
 
         //执行方法,或者继续执行下一个aop
+       // Object proceed(Object[] var1) throws Throwable	传入的新的参数去执行目标方法
         Object methodReturn = point.proceed();
 
         Long end = System.currentTimeMillis()- str;

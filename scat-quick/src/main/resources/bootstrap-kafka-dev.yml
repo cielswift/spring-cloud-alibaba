@@ -3,28 +3,44 @@ spring:
     # 指定kafka server的地址，集群配多个，中间，逗号隔开
     bootstrap-servers: 127.0.0.1:9920,127.0.0.1:9921,127.0.0.1:9922
     producer:
-      retries: 0
+      clientId: ${spring.application.name} #方便kafkaserver打印日志定位请求来源
       # 写入失败时，重试次数。当leader节点失效，一个repli节点会替代成为leader节点，此时可能出现写入失败，
       # 当retris为0时，produce不会重复。retirs重发，此时repli节点完全成为leader节点，不会产生消息丢失。
-      batch-size: 16384   # 每次批量发送消息的数量,produce积累到一定数据，一次发送
+      retries: 0
+      batch-size: 16384   #每次批量发送消息的数量,produce积累到一定数据，一次发送 ;默认16K，值越小延迟越低，但是吞吐量和性能会降低。0=禁用批量发送
       buffer-memory: 33554432 # produce积累数据一次发送，缓存大小达到buffer.memory就发送数据
+      #acks = 0 如果设置为零，则生产者将不会等待来自服务器的任何确认，该记录将立即添加到套接字缓冲区并视为已发送。在这种情况下，无法保证服务器已收到记录，并且重试配置将不会生效（因为客户端通常不会知道任何故障），为每条记录返回的偏移量始终设置为-1。
+      #acks = 1 这意味着leader会将记录写入其本地日志，但无需等待所有副本服务器的完全确认即可做出回应，在这种情况下，如果leader在确认记录后立即失败，但在将数据复制到所有的副本服务器之前，则记录将会丢失。
+      #acks = all 这意味着leader将等待完整的同步副本集以确认记录，这保证了只要至少一个同步副本服务器仍然存活，记录就不会丢失，这是最强有力的保证，这相当于acks = -1的设置。
       acks: 1
-        #procedure要求leader在考虑完成请求之前收到的确认数，用于控制发送记录在服务端的持久化，其值可以为如下：
-        #acks = 0 如果设置为零，则生产者将不会等待来自服务器的任何确认，该记录将立即添加到套接字缓冲区并视为已发送。在这种情况下，无法保证服务器已收到记录，并且重试配置将不会生效（因为客户端通常不会知道任何故障），为每条记录返回的偏移量始终设置为-1。
-        #acks = 1 这意味着leader会将记录写入其本地日志，但无需等待所有副本服务器的完全确认即可做出回应，在这种情况下，如果leader在确认记录后立即失败，但在将数据复制到所有的副本服务器之前，则记录将会丢失。
-        #acks = all 这意味着leader将等待完整的同步副本集以确认记录，这保证了只要至少一个同步副本服务器仍然存活，记录就不会丢失，这是最强有力的保证，这相当于acks = -1的设置。
-      #可以设置的值为：all, -1, 0, 1
+      compressionType: gzip #开启压缩 #如果不开启压缩，可设置为none
       key-serializer: org.apache.kafka.common.serialization.StringSerializer #序列化
       value-serializer: org.apache.kafka.common.serialization.StringSerializer #序列化
       #transaction-id-prefix:  kafka_tx #事务
 
     consumer:
       group-id: ciel-group # 指定默认消费者group id --> 由于在kafka中，同一组中的consumer不会读取到同一个消息，依靠groud.id设置组名
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
         #earliest 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
         #latest 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据
-      #none topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
-      enable-auto-commit: true # enable.auto.commit:true --> 设置自动提交offset
-      auto-commit-interval: 100 #如果'enable.auto.commit'为true，则消费者偏移自动提交给Kafka的频率（以毫秒为单位），默认值为5000
+        #none topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
+      enable-auto-commit: true # 设置自动提交offset
+      auto-commit-interval: 500 #则消费者偏移自动提交给Kafka的频率（以毫秒为单位），默认值为500
+      maxPollRecords: 500 #默认值：500 consumer每次批量拉多少条数据。
+      #这个参数允许消费者指定从broker读取消息时最小的Payload的字节数。当消费者从broker读取消息时，如果数据字节数小于这个阈值，broker会等待直到有足够的数据，然后才返回给消费者。对于写入量不高的主题来说，这个参数可以减少broker和消费者的压力，因为减少了往返的时间。而对于有大量消费者的主题来说，则可以明显减轻broker压力。
+      fetchMinSize: 1 #默认值： 1
+      #上面的fetch.min.bytes参数指定了消费者读取的最小数据量，而这个参数则指定了消费者读取时最长等待时间，从而避免长时间阻塞。这个参数默认为500ms。
+      fetchMaxWait: 500 #默认值：500毫秒
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #序列化
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #序列化
+    properties:
+      #这个参数指定producer在发送批量消息前等待的时间，当设置此参数后，即便没有达到批量消息的指定大小(batch-size)，
+      #到达时间后生产者也会发送批量消息到broker。默认情况下，生产者的发送消息线程只要空闲了就会发送消息，
+      #即便只有一条消息。设置这个参数后，发送线程会等待一定的时间，这样可以批量发送消息增加吞吐量，但同时也会增加延迟。
+      linger.ms: 50 #默认值：0毫秒，当消息发送比较频繁时，增加一些延迟可增加吞吐量和性能
+      #这个参数指定producer在一个TCP connection可同时发送多少条消息到broker并且等待broker响应，
+      #设置此参数较高的值可以提高吞吐量，但同时也会增加内存消耗。另外，如果设置过高反而会降低吞吐量，
+      #因为批量消息效率降低。设置为1，可以保证发送到broker的顺序和调用send方法顺序一致，即便出现失败重试的情况也是如此。
+      #注意：当前消息符合at-least-once，自kafka1.0.0以后，为保证消息有序以及exactly once，这个配置可适当调大为5。
+      max.in.flight.requests.per.connection: 1 #默认值：5，设置为1即表示producer在connection上发送一条消息，至少要等到这条消息被broker确认收到才继续发送下一条，因此是有序的。
+

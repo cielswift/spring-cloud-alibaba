@@ -43,11 +43,6 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
 
-        <dependency> <!--日志-->
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-
         <dependency> <!--jwt工具-->
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>

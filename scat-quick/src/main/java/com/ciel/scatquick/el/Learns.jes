@@ -1,6 +1,6 @@
 PUT /b2b/good/6
 {
-  "id" : 6,
+    "id" : 6,
     "name" : "莫尔森",
     "price" : 25.5
 }
@@ -8,10 +8,10 @@ PUT /b2b/good/6
 GET /b2b/good/6
 GET /b2b/good/_search
 GET /b2b/good/_search
-{
-  "query": {
-  "bool": {
-    "must": [ //must多个条件 and 关系
+ {
+  "query" : {
+  "bool" : {
+    "must" : [ //must多个条件 and 关系
       {"match": {
           "name": "盘尼"
         }},
@@ -179,8 +179,6 @@ GET /b2b/good/_search
     }
   }
   },
-
-
 }
 
 GET _analyze  //查看分词器效果

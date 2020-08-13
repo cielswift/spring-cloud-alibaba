@@ -1,7 +1,14 @@
 package com.ciel.scatquick.mq.kafka;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -12,40 +19,39 @@ import org.springframework.kafka.listener.ContainerProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Configuration
+@Configuration
+@EnableConfigurationProperties(KafkaProperties.class)
 public class KafkaConfig {
 
-    /**
-     * kafka 手动配置
-     */
-    @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>>
-    kafkaListenerContainerFactory(ConsumerFactory<String, String> consumerFactory) {
 
-        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+    @Autowired
+    private KafkaProperties properties;
+
+
+    @Bean("myKafkaContainerFactory")
+    @ConditionalOnBean(ConcurrentKafkaListenerContainerFactoryConfigurer.class)
+    public ConcurrentKafkaListenerContainerFactory<Object, Object> kafkaListenerContainerFactory(
+            ConcurrentKafkaListenerContainerFactoryConfigurer configurer) {
+
+        ConcurrentKafkaListenerContainerFactory<Object, Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
-        factory.setConsumerFactory(consumerFactory);
-        factory.getContainerProperties().setPollTimeout(1500);
-        //配置手动提交offset
-        factory.getContainerProperties().setAckMode((ContainerProperties.AckMode.MANUAL));
-
-        //    RECORD
-//            每处理一条commit一次
-//    BATCH(默认)
-//每次poll的时候批量提交一次，频率取决于每次poll的调用频率
-//        TIME
-//        每次间隔ackTime的时间去commit
-//        COUNT
-//        累积达到ackCount次的ack去commit
-//        COUNT_TIME
-//        ackTime或ackCount哪个条件先满足，就commit
-//        MANUAL
-//        listener负责ack，但是背后也是批量上去
-//        MANUAL_IMMEDIATE
-//        listner负责ack，每调用一次，就立即commit
-
+        configurer.configure(factory, consumerFactory());
         return factory;
+    }
+
+
+
+    //获得创建消费者工厂
+    public ConsumerFactory<Object, Object> consumerFactory() {
+
+        KafkaProperties myKafkaProperties =
+                JSON.parseObject(JSON.toJSONString(this.properties), KafkaProperties.class);
+        //对模板 properties 进行定制化
+        //....
+        //例如：定制servers
+        //myKafkaProperties.setBootstrapServers(myServers);
+        return new DefaultKafkaConsumerFactory<>(myKafkaProperties.buildConsumerProperties());
     }
 
     @Bean
