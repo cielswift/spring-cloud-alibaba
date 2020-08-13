@@ -3,7 +3,7 @@ package com.ciel.scatquick.thread;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
-public class AtomicReferenceThread {
+public class AtomicCasThread {
 
     public static void main(String[] args) {
 

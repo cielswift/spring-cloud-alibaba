@@ -31,7 +31,7 @@ public abstract class ScaBaseEntity implements Serializable {
     /**
      * json 序列化策略 ; 使用string 防止js 精度丢掉问题  fastjson
      */
-    @JSONField(serializeUsing = ToStringSerializer.class)
+    @JSONField(serializeUsing= com.alibaba.fastjson.serializer.ToStringSerializer.class)
     public Long getId() {
         return id;
     }
