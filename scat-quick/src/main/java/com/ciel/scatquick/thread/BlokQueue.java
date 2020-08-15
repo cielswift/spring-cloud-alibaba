@@ -1,5 +1,8 @@
 package com.ciel.scatquick.thread;
 
+import org.apache.shardingsphere.core.yaml.swapper.impl.ShadowRuleConfigurationYamlSwapper;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -90,25 +93,31 @@ public class BlokQueue {
 
     public static void main(String[] args) throws InterruptedException {
 
-        new Thread(() ->{
-            try {
-                String take = bl1.take();
+        LinkedList<String> linkedList = new LinkedList<>();
+        for(int i = 0 ;i < 100000000; i++){
+            linkedList.add(System.currentTimeMillis()+ "aa"+ Math.random());
+        }
 
-                System.out.println(take);
-
-                String take2 = bl1.take();
-
-                System.out.println(take2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-        boolean add = bl1.add("a");
-        boolean b = bl1.offer("b");
-        bl1.put("c");
-
-        System.out.println(b);
+        bl1.take();
+//        new Thread(() ->{
+//            try {
+//
+//                String take = bl1.take();
+//                System.out.println(take);
+//
+//                String take2 = bl1.take();
+//                System.out.println(take2);
+//
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+//
+//        boolean add = bl1.add("a");
+//        boolean b = bl1.offer("b");
+//        bl1.put("c");
+//
+//        System.out.println(b);
 
 
     }
