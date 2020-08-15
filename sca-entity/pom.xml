@@ -25,11 +25,12 @@
             <version>3.3.2</version>
         </dependency>
 
-        <dependency> <!--mybatis plus 多数据源-->
+        <dependency><!--mybatis plus 多数据源-->
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>3.1.1</version>
+            <version>3.2.0</version>
         </dependency>
+
 
         <!--        <dependency> &lt;!&ndash;缓存&ndash;&gt;-->
 <!--            <groupId>org.mybatis.caches</groupId>-->

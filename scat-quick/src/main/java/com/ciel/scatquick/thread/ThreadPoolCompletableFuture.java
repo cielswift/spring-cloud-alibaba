@@ -269,22 +269,19 @@ public class ThreadPoolCompletableFuture {
          * 执行一批任务，然后消费执行结果
          */
         ExecutorCompletionService<String> completionService =
-                new ExecutorCompletionService(CPU_THREAD_POOL);
+                new ExecutorCompletionService(CPU_THREAD_POOL,new LinkedBlockingDeque<>(1 << 12));
 
         for (int i=0; i<100; i++){
             completionService.submit(() -> {
                 System.out.println(String.format("当前线程: %s",Thread.currentThread().getName()));
-                return String.valueOf(System.currentTimeMillis());
+                return String.valueOf(System.currentTimeMillis()+Math.random());
             });
         }
 
         while (true){
-
             Future<String> take = completionService.take();
-
             System.out.println(take.get());
         }
-
         //必须等待所有的任务执行完成后统一返回
         //CPU_THREAD_POOL.invokeAll()
     }

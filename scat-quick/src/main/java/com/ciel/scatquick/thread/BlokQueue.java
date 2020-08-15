@@ -93,12 +93,6 @@ public class BlokQueue {
 
     public static void main(String[] args) throws InterruptedException {
 
-        LinkedList<String> linkedList = new LinkedList<>();
-        for(int i = 0 ;i < 100000000; i++){
-            linkedList.add(System.currentTimeMillis()+ "aa"+ Math.random());
-        }
-
-        bl1.take();
 //        new Thread(() ->{
 //            try {
 //

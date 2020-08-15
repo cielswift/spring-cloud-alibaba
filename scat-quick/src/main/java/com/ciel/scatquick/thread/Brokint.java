@@ -1,100 +1,96 @@
 package com.ciel.scatquick.thread;
 
-import java.util.Objects;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import com.ciel.scaapi.util.Faster;
+import com.google.common.util.concurrent.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.LockSupport;
 
 public class Brokint {
 
-    public static class BucketLimit {
-        static AtomicInteger threadNum = new AtomicInteger(1);
-        //容量
-        private int capcity;
-        //流速
-        private int flowRate;
-        //流速时间单位
-        private TimeUnit flowRateUnit;
-        private BlockingQueue<Node> queue;
-        //漏桶流出的任务时间间隔（纳秒）
-        private long flowRateNanosTime;
+    public static void limit() {
+        /**
+         * RateLimiter.create(5)创建QPS为5的限流对象，后面又调用rateLimiter.setRate(10);将速率设为10，
+         * 输出中分2段，第一段每次输出相隔200毫秒，第二段每次输出相隔100毫秒，可以非常精准的控制系统的QPS
+         */
+        RateLimiter rateLimiter = RateLimiter.create(5);//设置QPS为5
 
-        public BucketLimit(int capcity, int flowRate, TimeUnit flowRateUnit) {
-            this.capcity = capcity;
-            this.flowRate = flowRate;
-            this.flowRateUnit = flowRateUnit;
-            this.bucketThreadWork();
+        for (int i = 0; i < 10; i++) {
+            rateLimiter.acquire();
+            System.out.println(System.currentTimeMillis());
         }
 
-        //漏桶线程
-        public void bucketThreadWork() {
-            this.queue = new ArrayBlockingQueue<Node>(capcity);
+        System.out.println("----------");
 
-            //漏桶流出的任务时间间隔（纳秒）
-            this.flowRateNanosTime = flowRateUnit.toNanos(1) / flowRate;
+        //可以随时调整速率，我们将qps调整为10
+        rateLimiter.setRate(10);
 
-            Thread thread = new Thread(this::bucketWork);
-            thread.setName("漏桶线程-" + threadNum.getAndIncrement());
-            thread.start();
+        for (int i = 0; i < 10; i++) {
+            rateLimiter.acquire();
+            System.out.println(System.currentTimeMillis());
         }
 
-        //漏桶线程开始工作
-        public void bucketWork() {
-            while (true) {
-                Node node = this.queue.poll();
-                if (Objects.nonNull(node)) {
-                    //唤醒任务线程
-                    LockSupport.unpark(node.thread);
-                }
-                //休眠flowRateNanosTime
-                LockSupport.parkNanos(this.flowRateNanosTime);
-            }
-        }
-
-        //返回一个漏桶
-        public static BucketLimit build(int capcity, int flowRate, TimeUnit flowRateUnit) {
-            if (capcity < 0 || flowRate < 0) {
-                throw new IllegalArgumentException("capcity、flowRate必须大于0！");
-            }
-            return new BucketLimit(capcity, flowRate, flowRateUnit);
-        }
-
-        //当前线程加入漏桶，返回false，表示漏桶已满；true：表示被漏桶限流成功，可以继续处理任务
-        public boolean acquire() {
-            Thread thread = Thread.currentThread();
-            Node node = new Node(thread);
-            if (this.queue.offer(node)) {
-                LockSupport.park();
-                return true;
-            }
-            return false;
-        }
-
-        //漏桶中存放的元素
-        class Node {
-            private Thread thread;
-
-            public Node(Thread thread) {
-                this.thread = thread;
-            }
-        }
     }
 
-    public static void main(String[] args) {
-        BucketLimit bucketLimit = BucketLimit.build(10, 60, TimeUnit.MINUTES);
 
-        for (int i = 0; i < 15; i++) {
-            new Thread(() -> {
-                boolean acquire = bucketLimit.acquire();
-                System.out.println(System.currentTimeMillis() + " " + acquire);
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        // limit();
+
+        ListeningExecutorService executorService =
+                MoreExecutors.listeningDecorator(ThreadPoolCompletableFuture.CPU_THREAD_POOL);
+
+        ListenableFuture<?> listenableFuture = executorService.submit(() -> {
+            System.out.println("任务+++++++++++++执行");
+        });
+
+        listenableFuture.addListener(() -> {
+            System.out.println("任务++++++++++回调");
+        }, ThreadPoolCompletableFuture.CPU_THREAD_POOL);
+
+
+        ListenableFuture<String> future = executorService.submit(() -> {
+            System.out.println("带返回值");
+            return "AAA";
+        });
+
+        Futures.addCallback(future, new FutureCallback<String>() {
+            @Override
+            public void onSuccess(@Nullable String result) {
+                System.out.println("成功");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("失败");
+            }
+        }, ThreadPoolCompletableFuture.CPU_THREAD_POOL);
+
+
+        ////获取一批任务的执行结果
+        List<String> strings = Futures.allAsList(Faster.toList(future)).get();
+        System.out.println(strings);
+
+
+        //一批任务执行回调
+        ListenableFuture<List<String>> listListenableFuture = Futures.allAsList(Faster.toList(future));
+
+        //一批任务添加回调
+        Futures.addCallback(listListenableFuture,new FutureCallback<List<String>>(){
+
+            @Override
+            public void onSuccess(@Nullable List<String> result) {
+                System.out.println("成功");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("失败");
+            }
+
+        },ThreadPoolCompletableFuture.CPU_THREAD_POOL);
+
     }
 }

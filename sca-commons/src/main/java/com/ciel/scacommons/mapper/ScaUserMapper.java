@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ciel.scaentity.entity.ScaUser;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -28,6 +25,18 @@ public interface ScaUserMapper extends MyBaseMapper<ScaUser> {
      * 自定义sql 使用 querywarpe
      */
     //@Select("SELECT * FROM sca_user ${ew.customSqlSegment}")  //查询条件
+
+
+//    @Results(id="studentMap", value={
+//            @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+//            @Result(column="class_id", property="myClass", javaType=MyClass.class,
+//                    one=@One(select="com.example.demo.mapper.MyClassMapper.selectById"))
+//            @Result(column="id", property="gradeList", javaType=List.class,
+//                    many=@Many(select="com.example.demo.mapper.GradeMapper.selectByStudentId"))
+//
+//    })
+//    @ResultMap(value="studentMap")
+
     Page<ScaUser> myPage(Page<ScaUser> page, @Param(Constants.WRAPPER) QueryWrapper<ScaUser> queryWrapper);
 
     //@Update("UPDATE sca_user SET ${ew.sqlSet} ${ew.customSqlSegment}")  //更新的列

@@ -64,11 +64,12 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
 
-        <dependency>
+        <dependency> <!--集合工具 并发工具-->
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>25.1-jre</version>
+            <version>29.0-jre</version>
         </dependency>
+
 
         <!--        <dependency> &lt;!&ndash;操作el 客户端&ndash;&gt;-->
         <!--            <groupId>org.elasticsearch.client</groupId>-->

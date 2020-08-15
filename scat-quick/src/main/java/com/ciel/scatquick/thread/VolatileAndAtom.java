@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAccumulator;
 import java.util.concurrent.atomic.LongAdder;
 
 @Slf4j
@@ -29,10 +30,26 @@ public class VolatileAndAtom {
         //------------------------------------------------------------------------------------------
         //如果不能使用volatile 可以使用jdk 原子类
 
-        //关于原子类操作，都位于java.util.concurrent.atomic包中
-        LongAdder longAdder = new LongAdder(); //线程安全的原子类
-        
         AtomicLong atomicLong = new AtomicLong(); //线程安全的原子类
+        /**
+         * 是AtomicLong的增强版
+         */
+        LongAdder longAdder = new LongAdder(); //线程安全的原子类
+        /**
+         * LongAccumulator是LongAdder的功能增强版。
+         * LongAdder的API只有对数值的加减，而LongAccumulator提供了自定义的函数操作，其构造函数如下
+         *
+         * accumulatorFunction：需要执行的二元函数（接收2个long作为形参，并返回1个long）
+         *   identity：初始值
+         */
+        LongAccumulator accumulator = new LongAccumulator((x,y) -> {
+            return x+y;
+        }, 0L);
+
+        accumulator.accumulate(5); //更新为5
+        accumulator.reset();
+        System.out.println(accumulator);
+
 
       //  public final int get() //获取当前的值
       //  public final int getAndSet(int newValue)//获取当前的值，并设置新的值
