@@ -42,7 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         firewall.setAllowBackSlash(true); //可包含  正反斜杠
         firewall.setAllowUrlEncodedSlash(true);
 
-
         firewall.setAllowUrlEncodedPeriod(true); //可包含 .
 
         return firewall;
@@ -97,6 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public LoginUrlAuthenticationEntryPoint loginUrlAuthenticationEntryPoint(){
         return new LoginUrlAuthenticationEntryPoint("/ipLogin");
     }
+
 
     /**
      * 配置登录验证逻辑

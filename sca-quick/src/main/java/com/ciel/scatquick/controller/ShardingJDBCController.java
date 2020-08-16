@@ -112,7 +112,6 @@ public class ShardingJDBCController {
 
         AppContext.innSet("xiapeixin");
 
-
         List<ScaGirls> girls = scaGirlsService.girlsByPrice(str, end);
         return Result.ok().data(girls);
 

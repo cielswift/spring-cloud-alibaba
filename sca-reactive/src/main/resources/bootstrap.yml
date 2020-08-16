@@ -1,0 +1,9 @@
+server:
+  port: 29991
+
+spring:
+  appcation:
+    name: scareactive
+#日志
+logging:
+  config: classpath:log4j2-spring.xml

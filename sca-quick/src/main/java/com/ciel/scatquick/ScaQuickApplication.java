@@ -91,7 +91,7 @@ import java.util.ServiceLoader;
  *             如果没有注册过，那么再来注册
  */
 @Import({XiapeixinFcs.class, ImportSelectTest.class, ImportBeanDefinitionRegistrarTest.class,
-        ConfigurationTest.class,ContionalConfig.class,ImportDefaultB.class,ImportDefaultA.class})
+        ConfigurationTest.class, ContionalConfig.class, ImportDefaultB.class, ImportDefaultA.class})
 
 /**
  * 导入其他配置类
@@ -124,18 +124,18 @@ import java.util.ServiceLoader;
  *  开启事务,order指定aop的执行顺序,在其他aop(cache)之前执行;
  * aop 执行属顺序, 子类代理 , mode ASPECTJ 方式
  */
-@EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE,proxyTargetClass = true)
+@EnableTransactionManagement(order = Ordered.HIGHEST_PRECEDENCE, proxyTargetClass = true)
 
 /**
  * 配合CommandLineRunner 控制初始化顺序
  */
 @Order(value = 1)
 
-public class ScatQuickApplication implements CommandLineRunner {
+public class ScaQuickApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
 
-        SpringApplication springApplication = new SpringApplication(ScatQuickApplication.class);
+        SpringApplication springApplication = new SpringApplication(ScaQuickApplication.class);
 
         springApplication.addInitializers(new AppInitializer()); //添加初始化
         springApplication.addListeners(new AppListener()); //添加事件监听器
@@ -164,8 +164,8 @@ public class ScatQuickApplication implements CommandLineRunner {
 
         //ListableBeanFactory接口不支持层次查找
         //spring中有个工具类 支持父子层次查找
-        BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext,String.class);
-        BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext,String.class);
+        BeanFactoryUtils.beanNamesForTypeIncludingAncestors(applicationContext, String.class);
+        BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, String.class);
 
 //        @Autowired
 //        AnnotationConfigApplicationContext annotationConfigApplicationContext;
@@ -210,22 +210,22 @@ public class ScatQuickApplication implements CommandLineRunner {
 
 //---------------------------------------------------------------------------------------------------
         //类资源加载器
-        URL resource = ScatQuickApplication.class.getResource("./"); //类所在路径,可以使用 ../../切换
-        URL resource1 = ScatQuickApplication.class.getResource("/"); //classpath目录下
+        URL resource = ScaQuickApplication.class.getResource("./"); //类所在路径,可以使用 ../../切换
+        URL resource1 = ScaQuickApplication.class.getResource("/"); //classpath目录下
         System.out.println(resource);
         System.out.println(resource1);
 
         //直接获取inputstream
         InputStream resourceAsStream =
-                ScatQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
-        IOUtils.readLines(resourceAsStream,Charset.forName("utf-8")).forEach(System.err::println);
+                ScaQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
+        IOUtils.readLines(resourceAsStream, Charset.forName("utf-8")).forEach(System.err::println);
 
         //在使用 ClassLoader().getResource 获取路径时，不能以 "/" 开头，且路径总是从 classpath 根路径开始；
-        URL resource2 = ScatQuickApplication.class.getClassLoader().getResource("./");
+        URL resource2 = ScaQuickApplication.class.getClassLoader().getResource("./");
         System.out.println(resource2);
 
         //获取类路径下文件 //打jar 包报错 这是因为打包后Spring试图访问文件系统路径，但无法访问JAR中的路径。
-       // File cfgFile = ResourceUtils.getFile("classpath:./logback-spring.xml");
+        // File cfgFile = ResourceUtils.getFile("classpath:./logback-spring.xml");
 
         //获取类路径下文件
         ClassPathResource classPathResource = new ClassPathResource("./logback-spring.xml");
@@ -254,9 +254,9 @@ public class ScatQuickApplication implements CommandLineRunner {
     }
 
     @Bean
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().set(0,new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        restTemplate.getMessageConverters().set(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }
 }
