@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>com.ciel</groupId>
-    <artifactId>scat-quick</artifactId>
+    <artifactId>sca-quick</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>scat-quick</name>
+    <name>sca-quick</name>
     <description>SPRING-CLOUD-ALI</description>
 
     <properties>

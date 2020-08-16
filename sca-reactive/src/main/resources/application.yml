@@ -1,0 +1,27 @@
+server:
+  port: 29991
+
+spring:
+  application:
+    name: scareactive
+  redis:
+    jedis:
+      pool:
+        max-active: 8
+        min-idle: 3
+        max-idle: 8
+        max-wait: 2ms
+    database: 3
+    #password: root #ciel
+    host: 120.27.69.29
+    port: 6379
+    timeout: 5000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  config: classpath:log4j2-spring.xml

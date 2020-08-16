@@ -55,7 +55,7 @@ spring:
     #password: root #ciel
     host: 120.27.69.29
     port: 6379
-    timeout: 3000
+    timeout: 5000
   mail:
     username: 15966504931@163.com #邮箱账户
     password: cielswift202 #授权码

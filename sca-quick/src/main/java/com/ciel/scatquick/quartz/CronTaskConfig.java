@@ -55,7 +55,7 @@ public class CronTaskConfig {
     @Autowired
     protected JavaMailSender javaMailSender;
 
-    @Scheduled(cron = "1 * * 14,15 * 1-7" )
+    @Scheduled(cron = "1 * * 14,15 9 1-7" )
     public void run2() throws FileNotFoundException, MessagingException {
 
         //普通邮件

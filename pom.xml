@@ -14,7 +14,8 @@
         <module>sca-gateway</module>
         <module>sca-entity</module>
         <module>sca-commons</module>
-        <module>scat-quick</module>
+        <module>sca-quick</module>
+        <module>sca-reactive</module>
     </modules>
 
     <parent>

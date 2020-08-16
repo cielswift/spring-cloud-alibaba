@@ -10,7 +10,8 @@
       <module fileurl="file://$PROJECT_DIR$/sca-producer1/sca-producer1.iml" filepath="$PROJECT_DIR$/sca-producer1/sca-producer1.iml" />
       <module fileurl="file://$PROJECT_DIR$/sca-producer2/sca-producer2.iml" filepath="$PROJECT_DIR$/sca-producer2/sca-producer2.iml" />
       <module fileurl="file://$PROJECT_DIR$/sca-producer3/sca-producer3.iml" filepath="$PROJECT_DIR$/sca-producer3/sca-producer3.iml" />
-      <module fileurl="file://$PROJECT_DIR$/scat-quick/scat-quick.iml" filepath="$PROJECT_DIR$/scat-quick/scat-quick.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-quick/sca-quick.iml" filepath="$PROJECT_DIR$/sca-quick/sca-quick.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sca-reactive/sca-reactive.iml" filepath="$PROJECT_DIR$/sca-reactive/sca-reactive.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-alibaba.iml" filepath="$PROJECT_DIR$/spring-cloud-alibaba.iml" />
     </modules>
   </component>
