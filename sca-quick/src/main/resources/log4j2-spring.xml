@@ -19,7 +19,7 @@
         %M : 方法名
         %l : 输出语句所在的行数, 包括类名、方法名、文件名、行数
     -->
-    HIT THIS CLASS
+
     <!--变量配置-->
     <Properties>
         <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
@@ -31,7 +31,6 @@
     </Properties>
 
     <appenders>
-
         <console name="Console" target="SYSTEM_OUT">
             <!--输出日志的格式-->
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -56,7 +55,7 @@
 
             <Policies>
                 <!--interval属性用来指定多久滚动一次，默认是1 hour-->
-                <TimeBasedTriggeringPolicy interval="1"/>
+                <TimeBasedTriggeringPolicy interval="24"/>
                 <SizeBasedTriggeringPolicy size="100MB"/>
             </Policies>
 
@@ -72,7 +71,7 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <!--interval属性用来指定多久滚动一次，默认是1 hour-->
-                <TimeBasedTriggeringPolicy interval="1"/>
+                <TimeBasedTriggeringPolicy interval="24"/>
                 <SizeBasedTriggeringPolicy size="100MB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
@@ -87,7 +86,7 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <!--interval属性用来指定多久滚动一次，默认是1 hour-->
-                <TimeBasedTriggeringPolicy interval="1"/>
+                <TimeBasedTriggeringPolicy interval="24"/>
                 <SizeBasedTriggeringPolicy size="100MB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->

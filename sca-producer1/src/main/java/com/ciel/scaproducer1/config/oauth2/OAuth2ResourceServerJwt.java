@@ -14,7 +14,11 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
-@EnableResourceServer //整合oauth2 资源服务器
+
+/**
+ * 整合oauth2 资源服务器
+ */
+@EnableResourceServer
 
 public class OAuth2ResourceServerJwt extends ResourceServerConfigurerAdapter {
 
@@ -82,6 +86,10 @@ public class OAuth2ResourceServerJwt extends ResourceServerConfigurerAdapter {
         return converter;
     }
 
+    /**
+     * 是因为资源服务器和授权服务器是分开的，资源服务器和授权服务器是放在一起的，就不需要配置 RemoteTokenServices 了
+     * @return
+     */
     @Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();

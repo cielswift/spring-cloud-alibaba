@@ -159,6 +159,7 @@ dubbo: #dubbo配置
     version: 1.0
     timeout: 600000  #10分钟
     retries: 0 #禁止重试 为了debug
+    mock: fail:return+null
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml

@@ -14,10 +14,10 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class Oauth2Controller {
 
-
     @GetMapping("/oat2/{aa}")
     public Result oat2(@PathVariable("aa")  String s){
 
         return Result.ok("aaa");
     }
+
 }

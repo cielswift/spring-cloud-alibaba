@@ -21,9 +21,8 @@ public class ThreadPoolConfig {
      */
     @Bean("jdkThreadPoolExecutor")
     public ThreadPoolExecutor threadPoolExecutor(){
-
-        return new ThreadPoolExecutor(cpus,cpus+1,2, TimeUnit.SECONDS,
-                new LinkedBlockingDeque<Runnable>(1024),
+        return new ThreadPoolExecutor(cpus,cpus,2, TimeUnit.SECONDS,
+                new LinkedBlockingDeque<Runnable>(1 << 12),
                 new ThreadFactoryBuilder().setNameFormat("CIEL-JDK-POOL-%d").build(),
                 new ThreadPoolExecutor.DiscardOldestPolicy());
     }
@@ -37,10 +36,9 @@ public class ThreadPoolConfig {
         // 核心线程数
         taskExecutor.setCorePoolSize(cpus);
         // 最大线程数
-        taskExecutor.setMaxPoolSize(cpus+1);
+        taskExecutor.setMaxPoolSize(cpus);
         // 线程队列最大线程数
-        taskExecutor.setQueueCapacity(1024);
-
+        taskExecutor.setQueueCapacity(1 << 12);
         taskExecutor.setKeepAliveSeconds(2);
         taskExecutor.setThreadFactory(new ThreadFactoryBuilder().setNameFormat("CIEL-SPRING-POOL-%d").build());
         // 初始化线程池

@@ -4,14 +4,9 @@
     <option name="serverConfigurations">
       <list>
         <ServerConfiguration>
-          <option name="authenticationSettings">
-            <AuthenticationSettings>
-              <option name="password" value="ciel" />
-            </AuthenticationSettings>
-          </option>
           <option name="databaseVendor" value="DatabaseVendor{name='RedisDB'}" />
-          <option name="label" value="redis-6510" />
-          <option name="serverUrl" value="localhost:6510" />
+          <option name="label" value="redis" />
+          <option name="serverUrl" value="120.27.69.29:6379" />
         </ServerConfiguration>
       </list>
     </option>

@@ -1,6 +1,5 @@
 package com.ciel.scatquick.zookeeper.dubbo;
 
-public class DubboTest {
-
+public class DubboSpi {
 
 }

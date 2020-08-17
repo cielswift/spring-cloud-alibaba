@@ -1,6 +1,6 @@
 package com.ciel.scatquick.algorithm;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * 折中查找

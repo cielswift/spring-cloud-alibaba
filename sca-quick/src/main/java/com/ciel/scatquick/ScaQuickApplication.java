@@ -217,7 +217,7 @@ public class ScaQuickApplication implements CommandLineRunner {
 
         //直接获取inputstream
         InputStream resourceAsStream =
-                ScaQuickApplication.class.getResourceAsStream("./ScatQuickApplication.class");
+                ScaQuickApplication.class.getResourceAsStream("./ScaQuickApplication.class");
         IOUtils.readLines(resourceAsStream, Charset.forName("utf-8")).forEach(System.err::println);
 
         //在使用 ClassLoader().getResource 获取路径时，不能以 "/" 开头，且路径总是从 classpath 根路径开始；

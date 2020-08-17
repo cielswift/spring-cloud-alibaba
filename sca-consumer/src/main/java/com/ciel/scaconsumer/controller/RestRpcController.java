@@ -62,10 +62,12 @@ public class RestRpcController {
      *
      * broadcast=org.apache.dubbo.rpc.cluster.support.BroadcastCluster
      *      广播调用所有提供者，逐个调用，任意一台报错则报错。通常用于通知所有提供者更新缓存或日志等本地资源信息
+     *
+     *  mock = "fail:return+null" 异常返回null
      */
 
     @Reference(check = false,timeout = 3000,loadbalance = "roundrobin",cluster = "failfast", retries = 0,
-            parameters = {"addCircle.cluster", "failfast"})
+            parameters = {"addCircle.cluster", "failfast"} /*,mock = "fail:return+null" */)
     protected ApplicationServer applicationServer;
 
     @Autowired

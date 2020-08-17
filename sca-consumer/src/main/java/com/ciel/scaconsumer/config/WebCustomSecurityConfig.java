@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableGlobalMethodSecurity(prePostEnabled = true) //开启权限注解,默认是关闭的
 public class WebCustomSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     /**
      *不经过security的过滤器
      */

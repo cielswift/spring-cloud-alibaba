@@ -21,13 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
-import org.redisson.Redisson;
-import org.redisson.api.RLock;
-import org.redisson.config.Config;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -45,6 +39,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sharding")
+
 @Slf4j
 @AllArgsConstructor
 public class ShardingJDBCController {
@@ -95,18 +90,18 @@ public class ShardingJDBCController {
         }
 
         //redisson 分布式锁
-        Config config = new Config();
-        config.useSingleServer().setAddress("redis://120.27.69.29:6379")
-                //.setPassword()
-                .setDatabase(1);
-
-        Redisson redisson = (Redisson) Redisson.create(config);
-
-        RLock lock = redisson.getLock("cl-lock");
-        lock.lock(5, TimeUnit.SECONDS);
+//        Config config = new Config();
+//        config.useSingleServer().setAddress("redis://120.27.69.29:6379")
+//                //.setPassword()
+//                .setDatabase(1);
+//
+//        Redisson redisson = (Redisson) Redisson.create(config);
+//
+//        RLock lock = redisson.getLock("cl-lock");
+//        lock.lock(5, TimeUnit.SECONDS);
 
         //业务逻辑
-        lock.unlock();
+ //       lock.unlock();
 
         AppContext.setToken("xiapeixin");
 
