@@ -16,6 +16,7 @@ import java.util.List;
 //@Configuration
 public class DubboConfig { //dubbo配置
 
+
     @Bean
     @Lazy
     @Primary

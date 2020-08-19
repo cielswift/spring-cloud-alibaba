@@ -22,8 +22,8 @@ public class AfterExceptionController {
         // 发送：未知异常异常事件
         return ReactiveRequestContextHolder.getRequest()
                 .doOnSuccess(r -> publishEvent(r, e))
-
                 .flatMap(r -> Mono.just(ResultReactive.error(e.getMessage())));
+
     }
 
     private void publishEvent(ServerHttpRequest request, Throwable error) {

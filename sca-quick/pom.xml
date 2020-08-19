@@ -70,7 +70,6 @@
             <version>29.0-jre</version>
         </dependency>
 
-
         <!--        <dependency> &lt;!&ndash;操作el 客户端&ndash;&gt;-->
         <!--            <groupId>org.elasticsearch.client</groupId>-->
         <!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->

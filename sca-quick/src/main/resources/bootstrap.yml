@@ -94,6 +94,8 @@ spring:
       uris:
         - http://106.12.213.120:9200
         #- http://127.0.0.1:19390
+      connection-timeout: 3s
+      read-timeout: 10s
 
 #rocketmq 事务
 rocketmq:

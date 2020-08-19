@@ -36,7 +36,6 @@ import java.util.Date;
 public class Human {
 
 
-
     @Id
     protected Long id;
 

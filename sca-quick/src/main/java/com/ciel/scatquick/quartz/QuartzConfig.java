@@ -22,7 +22,7 @@ public class QuartzConfig {
         return JobBuilder.newJob(new QuartzJobBean(){
 
             @Override
-            protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+            protected void executeInternal(JobExecutionContext jobExecutionContext)  {
 
                 String ali = restTemplate.getForObject("http://120.27.69.29:3000/", String.class);
                 System.out.println(ali.length());
@@ -40,7 +40,7 @@ public class QuartzConfig {
 
     @Bean
     public Trigger printTimeJobTrigger(@Qualifier("fuck-job") JobDetail jobDetail) {
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0/10 * 1 * * ?");
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0/10 * * * * ?");
         return TriggerBuilder.newTrigger()
                 .forJob(printTimeJobDetail())//关联上述的JobDetail
                 .withIdentity("fuck-job-tri")//给Trigger起个名字
