@@ -46,9 +46,9 @@ public class IndexController {
     }
 
     @GetMapping("/many")
-    public Flux<List> many(){
-
-        return Flux.just(Stream.generate(() -> UUID.randomUUID().toString()).limit(10000).collect(Collectors.toList()));
+    public Flux<String> many(){
+        return Flux.fromIterable(Stream.generate(() -> UUID.randomUUID().toString())
+                .limit(10000).collect(Collectors.toList()));
     }
 
 }

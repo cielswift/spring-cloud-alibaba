@@ -16,7 +16,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../spring-cloud-alibaba-entity/target" />
     </content>
     <content url="file://$MODULE_DIR$/../spring-cloud-alibaba-entity/src/test/java" />
-    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-boot-starter:3.3.2" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus:3.3.2" level="project" />

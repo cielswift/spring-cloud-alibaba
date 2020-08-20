@@ -149,7 +149,6 @@
     </dependencies>
 
 
-
     <!-- dependencyManagement父类管理依赖版本 只是声明依赖 不引入jar包 -->
     <dependencyManagement>
         <dependencies>

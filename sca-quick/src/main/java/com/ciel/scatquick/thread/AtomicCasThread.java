@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 public class AtomicCasThread {
-
+    
     public static void main(String[] args) {
 
         //自旋锁
