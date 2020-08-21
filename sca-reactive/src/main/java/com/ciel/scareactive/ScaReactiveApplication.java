@@ -13,7 +13,17 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 public class ScaReactiveApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ScaReactiveApplication.class, args);
+
+        SpringApplication app = new SpringApplication(ScaReactiveApplication.class);
+
+        app.addInitializers(c -> {
+
+            System.out.println("==============APPLICATION START===============");
+
+        });
+        app.run(args);
+
+        //SpringApplication.run(ScaReactiveApplication.class, args);
     }
 
     /**
