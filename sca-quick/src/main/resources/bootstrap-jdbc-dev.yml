@@ -5,30 +5,45 @@ spring:
       names: ds0,ds1,ds2 #数据源名称，多数据源以逗号分隔
       ds0:
         type: com.alibaba.druid.pool.DruidDataSource
-        initialSize: 10
-        minIdle: 10
-        maxActive: 10
-        maxWait: 20000
+        initialSize: 9
+        minIdle: 9
+        maxActive: 9
+        maxWait: 20000 #配置获取连接等待超时的时间
+        time-between-eviction-runs-millis: 10000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+        validation-query: SELECT 1 FROM dual
+        min-evictable-idle-time-millis: 30000 # 配置一个连接在池中最小生存时间
+        #connection-error-retry-attempts: 0 #禁止重试
+        #break-after-acquire-failure: true #禁止重试
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: ciel
       ds1:
         type: com.alibaba.druid.pool.DruidDataSource
-        initialSize: 10
-        minIdle: 10
-        maxActive: 10
-        maxWait: 20000
+        initialSize: 9
+        minIdle: 9
+        maxActive: 9
+        maxWait: 20000 #配置获取连接等待超时的时间
+        time-between-eviction-runs-millis: 10000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+        validation-query: SELECT 1 FROM dual
+        min-evictable-idle-time-millis: 30000 # 配置一个连接在池中最小生存时间
+        #connection-error-retry-attempts: 0 #禁止重试
+        #break-after-acquire-failure: true #禁止重试
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: ciel
       ds2:
         type: com.alibaba.druid.pool.DruidDataSource
-        initialSize: 10
-        minIdle: 10
-        maxActive: 10
-        maxWait: 20000
+        initialSize: 9
+        minIdle: 9
+        maxActive: 9
+        maxWait: 20000 #配置获取连接等待超时的时间
+        time-between-eviction-runs-millis: 10000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+        validation-query: SELECT 1 FROM dual
+        min-evictable-idle-time-millis: 30000 # 配置一个连接在池中最小生存时间
+        #connection-error-retry-attempts: 0 #禁止重试
+        #break-after-acquire-failure: true #禁止重试
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1672/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root

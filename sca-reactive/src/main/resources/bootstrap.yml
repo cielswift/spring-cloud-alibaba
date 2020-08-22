@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: scareactive
+  profiles:
+    active: dev
   redis:
     jedis:
       pool:
@@ -25,3 +27,17 @@ management:
 
 logging:
   config: classpath:log4j2-spring.xml
+
+
+---
+spring:
+  profiles:
+    active: dev
+
+elas:
+  address: 106.12.213.120:9200
+  connectTimeout: 3000
+  socketTimeout: 3000
+  connectionRequestTimeout: 5000
+  maxConnectNum: 8
+  maxConnectPerRoute: 8

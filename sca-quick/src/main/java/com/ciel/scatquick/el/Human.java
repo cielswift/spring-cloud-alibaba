@@ -32,7 +32,7 @@ import java.util.Date;
  * shards：分片数量，默认5
  * replicas：副本数量，默认1
  */
-@Document(indexName = "cielswift",type = "human", shards = 1, replicas = 1)
+@Document(indexName = "cielswift", shards = 1, replicas = 1)
 public class Human {
 
 

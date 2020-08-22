@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class EsTemplate2 {
 
-    public static RestHighLevelClient client = ESConfig.restHighLevelClient();
+    public static RestHighLevelClient client = new ESConfig().restHighLevelClient();
 
     public static final String SCA_GIRLS = "scagirls";
 

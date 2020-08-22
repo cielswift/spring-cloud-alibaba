@@ -32,7 +32,7 @@ import java.util.LinkedList;
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITELIST = new String[]{"/**/**"};
+    private static final String[] AUTH_WHITELIST = new String[]{"/**"};
 
     /**
      * 此处的代码会放在SecurityConfig类中，此处只是摘要下

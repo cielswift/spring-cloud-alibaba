@@ -26,7 +26,7 @@ import java.util.List;
 
 public class EsTemplate3 {
 
-    public static RestHighLevelClient client = ESConfig.restHighLevelClient();
+    public static RestHighLevelClient client = new ESConfig().restHighLevelClient();
 
     public static final String SCA_GIRLS = "scagirls";
 

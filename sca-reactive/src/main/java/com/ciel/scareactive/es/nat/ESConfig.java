@@ -4,23 +4,34 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class ESConfig {
 
+    @Value("${elas.address}")
     private static String address = "106.12.213.120:9200";
     /** 连接超时时间 */
+    @Value("${elas.connectTimeout}")
     private static int connectTimeout = 3000;
     /** Socket 连接超时时间 */
+    @Value("${elas.socketTimeout}")
     private static int socketTimeout = 3000;
     /** 获取连接的超时时间 */
+    @Value("${elas.connectionRequestTimeout}")
     private static int connectionRequestTimeout = 5000;
     /** 最大连接数 */
+    @Value("${elas.maxConnectNum}")
     private static int maxConnectNum = 8;
     /** 最大路由连接数 */
+    @Value("${elas.maxConnectPerRoute}")
     private static int maxConnectPerRoute = 8;
 
 
-    public static RestHighLevelClient restHighLevelClient() {
+    @Bean
+    public RestHighLevelClient restHighLevelClient() {
         String[] hostList = address.split(",");
 
         HttpHost[] httpHost = new HttpHost[hostList.length];

@@ -37,7 +37,7 @@ import java.util.Date;
 
 public class EsTemplate {
 
-    public static RestHighLevelClient client = ESConfig.restHighLevelClient();
+    public static RestHighLevelClient client = new ESConfig().restHighLevelClient();
 
     public static final String SCA_GIRLS = "scagirls";
 
