@@ -13,6 +13,7 @@ import com.ciel.scaapi.util.AppContext;
 import com.ciel.scaapi.util.Faster;
 import com.ciel.scaapi.util.FileUpload2Nginx;
 import com.ciel.scaapi.util.SysUtils;
+import com.ciel.scacommons.config.SnowFlake;
 import com.ciel.scacommons.mapper.ScaGirlsMapper;
 import com.ciel.scaentity.entity.ScaGirls;
 import com.ciel.scaentity.entity.ScaUser;
@@ -31,9 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -56,17 +55,17 @@ public class ShardingJDBCController {
 
     protected AutowireCapableBeanFactory autowireCapableBeanFactory;
 
-    protected FileUpload2Nginx fileUpload2Nginx;
 
     protected ScaGirlsMapper scaGirlsMapper;
 
     protected RedisTemplate<String, Object> redisTemplate;
 
+    protected SnowFlake snowFlake;
 
     //pamr/123;name=javaboy
 
     @GetMapping("/pamr/{id}")
-    public Result parm(@PathVariable("id") Integer id,@MatrixVariable String name){
+    public Result parm(@PathVariable("id") Integer id, @MatrixVariable String name) {
 
         return Result.ok();
     }
@@ -74,7 +73,7 @@ public class ShardingJDBCController {
 
     @LogsAnnal
     @GetMapping("/cache")
-    public Result users(double str ,double end) {
+    public Result users(double str, double end) {
 
         /**
          * redis 分布式锁
@@ -101,7 +100,7 @@ public class ShardingJDBCController {
 //        lock.lock(5, TimeUnit.SECONDS);
 
         //业务逻辑
- //       lock.unlock();
+        //       lock.unlock();
 
         AppContext.setToken("xiapeixin");
 
@@ -113,85 +112,68 @@ public class ShardingJDBCController {
     }
 
 
-    @GetMapping("/girls/list")
-    @LogsAnnal
-    @Transactional
-    public Result girls() throws MissingServletRequestParameterException {
-
-        scaGirlsMapper.deleteAll(7L);
-
-        QueryWrapper<ScaGirls> wrapper = SysUtils.autoCnd(ScaGirls.class);
-        IPage<ScaGirls> page = SysUtils.autoPage(ScaGirls.class);
-        IPage<ScaGirls> result = scaGirlsService.page(page, wrapper);
-        return Result.ok().pageData(result);
-    }
-
-    @PostMapping("/upl")
-    public Result upload(@RequestParam("file") MultipartFile file) throws IOException {
-        String img = fileUpload2Nginx.imgSaveReturn(file);
-        return Result.ok().data(img);
-    }
 
     /**
-     *  本地事务:
-     *      完全支持非跨库事务，例如：仅分表，或分库但是路由的结果在单库中；
-     *      完全支持因逻辑异常导致的跨库事务。例如：同一事务中，跨两个库更新。更新完毕后，抛出空指针，则两个库的内容都能回滚
-     *      不支持因网络、硬件异常导致的跨库事务。例如：同一事务中，跨两个库更新，更新完毕后、未提交之前，第一个库宕机，则只有第二个库数据提交
-     *  XA两阶段事务:
-     *      支持数据分片后的跨库事务；两阶段提交保证操作的原子性和数据的强一致性；
-     *      服务宕机重启后，提交/回滚中的事务可自动恢复；支持同时使用 XA 和非 XA 的连接池;
-     *      服务宕机后，在其它机器上恢复提交/回滚中的数据。
-     *  SEATA 柔性事务:
-     *      支持数据分片后的跨库事务；支持RC隔离级别；通过undo快照进行事务回滚；支持服务宕机后的，自动恢复提交中的事务
-     *
+     * 本地事务:
+     * 完全支持非跨库事务，例如：仅分表，或分库但是路由的结果在单库中；
+     * 完全支持因逻辑异常导致的跨库事务。例如：同一事务中，跨两个库更新。更新完毕后，抛出空指针，则两个库的内容都能回滚
+     * 不支持因网络、硬件异常导致的跨库事务。例如：同一事务中，跨两个库更新，更新完毕后、未提交之前，第一个库宕机，则只有第二个库数据提交
+     * XA两阶段事务:
+     * 支持数据分片后的跨库事务；两阶段提交保证操作的原子性和数据的强一致性；
+     * 服务宕机重启后，提交/回滚中的事务可自动恢复；支持同时使用 XA 和非 XA 的连接池;
+     * 服务宕机后，在其它机器上恢复提交/回滚中的数据。
+     * SEATA 柔性事务:
+     * 支持数据分片后的跨库事务；支持RC隔离级别；通过undo快照进行事务回滚；支持服务宕机后的，自动恢复提交中的事务
      */
+    @LogsAnnal
     @GetMapping("/tran")
     @Transactional(rollbackFor = Exception.class)
     //Sharding 事务注解 支持LOCAL,XA,BASE  并且引入相应jar包
     //XAShardingTransactionManager xa 的事务管理器
     @ShardingTransactionType(TransactionType.XA)
-    public Result tran(@RequestParam(value = "type",required = false,defaultValue = "1") Integer type,
-                       @RequestParam(value = "date",required = false,defaultValue = "2020-05-24") Date date,
-                       ScaUser scaUser) throws AlertException {
+    public Result tran(@RequestParam("type") Integer type) throws AlertException {
+
 
         List<ScaGirls> list = scaGirlsService.list();
 
-        Set<Long> collect = list.stream().filter(t -> t.getId() %3 == 0)
-                .map(ScaGirls::getId).collect(Collectors.toSet());
+        scaGirlsService.remove(new LambdaQueryWrapper<ScaGirls>()
+                .in(ScaGirls::getId, list.stream().limit(5).map(ScaGirls::getId).collect(Collectors.toList())));
 
-        scaGirlsService.remove(new LambdaQueryWrapper<ScaGirls>().in(ScaGirls::getId,collect));
-
-        if(type.equals(2)){
-            throw new AlertException("human exception");
+        if (type.equals(2)) {
+            throw new AlertException("人为制造的异常 %s: 测试是否回滚","TEST-EXCEPTION");
         }
 
         return Result.ok().data(list);
     }
 
+    @GetMapping("/tran/test")
+    public Result tranTest() throws MissingServletRequestParameterException {
+
+        scaGirlsMapper.deleteAll(7L);
+        QueryWrapper<ScaGirls> wrapper = SysUtils.autoCnd(ScaGirls.class);
+        IPage<ScaGirls> page = SysUtils.autoPage(ScaGirls.class);
+        IPage<ScaGirls> result = scaGirlsService.page(page, wrapper);
+
+        return Result.ok("ok").data(scaGirlsService.list().size());
+    }
 
     @GetMapping("/hello")
-    public Result hello(){
+    public Result hello() {
 
-//        ScaDict scaDict = new ScaDict();
-//        scaDict.setName("范围");
-//        scaDict.setValue("RANGE");
-//        scaDict.setDetail("RANGE");
-//        scaDictService.save(scaDict);
+        List<ScaGirls> gs = new ArrayList<>();
 
-        for(int i = 0; i< 20 ; i++){
-            ScaGirls scaGirls = new ScaGirls();
-            scaGirls.setName(String.format("夏%s%s",i,i*7));
-            scaGirls.setPrice(new BigDecimal(String.format("%.2f",Math.random()*100)));
-            scaGirls.setUserId(System.currentTimeMillis()-77777);
-            scaGirls.setBirthday(Faster.now());
-            scaGirls.setImgs("http://127.0.0.1/image/2cd39f06e1b2c06977d751bbf75ebb1b.jpg");
-            boolean save = scaGirlsService.save(scaGirls);
-            System.out.println(save);
-        }
+        ScaGirls scaGirls = new ScaGirls();
+        scaGirls.setName("Ciel夏");
+        scaGirls.setPrice(new BigDecimal(String.format("%.2f", Math.random() * 100)));
+        scaGirls.setUserId(System.currentTimeMillis() - 77777);
+        scaGirls.setBirthday(Faster.now());
+        scaGirls.setImgs("http://127.0.0.1/image/2cd39f06e1b2c06977d751bbf75ebb1b.jpg");
+        gs.add(scaGirls);
 
-        List<ScaGirls> price = scaGirlsService.list(new QueryWrapper<ScaGirls>()
-                .between("price", "20.55", "60.55"));
+        boolean save = scaGirlsService.save(scaGirls);
+        System.out.println(save);
 
-        return Result.ok().data(price);
+        return Result.ok().data(scaGirls);
     }
+
 }

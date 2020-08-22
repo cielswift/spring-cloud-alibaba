@@ -34,10 +34,10 @@ public class IndexController {
         //   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //  Object principal = authentication.getPrincipal();
 
-       // Mono<ServerHttpRequest> request = ReactiveRequestContextHolder.getRequest();
+        // Mono<ServerHttpRequest> request = ReactiveRequestContextHolder.getRequest();
 
-       // MultiValueMap<String, String> queryParams = request.block().getQueryParams();
-       // System.out.println(queryParams);
+        // MultiValueMap<String, String> queryParams = request.block().getQueryParams();
+        // System.out.println(queryParams);
 
         log.info("fuck you mother");
         redisTemplate.opsForValue().setIfAbsent("xia", UUID.randomUUID().toString());
@@ -46,7 +46,7 @@ public class IndexController {
     }
 
     @GetMapping("/many")
-    public Flux<String> many(){
+    public Flux<String> many() {
         return Flux.fromIterable(Stream.generate(() -> UUID.randomUUID().toString())
                 .limit(10000).collect(Collectors.toList()));
     }

@@ -3,6 +3,7 @@ package com.ciel.scatquick.controller;
 import com.ciel.scaapi.exception.AlertException;
 import com.ciel.scaapi.retu.Result;
 import com.ciel.scaapi.util.Faster;
+import com.sun.beans.editors.IntegerEditor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.UUIDEditor;
@@ -57,7 +58,7 @@ public class AfterGlobalExceptionReturnController implements ResponseBodyAdvice<
         }
         if ("type".equals(binder.getObjectName())) {
 
-            binder.registerCustomEditor(Integer.class,new UUIDEditor());
+            binder.registerCustomEditor(Integer.class,new IntegerEditor());
 
             System.out.println("===PARAM ADVANCE ACTION===");
         }

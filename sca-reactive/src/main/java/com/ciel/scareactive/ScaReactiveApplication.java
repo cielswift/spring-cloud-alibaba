@@ -18,7 +18,9 @@ public class ScaReactiveApplication {
 
         app.addInitializers(c -> {
 
-            System.out.println("==============APPLICATION START===============");
+            for (String arg : args) {
+                System.out.println(String.format("==============APPLICATION START===============%s",arg));
+            }
 
         });
         app.run(args);

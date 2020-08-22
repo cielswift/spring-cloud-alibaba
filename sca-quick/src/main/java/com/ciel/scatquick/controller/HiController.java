@@ -2,6 +2,7 @@ package com.ciel.scatquick.controller;
 
 import com.ciel.scaapi.crud.IScaUserService;
 import com.ciel.scaapi.retu.Result;
+import com.ciel.scaapi.util.FileUpload2Nginx;
 import com.ciel.scaentity.entity.ScaUser;
 import com.ciel.scatquick.aoptxspi.LogsAnnal;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +36,14 @@ public class HiController {
     protected IScaUserService scaUserService;
 
     protected RedisTemplate<String, Object> redisTemplate;
+
+    protected FileUpload2Nginx fileUpload2Nginx;
+
+    @PostMapping("/upl")
+    public Result upload(@RequestParam("file") MultipartFile file) throws IOException {
+        String img = fileUpload2Nginx.imgSaveReturn(file);
+        return Result.ok().data(img);
+    }
 
     /**
      * 获取验证码

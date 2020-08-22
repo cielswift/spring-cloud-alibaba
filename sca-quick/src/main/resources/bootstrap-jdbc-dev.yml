@@ -5,9 +5,9 @@ spring:
       names: ds0,ds1,ds2 #数据源名称，多数据源以逗号分隔
       ds0:
         type: com.alibaba.druid.pool.DruidDataSource
-        initialSize: 16
-        minIdle: 16
-        maxActive: 16
+        initialSize: 10
+        minIdle: 10
+        maxActive: 10
         maxWait: 20000
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1670/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -15,9 +15,9 @@ spring:
         password: ciel
       ds1:
         type: com.alibaba.druid.pool.DruidDataSource
-        initialSize: 16
-        minIdle: 16
-        maxActive: 16
+        initialSize: 10
+        minIdle: 10
+        maxActive: 10
         maxWait: 20000
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1671/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -25,9 +25,9 @@ spring:
         password: ciel
       ds2:
         type: com.alibaba.druid.pool.DruidDataSource
-        initialSize: 16
-        minIdle: 16
-        maxActive: 16
+        initialSize: 10
+        minIdle: 10
+        maxActive: 10
         maxWait: 20000
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:1672/spring_alibaba?seUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
