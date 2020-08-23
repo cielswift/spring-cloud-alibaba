@@ -23,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.transaction.annotation.ShardingTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -149,12 +151,13 @@ public class ShardingJDBCController {
     @GetMapping("/tran/test")
     public Result tranTest() throws MissingServletRequestParameterException {
 
-        scaGirlsMapper.deleteAll(7L);
+       // scaGirlsMapper.deleteAll(7L);
+
         QueryWrapper<ScaGirls> wrapper = SysUtils.autoCnd(ScaGirls.class);
         IPage<ScaGirls> page = SysUtils.autoPage(ScaGirls.class);
         IPage<ScaGirls> result = scaGirlsService.page(page, wrapper);
 
-        return Result.ok("ok").data(scaGirlsService.list().size());
+        return Result.ok("ok").data(result);
     }
 
     @GetMapping("/hello")

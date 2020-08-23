@@ -34,8 +34,6 @@ import java.util.Date;
  */
 @Document(indexName = "cielswift", shards = 1, replicas = 1)
 public class Human {
-
-
     @Id
     protected Long id;
 

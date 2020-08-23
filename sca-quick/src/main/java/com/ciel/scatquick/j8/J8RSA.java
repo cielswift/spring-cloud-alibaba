@@ -18,7 +18,8 @@ public class J8RSA {
     public static final String publickey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh4MD9+iZOc0EhMBTDpFuok7TAxl1kge2LLlCBmGdqDUeyYqorfrydAn1DF3EmdraNBg2eq3/gGSAMshkZBjptD6febiOUktF8jfsQ5Olc9dAPAD3R1y8ZHjq55TBviV1xuU0UvzYcCJmFp6tflkwTtXns3m50ehJqROsl059UBCSE9f+9D22KPr177USCG9p32TBucOp3GXLmN1OsS2Jmf1qtYWWZCOI8g1ez+Q4ulJ9OzVTBY9fTwzZFnmcgP7795sUcnaLC8xEqJgtX9DVQxFftsl+KcNWJRThEEoloFQ7qa42mdKX9I0mke0CRa9TZMz73SWs6P3qtQrVqHArbQIDAQAB";
 
     public static void main(String[] args) throws Exception {
-
+        long timeMillis = System.currentTimeMillis();
+        System.out.println(timeMillis);
         //私钥加密, 私钥和公钥都可以解密;
         //公钥加密, 只能私钥解密
 
@@ -49,6 +50,7 @@ public class J8RSA {
 
         boolean verify = verify(message, sign, publickey, "utf-8");
         System.out.println("合法吗:" + verify);
+        System.out.println(System.currentTimeMillis()-timeMillis);
 
     }
 
