@@ -42,7 +42,7 @@ public class EsTemplate {
     public static final String SCA_GIRLS = "scagirls";
 
     public static void main(String[] args) throws IOException {
-        createIndex();
+        //createIndex();
 
         //qer();
 
@@ -55,7 +55,7 @@ public class EsTemplate {
 
         //create(girls);
 
-        //get(1597926154931L);
+        get(1597926154931L);
 
         // update(girls);
 

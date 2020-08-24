@@ -73,6 +73,15 @@ spring:
       #                offset:
       default-data-source-name: ds0  #未配置分片规则的表将通过默认数据源定位
       broadcast-tables: sca_dict  #公共表 两个库中的数据是一样的 如字典表
+      default-database-strategy: #默认分库策略
+        inline:
+          sharding-column: ID #默认的分库的列
+          algorithm-expression: ds$->{ID % 3} #默认分库的算法
+      default-table-strategy: #默认分表策略
+        inline:
+          sharding-column: ID
+          algorithm-expression: sca_girls_$->{ID % 5}
+
       #读写分离
     #      master-slave-rules:
     #        dufl1: #逻辑名称
