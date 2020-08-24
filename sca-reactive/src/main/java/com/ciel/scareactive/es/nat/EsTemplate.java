@@ -42,7 +42,7 @@ public class EsTemplate {
     public static final String SCA_GIRLS = "scagirls";
 
     public static void main(String[] args) throws IOException {
-        //createIndex();
+        createIndex();
 
         //qer();
 
@@ -59,7 +59,7 @@ public class EsTemplate {
 
         // update(girls);
 
-        del(1597927269298L);
+        //del(1597927269298L);
     }
 
     public static void createIndex() throws IOException {
@@ -111,8 +111,8 @@ public class EsTemplate {
 
         // 创建索引配置信息，配置
         Settings settings = Settings.builder()
-                .put("index.number_of_shards", 1)
-                .put("index.number_of_replicas", 0)
+                .put("index.number_of_shards", 3)
+                .put("index.number_of_replicas", 1)
                 .build();
         // 新建创建索引请求对象，然后设置索引类型（ES 7.0 将不存在索引类型）和 mapping 与 index 配置
         CreateIndexRequest request = new CreateIndexRequest(SCA_GIRLS);

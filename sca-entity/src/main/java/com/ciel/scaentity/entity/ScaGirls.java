@@ -19,7 +19,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sca_girls")
+@TableName("sca_girls_")
 public class ScaGirls implements Serializable {
 
     protected static final long serialVersionUID = 1L;
@@ -30,7 +30,6 @@ public class ScaGirls implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-
 
     @TableField("NAME")
     private String name;
@@ -48,4 +47,8 @@ public class ScaGirls implements Serializable {
 
     @TableField("IMGS")
     private String imgs;
+
+    @TableField("IS_ONLINE")
+    private Integer isOnline = 1;
+
 }

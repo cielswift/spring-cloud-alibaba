@@ -160,23 +160,28 @@ public class ShardingJDBCController {
         return Result.ok("ok").data(result);
     }
 
+    public static void main(String[] args) {
+        System.out.println(1297888313860173824L % 4);
+    }
+
     @GetMapping("/hello")
     public Result hello() {
 
         List<ScaGirls> gs = new ArrayList<>();
 
-        ScaGirls scaGirls = new ScaGirls();
-        scaGirls.setName("Ciel夏");
-        scaGirls.setPrice(new BigDecimal(String.format("%.2f", Math.random() * 100)));
-        scaGirls.setUserId(System.currentTimeMillis() - 77777);
-        scaGirls.setBirthday(Faster.now());
-        scaGirls.setImgs("http://127.0.0.1/image/2cd39f06e1b2c06977d751bbf75ebb1b.jpg");
-        gs.add(scaGirls);
+        for (int i = 0; i < 100; i++) {
+            ScaGirls scaGirls = new ScaGirls();
+            scaGirls.setName("Ciel夏");
+            scaGirls.setPrice(new BigDecimal(String.format("%.2f", Math.random() * 100)));
+            scaGirls.setUserId(System.currentTimeMillis() - 77777);
+            scaGirls.setBirthday(Faster.now());
+            scaGirls.setImgs("http://127.0.0.1/image/2cd39f06e1b2c06977d751bbf75ebb1b.jpg");
+            gs.add(scaGirls);
 
-        boolean save = scaGirlsService.save(scaGirls);
-        System.out.println(save);
+            boolean save = scaGirlsService.save(scaGirls);
+        }
 
-        return Result.ok().data(scaGirls);
+        return Result.ok().data(gs);
     }
 
 }

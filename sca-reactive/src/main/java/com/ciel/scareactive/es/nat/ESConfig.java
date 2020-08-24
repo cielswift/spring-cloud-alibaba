@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class ESConfig {
 
     @Value("${elas.address}")
-    private static String address = "106.12.213.120:9200";
+    private static String address = "127.0.0.1:27210,127.0.0.1:27211,127.0.0.1:27212";
     /** 连接超时时间 */
     @Value("${elas.connectTimeout}")
     private static int connectTimeout = 3000;
