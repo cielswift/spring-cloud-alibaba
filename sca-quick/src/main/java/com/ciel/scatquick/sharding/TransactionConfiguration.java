@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 /**
- * shardingsphereJDBC XA分布式事务
+ * shardingsphereJDBC SpringBoot  XA分布式事务
  *
  * Apache ShardingSphere 默认的 XA 事务管理器为 Atomikos。
  *

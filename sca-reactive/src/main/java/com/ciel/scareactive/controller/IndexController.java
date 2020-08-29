@@ -1,17 +1,11 @@
 package com.ciel.scareactive.controller;
 
-import cn.hutool.core.codec.Base64;
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import cn.hutool.crypto.asymmetric.Sign;
-import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.ciel.scaapi.retu.ResultReactive;
 import com.ciel.scareactive.aop.Logto;
 import com.ciel.scareactive.es.nat.EsTemplate;
-import com.ciel.scareactive.filter.ReactiveRequestContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
@@ -21,20 +15,12 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.security.KeyPair;
-import java.security.Security;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

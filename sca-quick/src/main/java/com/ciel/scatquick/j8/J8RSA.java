@@ -14,6 +14,22 @@ import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 
 public class J8RSA {
+
+    /**
+     * -  java.security.Signature.getInstance(String algorithm); //根据对应算法，初始化签名对象
+     * - KeyFactory.getInstance(String algorithm);// 根据对应算法,生成KeyFactory对象
+     * - KeyFactory.generatePrivate(KeySpec keySpec); //生成私钥
+     * - java.security.Signature.initSign(PrivateKey privateKey) //由私钥，初始化加签对象
+     * - java.security.Signature.update(byte[] data)  //把原始报文更新到加签对象
+     * - java.security.Signature.sign();//加签
+     *
+     * - java.security.Signature.getInstance(String algorithm); //根据对应算法，初始化签名对象
+     * - KeyFactory.getInstance(String algorithm);// 根据对应算法,生成KeyFactory对象
+     * - KeyFactory.generatePublic(KeySpec keySpec); //生成公钥
+     * - java.security.Signature.initVerify(publicKey); //由公钥，初始化验签对象
+     * - java.security.Signature.update(byte[] data)  //把原始报文更新到验签对象
+     * - java.security.Signature.verify(byte[] signature);//验签
+     */
     public static final String privatekey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCHgwP36Jk5zQSEwFMOkW6iTtMDGXWSB7YsuUIGYZ2oNR7Jiqit+vJ0CfUMXcSZ2to0GDZ6rf+AZIAyyGRkGOm0Pp95uI5SS0XyN+xDk6Vz10A8APdHXLxkeOrnlMG+JXXG5TRS/NhwImYWnq1+WTBO1eezebnR6EmpE6yXTn1QEJIT1/70PbYo+vXvtRIIb2nfZMG5w6ncZcuY3U6xLYmZ/Wq1hZZkI4jyDV7P5Di6Un07NVMFj19PDNkWeZyA/vv3mxRydosLzESomC1f0NVDEV+2yX4pw1YlFOEQSiWgVDuprjaZ0pf0jSaR7QJFr1NkzPvdJazo/eq1CtWocCttAgMBAAECggEAIMExV134k3kTy4a1TMMoa8EDzi78NST6CstowyQbOIpGe86xQQR0UEoL2kZb/BhjP85OdM7UAFPKjPvVEEDZVIECiShr9kZNjOOpjxgEGQEBfL97BdvLibmUhg912SEy27WRNTH6mvgllvgZ1X13aMbZb49PtAYir+SahiQptA1AdQ8wVrZtRX/4vz7RMZvePqAG5pVxOf3Bgyt+FhdeAMgXJ6OBTMhBZ+lr2H4YkLXrU6LleV4zeki8LhVZ1uBzQ/2o5PAkzqxaLD04WjrZ3J7nZHlH2jvgj/IsZviFg7P6VXOvUrJvM6PAgsxPyDPPqCRQLTuPgLBRy+f1MfkMQQKBgQDvFNxM9Ls3vWvHJOUueQ6mZDbXiyxTlvcqjXeIZrwi9OAAlyP2z60faXQerd5HRpYj/I2ef7PzWzonk/Opa9IVdZJXIe6IGXVM863VqpBPyeoMg3Sls1XbYUHZpUcGGLv7vF2BAklZ87htHVQay5MGfAoShMcCPNYBNvOxxneBPQKBgQCRGemWyQUexEsP11f0Ox2aP11WbpTiNwiI0iw9HDdiBUj8CX2+aOJ1fV6sGm294wKAS8H7Atkxq2NGVfGYtX/+86kWOHOOamDHkiXJspUOVGiAHvEpZxh6ZWb5PirzgSvHeaMuNV1Jed/jk8Yg2t7gU7JPNngXcgd0KbhKwAOV8QKBgBBJ2ox/q/WrORmTQO3+n2nkr/vVZoq3YVWL19X6Md0r08sWgQPCuGfIdnnUnK08eOQww7FFwAvXbkneAZ7MUr7ViMfY7vhky6IXhANnoHdfKUv69MqJQlM0+BiM8x7ONph7B9/PORIg0bLVabJ9piGt9721QB296VKh3M6C2Ad9AoGADhBE46h4JpM/8zkb/T/9joW1tjrhk0tiOGCmiQXDGG0KteL1nQ7tZBXSpzuoh08JXwX4tyt/gaDq7lZGJFbzIPLc4Jp4GMWWu8EeiH4WlFz6A/D7ztd/N928LUwpPZC3fY38ku35LLXzTUt1WJneID/8eFD/MsaKkme4xQX3UwECgYEArpMqXE4X8dnJtCHOb/p3W7YZE9Q9IWUcclyFeS2vgd2mUjjqvaYaY5FEN2hGS0eTzeBeL2hdOt6moXrvEywIF/8KRMoSqatAf9RZ3HHgpcfPUmaJW0LzOe2frigTsJ8KwNW7Dhmzob7bt01cyiIki7r3jaTLjs7jFkw0iMPkL+4=";
     public static final String publickey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh4MD9+iZOc0EhMBTDpFuok7TAxl1kge2LLlCBmGdqDUeyYqorfrydAn1DF3EmdraNBg2eq3/gGSAMshkZBjptD6febiOUktF8jfsQ5Olc9dAPAD3R1y8ZHjq55TBviV1xuU0UvzYcCJmFp6tflkwTtXns3m50ehJqROsl059UBCSE9f+9D22KPr177USCG9p32TBucOp3GXLmN1OsS2Jmf1qtYWWZCOI8g1ez+Q4ulJ9OzVTBY9fTwzZFnmcgP7795sUcnaLC8xEqJgtX9DVQxFftsl+KcNWJRThEEoloFQ7qa42mdKX9I0mke0CRa9TZMz73SWs6P3qtQrVqHArbQIDAQAB";
 
